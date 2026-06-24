@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html class="w-mod-js" data-wf-domain="vlance.co" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Vlance — Freelance Dev Built to Ship</title>
+  <meta name="description" content="Freelance web design and development studio. From landing pages to full products — built to ship."/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <!-- Osmo's exact CSS from CDN -->
+  <link href="https://cdn.prod.website-files.com/68a5787bba0829184628bd51/css/osmo-v2.shared.36af92bad.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous"/>
+  <link href="https://slater.app/16596/45154.css" rel="stylesheet" type="text/css"/>
+  <link href="https://slater.app/16596/45446.css" rel="stylesheet" type="text/css"/>
+  <link href="https://slater.app/16596/45511.css" rel="stylesheet" type="text/css"/>
+
+  <!-- Playful display font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet"/>
+
+  <!-- Vlance overrides -->
+  <link rel="stylesheet" href="vlance.css"/>
+</head>
+<body class="body">
+
+<!-- ═══ LOADER ═══ -->
+<div id="vlance-loader" class="vl-loader">
+  <div class="vl-loader__inner">
+    <img
+      src="https://github.com/venivservices-wq/Vlance/blob/main/vlance%20logo.png?raw=true"
+      alt="Vlance"
+      class="vl-loader__icon"
+    />
+    <div class="vl-loader__word" aria-hidden="true">
+      <span>V</span><span>L</span><span>A</span><span>N</span><span>C</span><span>E</span>
+    </div>
+  </div>
+</div>
+
+<div class="global">
+
+  <!-- ═══════════════ NAV ═══════════════ -->
+  <div data-marketing-theme="dark" data-nav-theme="light" data-nav-status="not-active"
+       data-scrolling-started="false" data-scrolling-direction="down" class="nav" id="nav">
+    <div data-nav-toggle="close" class="nav__bg"></div>
+    <div class="nav-bar__wrap">
+      <div class="nav-bar__width">
+        <div class="nav-bar">
+          <div class="nav-bar__back">
+            <div class="nav-bar__outline"></div>
+            <div class="nav-bar__bg"></div>
+          </div>
+
+          <div data-nav-bar-height="" class="nav-bar__top">
+
+            <!-- Hamburger -->
+            <div class="nav-bar__menu">
+              <div data-nav-toggle="toggle" class="nav-menu" id="nav-toggle">
+                <div class="nav-menu__hamburger">
+                  <div class="nav-menu__hamburger-bar"></div>
+                  <div class="nav-menu__hamburger-bar"></div>
+                </div>
+                <span class="nav-menu__label">Menu</span>
+              </div>
+            </div>
+
+            <!-- Logo -->
+            <div class="nav-bar__logo">
+              <a href="#" class="nav-logo w-inline-block vlance-logo-link">
+                <img src="https://github.com/venivservices-wq/Vlance/blob/main/vlance%20logo.png?raw=true" alt="Vlance" class="vlance-logo-img"/>
+              </a>
+            </div>
+
+            <!-- Buttons -->
+            <div class="nav-bar__buttons">
+              <div class="nav-bar__login-button">
+                <a class="button w-inline-block" data-button-rotate="" data-shape="round"
+                   href="#services" data-size="" data-theme="">
+                  <div data-wf--button-theme--variant="neutral-525" class="button-bg"></div>
+                  <div class="button-label__wrap">
+                    <div class="button-label"><span>Work</span></div>
+                    <div aria-hidden="true" class="button-label"><span>Work</span></div>
+                  </div>
+                </a>
+              </div>
+              <div class="nav-bar__signup-button">
+                <a class="button w-inline-block" data-button-rotate="" data-shape=""
+                   href="#contact" data-size="" data-theme="">
+                  <div data-wf--button-theme--variant="electric" class="button-bg"></div>
+                  <div class="button-label__wrap">
+                    <div class="button-label"><span>Hire Me</span></div>
+                    <div aria-hidden="true" class="button-label"><span>Hire Me</span></div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="nav-bar__line"></div>
+          </div>
+
+          <!-- Dropdown bottom -->
+          <div class="nav-bar__bottom">
+            <div class="nav-bar__bottom-overflow">
+              <div class="nav-bar__bottom-inner">
+                <div class="nav-bar__bottom-row">
+                  <div class="nav-bar__bottom-col is--products">
+                    <div class="nav-bar__tag-row"><span class="eyebrow">Navigation</span></div>
+                    <ul class="nav-bar__ul-big">
+                      <li class="nav-bar__big-li">
+                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
+                          <span class="nav-bar__big-span">Work</span>
+                        </a>
+                        <div class="line is--nav-transparent"></div>
+                      </li>
+                      <li class="nav-bar__big-li">
+                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
+                          <span class="nav-bar__big-span">Services</span>
+                        </a>
+                        <div class="line is--nav-transparent"></div>
+                      </li>
+                      <li class="nav-bar__big-li">
+                        <a href="#contact" class="nav-bar__big-a w-inline-block" data-nav-close="">
+                          <span class="nav-bar__big-span">Contact</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="nav-bar__bottom-col">
+                    <div class="nav-bar__tag-row"><span class="eyebrow">Services</span></div>
+                    <ul class="nav-bar__ul-big">
+                      <li class="nav-bar__big-li">
+                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
+                          <span class="nav-bar__big-span">Web Development</span>
+                        </a>
+                        <div class="line is--nav-transparent"></div>
+                      </li>
+                      <li class="nav-bar__big-li">
+                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
+                          <span class="nav-bar__big-span">UI / UX Design</span>
+                        </a>
+                        <div class="line is--nav-transparent"></div>
+                      </li>
+                      <li class="nav-bar__big-li">
+                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
+                          <span class="nav-bar__big-span">Motion & Animation</span>
+                        </a>
+                        <div class="line is--nav-transparent"></div>
+                      </li>
+                      <li class="nav-bar__big-li">
+                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
+                          <span class="nav-bar__big-span">Branding</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Mobile buttons -->
+                  <div class="nav-bar__mobile-buttons">
+                    <a class="button w-inline-block" data-size="full" data-theme="" href="#services"
+                       data-button-rotate="" data-shape="" data-nav-close="">
+                      <div data-wf--button-theme--variant="neutral-600" class="button-bg"></div>
+                      <div class="button-label__wrap">
+                        <div class="button-label"><span>View Work</span></div>
+                        <div aria-hidden="true" class="button-label"><span>View Work</span></div>
+                      </div>
+                    </a>
+                    <a class="button w-inline-block" data-size="full" data-theme="" href="#contact"
+                       data-button-rotate="" data-shape="" data-nav-close="">
+                      <div data-wf--button-theme--variant="electric" class="button-bg"></div>
+                      <div class="button-label__wrap">
+                        <div class="button-label"><span>Hire Me</span></div>
+                        <div aria-hidden="true" class="button-label"><span>Hire Me</span></div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- Cursor drag indicator -->
+    <div class="cursor">
+      <div class="cursor__drag-dots">
+        <div class="cursor__drag-dot"></div>
+        <div class="cursor__drag-dot"></div>
+      </div>
+      <div class="cursor-bubble">
+        <div class="cursor-bubble__drag"><span class="cursor-bubble__drag-span">Drag</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.global -->
+
+<main class="main" id="main">
+
+  <!-- ═══════════════ UNDER-NAV MARQUEE ═══════════════ -->
+  <div class="under-nav-bar">
+    <div class="under-nav-bar__inner">
+      <a href="#services" class="nav-marquee w-inline-block">
+        <div data-css-marquee="" style="animation-duration:30s" class="marquee-css">
+          <div data-css-marquee-list="nav" class="marquee-css__list">
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+          </div>
+          <div data-css-marquee-list="nav" class="marquee-css__list" aria-hidden="true">
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section data-theme-section="light" class="home-hero" id="hero">
+
+    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star" style="top:9%;right:7%;height:65px;width:auto;">
+    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star" style="top:50%;right:3%;height:38px;width:auto;">
+
+    <!-- ═══ CLOUDS ═══ -->
+    <div class="vl-clouds-bg" aria-hidden="true">
+      <img src="svg/cloud 1.svg" class="vl-cloud-1" alt="">
+      <img src="svg/cloud 2.svg" class="vl-cloud-2" alt="">
+    </div>
+
+    <!-- ═══ MONKEY PEEK ═══ -->
+    <div class="vl-monkey-wrap" aria-hidden="true">
+      <svg class="vl-monkey-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1728" height="1957" viewBox="0 0 1728 1957">
+        <defs>
+          <style>
+            .mk-1,.mk-3{fill:#ffdbe0}.mk-1{stroke:#ffdbe0}.mk-1,.mk-2,.mk-3,.mk-4,.mk-5{stroke-width:1px}.mk-2,.mk-3,.mk-5{stroke:#000}.mk-2{fill:url(#vl-monkey-grad)}.mk-3{fill-rule:evenodd}.mk-4{fill:#fff;stroke:#fff}
+          </style>
+          <linearGradient id="vl-monkey-grad" x1="864.5" y1="2004" x2="864.5" y2="59" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#e64613"/>
+            <stop offset="0.502" stop-color="#b92614"/>
+            <stop offset="0.986" stop-color="#710d0d"/>
+          </linearGradient>
+        </defs>
+        <circle id="mk-right-ear" class="mk-1" cx="1411" cy="508" r="113"/>
+        <circle id="mk-left-ear"  class="mk-1" cx="301"  cy="508" r="113"/>
+        <path   id="mk-body"      class="mk-2" d="M864.5,59h0A578.5,578.5,0,0,1,1443,637.5V2004a0,0,0,0,1,0,0H286a0,0,0,0,1,0,0V637.5A578.5,578.5,0,0,1,864.5,59Z"/>
+        <path   id="mk-face-btm"  class="mk-3" d="M850.418,508A174.458,174.458,0,1,1,675.96,682.457,174.453,174.453,0,0,1,850.418,508Z"/>
+        <circle id="mk-nose-l"    cx="816" cy="682" r="14"/>
+        <circle id="mk-nose-r"    cx="878" cy="682" r="14"/>
+        <rect   id="mk-mouth"     x="764" y="752" width="172" height="15"/>
+        <rect   id="mk-face-top"  class="mk-1" x="504" y="374" width="727" height="268" rx="123.5" ry="123.5"/>
+        <circle id="mk-leye-out"  class="mk-4" cx="701.5"   cy="508.5"   r="95.5"/>
+        <circle id="mk-leye-in"   class="mk-5" cx="701.188" cy="507.938" r="61.688"/>
+        <circle id="mk-reye-out"  class="mk-4" cx="980.5"   cy="507.5"   r="95.5"/>
+        <circle id="mk-reye-in"   class="mk-5" cx="980.19"  cy="506.938" r="61.69"/>
+      </svg>
+    </div>
+
+    <!-- ═══ BLUE GUY ═══ -->
+    <div class="vl-blueguy-wrap" aria-hidden="true">
+      <svg class="vl-blueguy-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1728" height="1257" viewBox="0 0 1728 1257">
+        <defs>
+          <style>.bg-1{stroke:#3a5bff;fill:url(#vl-bg-grad)}.bg-1,.bg-2,.bg-3{stroke-width:1px}.bg-2{fill:#fff;stroke:#fff}.bg-3{stroke:#000}</style>
+          <linearGradient id="vl-bg-grad" x1="721.524" y1="38" x2="951.476" y2="1221" gradientUnits="userSpaceOnUse">
+            <stop offset="0"     stop-color="#3a5bff"/>
+            <stop offset="0.526" stop-color="#623dfe"/>
+            <stop offset="0.561" stop-color="#643bfe"/>
+            <stop offset="1"     stop-color="#4605ff"/>
+          </linearGradient>
+        </defs>
+        <path   id="bg-body"     class="bg-1" d="M836.5,38h0A747.5,747.5,0,0,1,1584,785.5V1161a60,60,0,0,1-60,60H149a60,60,0,0,1-60-60V785.5A747.5,747.5,0,0,1,836.5,38Z"/>
+        <circle id="bg-leye-out" class="bg-2" cx="579"      cy="588"     r="180"/>
+        <circle id="bg-leye-in"  class="bg-3" cx="579"      cy="588"     r="97.094"/>
+        <circle id="bg-reye-out" class="bg-2" cx="1027"     cy="586"     r="180"/>
+        <circle id="bg-reye-in"  class="bg-3" cx="1026.998" cy="588"     r="97.092"/>
+      </svg>
+    </div>
+
+
+<div data-wf--padding-hero--variant="nav-large" class="padding-hero"></div>
+    <div class="home-hero__bg">
+      <div class="home-hero__bg-line"></div>
+    </div>
+    <div class="container is--md-m">
+      <div class="home-hero__content">
+
+        <!-- Title row -->
+        <div class="home-hero__title-row">
+          <h1 class="vl-hero-heading">
+            <span class="vl-ht-pre">Are you</span>
+            <span class="vl-ht-line">Looking to get</span>
+            <span class="vl-ht-line">your TikToks</span>
+            <span class="vl-ht-line">viral?</span>
+          </h1>
+        </div>
+
+        <!-- Description row -->
+        <div class="home-hero__description-row">
+          <p class="home-hero__description-p">
+            Professional video editing packed with
+            <span class="home-hero__description-highlight is--round">cinematic</span>
+            cuts, <span class="home-hero__description-highlight">colour grading</span>,
+            <span class="home-hero__description-highlight is--round">motion graphics</span> and
+            <span class="home-hero__description-highlight">fast delivery</span>
+          </p>
+        </div>
+
+
+      </div><!-- /.home-hero__content -->
+    </div><!-- /.container -->
+
+  </section>
+
+  <!-- ═══════════════ SERVICES / TOOLKIT ═══════════════ -->
+  <section data-theme-section="light" class="product-slider__wrap" id="services">
+
+
+<!-- Decorative clock/fan track — arcs + ticks + dots indicating rotation slider -->
+    <svg class="vl-slider-track" xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid meet"
+         aria-hidden="true" focusable="false">
+
+      <!-- Two concentric arc tracks — center at (720,800), visible portion arcs upward -->
+      <g fill="none" stroke="#0a0000" stroke-linecap="round">
+        <path d="M 297,646 A 450,450 0 0 1 1143,646" stroke-width="1.2" opacity="0.09"/>
+        <path d="M 213,615 A 540,540 0 0 1 1227,615" stroke-width="0.8" opacity="0.06"/>
+      </g>
+
+      <!-- Radial tick marks — one base line rotated around center (720,800) -->
+      <!-- Each tick spans from R=648 (152px above center) to R=618 (182px above center) -->
+      <g stroke="#0a0000" stroke-width="1.4" stroke-linecap="round" opacity="0.11">
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(-70, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(-56, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(-42, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(-28, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(-14, 720, 800)"/>
+        <!-- Centre tick slightly more prominent -->
+        <line x1="720" y1="148" x2="720" y2="184" transform="rotate(0, 720, 800)" opacity="0.20"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(14, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(28, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(42, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(56, 720, 800)"/>
+        <line x1="720" y1="152" x2="720" y2="182" transform="rotate(70, 720, 800)"/>
+      </g>
+
+      <!-- Dots along the inner arc at R=540 — rotated around same center -->
+      <!-- Base dot sits at (720, 260) = (720, 800-540) -->
+      <g fill="#0a0000" opacity="0.09">
+        <circle cx="252" cy="530" r="2.5"/>
+        <circle cx="373" cy="386" r="2.5"/>
+        <circle cx="535" cy="292" r="2.5"/>
+        <circle class="vl-track-center-dot" cx="720" cy="260" r="3.5"/>
+        <circle cx="905" cy="292" r="2.5"/>
+        <circle cx="1067" cy="386" r="2.5"/>
+        <circle cx="1188" cy="530" r="2.5"/>
+      </g>
+    </svg>
+
+    <div class="product-slider">
+      <div class="container">
+        <div class="product-slider__text-row">
+          <div class="product-slider__title">
+            <h2 class="h-l">A look at<br>our work</h2>
+          </div>
+          <div class="product-slider__text">
+            <p class="p-l">Drag through a selection of recent edits:</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GSAP Fan Slider -->
+      <div data-gsap-slider-rotate="20"
+           data-gsap-slider-init=""
+           data-gsap-slider-loop="true"
+           data-gsap-slider-center="true"
+           class="gsap-slider">
+
+        <!-- Navigation buttons -->
+        <div class="product-slider__nav">
+          <button data-button-rotate="" data-shape="" data-gsap-slider-control="1"
+                  data-gsap-slider-control-status="active" data-responsive="" data-size=""
+                  data-theme="" data-button-rotate-hover="" class="button">
+            <div data-wf--button-theme--variant="neutral-300" class="button-bg"></div>
+            <div class="button-label__wrap">
+              <div class="button-label"><span>Dayne</span></div>
+            </div>
+          </button>
+          <button data-button-rotate="" data-shape="" data-gsap-slider-control="2"
+                  data-gsap-slider-control-status="not-active" data-responsive="" data-size=""
+                  data-theme="" data-button-rotate-hover="" class="button">
+            <div data-wf--button-theme--variant="neutral-300" class="button-bg"></div>
+            <div class="button-label__wrap">
+              <div class="button-label"><span>Anna</span></div>
+            </div>
+          </button>
+          <button data-button-rotate="" data-shape="" data-gsap-slider-control="3"
+                  data-gsap-slider-control-status="not-active" data-responsive="" data-size=""
+                  data-theme="" data-button-rotate-hover="" class="button">
+            <div data-wf--button-theme--variant="neutral-300" class="button-bg"></div>
+            <div class="button-label__wrap">
+              <div class="button-label"><span>Lee</span></div>
+            </div>
+          </button>
+          <button data-button-rotate="" data-shape="" data-gsap-slider-control="4"
+                  data-gsap-slider-control-status="not-active" data-responsive="" data-size=""
+                  data-theme="" data-button-rotate-hover="" class="button">
+            <div data-wf--button-theme--variant="neutral-300" class="button-bg"></div>
+            <div class="button-label__wrap">
+              <div class="button-label"><span>Maze</span></div>
+            </div>
+          </button>
+        </div><!-- /.product-slider__nav -->
+
+        <!-- Slider collection -->
+        <div data-cursor-zone="neutral-600" data-gsap-slider-collection=""
+             class="gsap-slider__collection is--products">
+          <div data-gsap-slider-list="" class="gsap-slider__list">
+
+            <!-- Card 1: Dayne -->
+            <div data-gsap-slider-item-status="active" data-gsap-slider-item="" class="gsap-slider__item">
+              <div class="product-card vlance-video-card">
+                <div class="product-card__before"></div>
+                <video class="vlance-video-bg" src="videos/Video 5 - Copy.mp4" autoplay muted loop playsinline></video>
+                <div class="vlance-video-overlay">
+                  <div class="vlance-video-info">
+                    <span class="vlance-video-tag">TT Shop video</span>
+                    <span class="vlance-video-name">Dayne</span>
+                  </div>
+                  <button class="vlance-mute-btn" aria-label="Toggle mute">
+                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Anna -->
+            <div data-gsap-slider-item-status="inview" data-gsap-slider-item="" class="gsap-slider__item">
+              <div class="product-card vlance-video-card">
+                <div class="product-card__before"></div>
+                <video class="vlance-video-bg" src="videos/Anna video.mp4" autoplay muted loop playsinline></video>
+                <div class="vlance-video-overlay">
+                  <div class="vlance-video-info">
+                    <span class="vlance-video-tag">TT Shop video</span>
+                    <span class="vlance-video-name">Anna</span>
+                  </div>
+                  <button class="vlance-mute-btn" aria-label="Toggle mute">
+                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Lee -->
+            <div data-gsap-slider-item-status="inview" data-gsap-slider-item="" class="gsap-slider__item">
+              <div class="product-card vlance-video-card">
+                <div class="product-card__before"></div>
+                <video class="vlance-video-bg" src="videos/Lee video.mp4" autoplay muted loop playsinline></video>
+                <div class="vlance-video-overlay">
+                  <div class="vlance-video-info">
+                    <span class="vlance-video-tag">Organic Video</span>
+                    <span class="vlance-video-name">Lee</span>
+                  </div>
+                  <button class="vlance-mute-btn" aria-label="Toggle mute">
+                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Maze -->
+            <div data-gsap-slider-item-status="inview" data-gsap-slider-item="" class="gsap-slider__item">
+              <div class="product-card vlance-video-card">
+                <div class="product-card__before"></div>
+                <video class="vlance-video-bg" src="videos/Maze video.mp4" autoplay muted loop playsinline></video>
+                <div class="vlance-video-overlay">
+                  <div class="vlance-video-info">
+                    <span class="vlance-video-tag">TikTok Creative Challenge video</span>
+                    <span class="vlance-video-name">Maze</span>
+                  </div>
+                  <button class="vlance-mute-btn" aria-label="Toggle mute">
+                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.gsap-slider__list -->
+        </div><!-- /.gsap-slider__collection -->
+      </div><!-- /.gsap-slider -->
+    </div><!-- /.product-slider -->
+  </section>
+
+
+  <!-- ═══════════════ STATS ═══════════════ -->
+  <section class="vl-stats" id="stats">
+
+    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star" style="top:16%;left:4%;height:55px;width:auto;">
+    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star" style="top:60%;right:5%;height:40px;width:auto;">
+
+<div class="vl-stats__inner">
+      <div class="vl-stats__grid">
+
+        <div class="vl-stat-card">
+          <div class="vl-stat-card__num">
+            <span class="vl-stat-count" data-to="1" data-suffix="B+">1B+</span>
+          </div>
+          <p class="vl-stat-card__label">Views generated for our clients</p>
+        </div>
+
+        <div class="vl-stat-card">
+          <div class="vl-stat-card__num">
+            <span class="vl-stat-count" data-to="3000" data-suffix="+" data-comma="true">3,000+</span>
+          </div>
+          <p class="vl-stat-card__label">Videos produced &amp; delivered</p>
+        </div>
+
+        <div class="vl-stat-card">
+          <div class="vl-stat-card__num">
+            <span class="vl-stat-count" data-to="8">8</span>
+          </div>
+          <p class="vl-stat-card__label">Elite editors on the team</p>
+        </div>
+
+        <div class="vl-stat-card">
+          <div class="vl-stat-card__num">
+            <span class="vl-stat-count" data-to="5000" data-suffix="+" data-comma="true">5,000+</span>
+          </div>
+          <p class="vl-stat-card__label">Discord members coached &amp; growing</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ CONTACT ═══════════════ -->
+  <section data-theme-section="dark" class="vlance-contact-section" id="contact">
+
+    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star" style="top:18%;left:7%;height:46px;width:auto;">
+    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star" style="top:24%;right:9%;height:62px;width:auto;">
+
+<div class="vlance-contact-inner">
+      <h2 class="h-l">Ready? Set. Go!</h2>
+      <div class="vlance-contact-actions">
+        <!-- Email -->
+        <a href="mailto:hello@vlance.co" class="vlance-contact-icon-btn" aria-label="Email us">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        </a>
+        <!-- Discord -->
+        <a href="https://discord.com" target="_blank" rel="noopener" class="vlance-contact-icon-btn" aria-label="Discord">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        </a>
+        <!-- Contact form button -->
+        <a href="mailto:hello@vlance.co" class="button vlance-contact-btn" data-shape="">
+          <div data-wf--button-theme--variant="electric" class="button-bg"></div>
+          <div class="button-label__wrap">
+            <div class="button-label"><span>Contact us via form</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer data-theme-section="dark" class="vlance-footer">
+
+    <!-- Decorative clouds — placed before wordmark so wordmark paints on top -->
+    <img src="svg/cloud 1.svg" class="vl-footer-cloud vl-footer-cloud-1" alt="" aria-hidden="true">
+    <img src="svg/cloud 2.svg" class="vl-footer-cloud vl-footer-cloud-2" alt="" aria-hidden="true">
+
+    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star" style="bottom:28%;left:5%;height:58px;width:auto;">
+    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star" style="bottom:32%;right:6%;height:36px;width:auto;">
+
+    <div class="vlance-footer-wordmark" aria-hidden="true">VLANCE</div>
+    <div class="container">
+      <div class="vlance-footer-inner">
+        <span class="vlance-footer-logo">Vlance</span>
+        <span class="eyebrow">© 2026 Vlance. All rights reserved.</span>
+        <nav class="vlance-footer-nav">
+          <a href="#hero" class="eyebrow">Top</a>
+          <a href="#services" class="eyebrow">Work</a>
+          <a href="#contact" class="eyebrow">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Draggable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/InertiaPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+<script src="vlance.js"></script>
+</body>
+</html>

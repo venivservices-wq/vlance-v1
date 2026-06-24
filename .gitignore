@@ -1,0 +1,11 @@
+# Reference/scratch files — not part of the deployed site
+osmo-raw.html
+osmo-main.js
+osmo-styles.css
+script.js
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.suo
+.vscode/

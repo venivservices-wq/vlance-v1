@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1728" height="1957" viewBox="0 0 1728 1957">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        fill: #ffdbe0;
+      }
+
+      .cls-1 {
+        stroke: #ffdbe0;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5 {
+        stroke-width: 1px;
+      }
+
+      .cls-2, .cls-3, .cls-5 {
+        stroke: #000;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-4 {
+        fill: #fff;
+        stroke: #fff;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="864.5" y1="2004" x2="864.5" y2="59" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e64613"/>
+      <stop offset="0.502" stop-color="#b92614"/>
+      <stop offset="0.986" stop-color="#710d0d"/>
+      <stop offset="1" stop-color="#710d0d"/>
+    </linearGradient>
+  </defs>
+  <circle id="right_ear" data-name="right ear" class="cls-1" cx="1411" cy="508" r="113"/>
+  <circle id="left_ear" data-name="left ear" class="cls-1" cx="301" cy="508" r="113"/>
+  <path id="body" class="cls-2" d="M864.5,59h0A578.5,578.5,0,0,1,1443,637.5V2004a0,0,0,0,1,0,0H286a0,0,0,0,1,0,0V637.5A578.5,578.5,0,0,1,864.5,59Z"/>
+  <path id="face_bottom" data-name="face bottom" class="cls-3" d="M850.418,508A174.458,174.458,0,1,1,675.96,682.457,174.453,174.453,0,0,1,850.418,508Z"/>
+  <circle id="nose_left" data-name="nose left" cx="816" cy="682" r="14"/>
+  <circle id="nose_right" data-name="nose right" cx="878" cy="682" r="14"/>
+  <rect id="mouth" x="764" y="752" width="172" height="15"/>
+  <rect id="face_top" data-name="face top" class="cls-1" x="504" y="374" width="727" height="268" rx="123.5" ry="123.5"/>
+  <circle id="left_eye_outside" data-name="left eye outside" class="cls-4" cx="701.5" cy="508.5" r="95.5"/>
+  <circle id="left_eye_inside" data-name="left eye inside" class="cls-5" cx="701.188" cy="507.938" r="61.688"/>
+  <circle id="right_eye_outside_" data-name="right eye outside " class="cls-4" cx="980.5" cy="507.5" r="95.5"/>
+  <circle id="right_eye_inside_copy" data-name="right eye inside copy" class="cls-5" cx="980.19" cy="506.938" r="61.69"/>
+</svg>

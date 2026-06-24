@@ -1,0 +1,1204 @@
+/* ─── Vlance brand color overrides ─── */
+:root {
+  --color-electric:    #b91616;
+  --color-neutral-900: #040000;
+  --color-neutral-800: #2a2a2a;
+  --color-neutral-700: #3a3a3a;
+  --color-neutral-600: #4a4a4a;
+  --color-neutral-525: #555555;
+  --color-neutral-500: #888888;
+  --color-neutral-400: #aaaaaa;
+  --color-neutral-300: #cccccc;
+  --color-neutral-200: #fffefe;
+  --color-light:       #fffefe;
+  --color-purple:      #b91616;
+}
+
+/* ─── Webflow button-theme variant colours (needed without Webflow runtime) ─── */
+[data-wf--button-theme--variant="electric"]     { background-color: var(--color-electric, #5a6aff); }
+[data-wf--button-theme--variant="neutral-200"]  { background-color: var(--color-neutral-200, #e8e8e8); }
+[data-wf--button-theme--variant="neutral-300"]  { background-color: var(--color-neutral-300, #d4d4d4); }
+[data-wf--button-theme--variant="neutral-525"]  { background-color: var(--color-neutral-525, #555); }
+[data-wf--button-theme--variant="neutral-600"]  { background-color: var(--color-neutral-600, #444); }
+[data-wf--button-theme--variant="light-10"]     { background-color: rgba(255,255,255,0.10); }
+[data-wf--button-theme--variant="dark-10"]      { background-color: rgba(0,0,0,0.10); }
+[data-wf--button-theme--variant="purple"]       { background-color: var(--color-purple, #8a55ff); }
+
+/* ─── Logo ─── */
+.vlance-logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.vlance-logo-img {
+  height: 1.6em;
+  width: auto;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+[data-nav-theme="light"] .vlance-logo-img,
+body:not([data-scrolled]) .vlance-logo-img {
+  filter: none;
+}
+
+.vlance-logo-text {
+  font-size: 1.25em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: currentColor;
+}
+
+/* ─── Radial marquee card visual ─── */
+.vlance-card-visual {
+  width: 100%;
+  padding-top: 56%;   /* 16:9 */
+  border-radius: 0.1875em;
+}
+
+/* ─── Product card bg ─── */
+.vlance-card-bg {
+  position: absolute;
+  inset: 0;
+}
+
+/* ─── Marquee CSS animation (same keyframe as osmo uses) ─── */
+.marquee-css {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-css__list {
+  display: flex;
+  flex-shrink: 0;
+  animation: translateX var(--marquee-duration, 30s) linear infinite;
+}
+.marquee-css__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding-right: 1.5em;
+}
+.marquee-css__item-svg {
+  width: 0.75em;
+  height: 0.75em;
+  flex-shrink: 0;
+}
+
+/* ─── Work section ─── */
+.vlance-work-section {
+  padding: var(--padding-xl, 8em) 0;
+  border-top: 1px solid rgba(var(--color-rgb-dark, 0 0 0), 0.08);
+  border-bottom: 1px solid rgba(var(--color-rgb-dark, 0 0 0), 0.08);
+  background-color: rgba(0,0,0,0.02);
+}
+.vlance-section-header {
+  margin-bottom: var(--gap-xl, 4em);
+}
+.vlance-section-header .p-l {
+  color: var(--color-neutral-500, #888);
+  margin-top: 0.75em;
+}
+.vlance-work-placeholder {
+  height: 20em;
+  border: 2px dashed rgba(var(--color-rgb-dark, 0 0 0), 0.1);
+  border-radius: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-500, #888);
+}
+
+/* ─── Contact section ─── */
+.vlance-contact-section {
+  position: relative;
+  padding: clamp(5rem, 9vh, 8rem) 0;
+  background-color: #fffefe;
+  color: #040000;
+  text-align: center;
+}
+
+.vlance-contact-section .h-l {
+  font-size: clamp(6rem, 13vw, 14rem) !important;
+}
+
+
+/* ── Unified display text: all section titles + hero titles + stat numbers ── */
+.h-xl,
+.h-l,
+.vl-stat-card__num {
+  font-family: "Bricolage Grotesque", sans-serif !important;
+  font-optical-sizing: auto !important;
+  font-variation-settings: "wdth" 100 !important;
+  font-size: clamp(4.5rem, 8vw, 8rem) !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.0 !important;
+}
+
+/* ── Hero description text ── */
+.home-hero__description-p {
+  font-size: clamp(1.3rem, 2.8vw, 2.2rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  letter-spacing: -0.015em !important;
+}
+
+.vl-word {
+  display: inline;
+}
+
+/* ── Services / generic body text ── */
+.p-l {
+  font-size: clamp(1.05rem, 1.8vw, 1.4rem) !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  letter-spacing: -0.005em !important;
+}
+.vlance-contact-inner {
+  max-width: 44em;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-l, 2em);
+}
+
+.vlance-contact-inner .p-l {
+  color: #888;
+}
+.vlance-contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2.5em;
+}
+
+.vlance-contact-icon-btn {
+  width: 5.5em;
+  height: 5.5em;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.07) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #040000 !important;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+  flex-shrink: 0;
+  cursor: pointer;
+  transform: none !important;
+  position: relative;
+}
+.vlance-contact-icon-btn svg {
+  width: 2em;
+  height: 2em;
+  pointer-events: none;
+  display: block;
+}
+.vlance-contact-icon-btn:hover {
+  background-color: #040000 !important;
+  color: #fffefe !important;
+}
+
+.vlance-contact-btn {
+  font-size: 1.125em;
+  padding: 0.875em 2.8em;
+  display: inline-flex;
+  position: relative;
+  text-decoration: none;
+  border-radius: 100em;
+  overflow: hidden;
+  height: 5.5em;
+  align-items: center;
+  transform: none !important;
+}
+.vlance-contact-btn .button-bg {
+  background-color: rgba(0,0,0,0.07) !important;
+  transition: background-color 0.2s ease !important;
+}
+.vlance-contact-btn:hover .button-bg {
+  background-color: #040000 !important;
+}
+.vlance-contact-btn .button-label span {
+  color: #040000;
+  transition: color 0.18s;
+}
+.vlance-contact-btn:hover .button-label span {
+  color: #fffefe;
+}
+
+/* ─── Footer ─── */
+.vlance-footer {
+  padding-bottom: 1.5rem;
+  background-color: #fffefe;
+  color: #888;
+  overflow: clip;
+}
+
+.vlance-footer-wordmark {
+  margin-top: calc(4rem + 100px);
+  font-size: 30.5vw;
+  font-weight: 1000;
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+  color: #b91616;
+  white-space: nowrap;
+  display: block;
+  text-align: center;
+  padding: 0;
+  margin: calc(4rem + 200px) 0 0;
+  user-select: none;
+  -webkit-text-stroke: 6px #b91616;
+  transform: translateX(-8%);
+}
+.vlance-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5em;
+  flex-wrap: wrap;
+}
+.vlance-footer-logo {
+  font-size: 1.1em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #040000;
+}
+.vlance-footer-nav {
+  display: flex;
+  gap: 1.5em;
+}
+.vlance-footer-nav a {
+  color: #888;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+.vlance-footer-nav a:hover {
+  color: #040000;
+}
+
+/* ─── Prevent nav wrapper from bleeding past viewport width ─── */
+.global {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* ─── Osmo drag cursor — must never intercept pointer events ─── */
+.cursor,
+.cursor * {
+  pointer-events: none !important;
+}
+
+/* ─── Cloud parallax ─── */
+.vl-clouds-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.vl-cloud-1,
+.vl-cloud-2 {
+  position: absolute;
+  width: clamp(420px, 58vw, 940px);
+  height: auto;
+  opacity: 0.5;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.vl-cloud-1 {
+  top: -6%;
+  left: -8%;
+}
+
+.vl-cloud-2 {
+  bottom: 0;
+  right: -12%;
+}
+
+/* ─── Footer clouds ─── */
+.vl-footer-cloud {
+  position: absolute;
+  width: clamp(260px, 34vw, 620px);
+  height: auto;
+  opacity: 0.22;
+  pointer-events: none;
+}
+.vl-footer-cloud-1 {
+  top: 2%;
+  left: -5%;
+}
+.vl-footer-cloud-2 {
+  bottom: 14%;
+  right: -7%;
+}
+
+/* ─── Monkey peek ─── */
+.home-hero {
+  position: relative;
+}
+
+.vl-monkey-wrap {
+  position: absolute;
+  top: 14vh;
+  left: 2vw;
+  width: clamp(220px, 22vw, 380px);
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.vl-monkey-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .vl-monkey-wrap  { display: none; }
+  .vl-blueguy-wrap { display: none; }
+}
+
+.vl-blueguy-wrap {
+  position: absolute;
+  bottom: 4vh;
+  right: 6vw;
+  width: clamp(180px, 18vw, 320px);
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.vl-blueguy-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+/* ─── Hero display title ─── */
+.home-hero__title-row {
+  display: block !important;
+  text-align: center;
+}
+
+.vl-hero-heading {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.vl-ht-pre {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-variation-settings: "wdth" 100;
+  font-size: clamp(1.6rem, 3.2vw, 3rem);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  background: linear-gradient(110deg, #e64613 0%, #b91616 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+  margin-bottom: 0.3em;
+}
+
+.vl-ht-line {
+  font-size: clamp(3.5rem, 10vw, 11rem);
+  color: #040000;
+  display: block;
+}
+
+.home-hero__description-row {
+  margin-top: clamp(4rem, 8vh, 7rem) !important;
+  padding-top: clamp(2rem, 4vh, 4rem);
+  padding-bottom: clamp(2rem, 4vh, 4rem);
+  text-align: center;
+}
+
+.home-hero__bg-line {
+  opacity: 0.08 !important;
+}
+
+.home-hero__content {
+  padding-bottom: clamp(5rem, 10vh, 9rem);
+}
+
+/* ─── Hero logo ─── */
+.vlance-hero-logo {
+  width: 7em;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* ─── Hero layout ─── */
+.home-hero {
+  overflow: visible !important;
+  min-height: 100svh !important;
+  justify-content: flex-start !important;
+}
+/* Keep text above wheel cards */
+.home-hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* Override osmo's overflow:clip on .main */
+.main {
+  overflow: visible !important;
+}
+
+/* Slater CSS injects body{display:flex;padding:.5em} from a different page
+   template — reset to normal block so sections fill the full viewport width */
+body {
+  display: block !important;
+  padding: 0 !important;
+  overflow-x: hidden;
+}
+
+/* Ensure enough hero height on all sizes */
+.home-hero {
+  min-height: max(100svh, 600px) !important;
+}
+
+/* Lighter gray pill highlights */
+.home-hero__description-highlight {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ─── Button: hide duplicate labels, add clean hover ─── */
+.button-label__wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hide the 2nd and 3rd label divs (used only for JS slide animation) */
+.button-label__wrap .button-label:not(:first-child) {
+  display: none !important;
+}
+
+/* General button hover — color only, no shape/size/position changes */
+.button {
+  transition: opacity 0.18s ease;
+  cursor: pointer;
+}
+.button:hover {
+  opacity: 0.75;
+}
+
+/* ─── Slider section: clock/fan track background ─── */
+.product-slider__wrap { position: relative; }
+
+.product-slider__text-row {
+  padding-top: clamp(4rem, 8vh, 7rem);
+}
+
+.vl-slider-track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle pulse on the centre tick dot */
+.vl-track-center-dot {
+  animation: vl-dot-pulse 3.5s ease-in-out infinite;
+  transform-origin: 720px 260px;
+}
+@keyframes vl-dot-pulse {
+  0%, 100% { opacity: 0.09; r: 3.5; }
+  50%       { opacity: 0.22; r: 5; }
+}
+
+/* Ensure slider content sits above the SVG */
+.product-slider { position: relative; z-index: 1; }
+
+/* ─── Slider nav buttons: lock shape, use color for active/hover ─── */
+.product-slider__nav .button,
+.product-slider__nav .button[data-gsap-slider-control-status="active"],
+.product-slider__nav .button[data-gsap-slider-control-status="not-active"] {
+  opacity: 1 !important;
+  border-radius: 0.5em !important;
+  transform: none !important;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease !important;
+}
+
+/* Inactive state */
+.product-slider__nav .button[data-gsap-slider-control-status="not-active"] .button-bg {
+  background-color: var(--color-neutral-300, #d4d4d4) !important;
+}
+
+/* Active state — brand color, same shape */
+.product-slider__nav .button[data-gsap-slider-control-status="active"] .button-bg {
+  background-color: #040000 !important;
+  border-radius: 0.5em !important;
+}
+.product-slider__nav .button[data-gsap-slider-control-status="active"] .button-label span {
+  color: #fffefe;
+}
+
+/* Hover: tint only */
+.product-slider__nav .button:hover {
+  opacity: 1 !important;
+}
+.product-slider__nav .button[data-gsap-slider-control-status="not-active"]:hover .button-bg {
+  background-color: #bbb !important;
+}
+.product-slider__nav .button[data-gsap-slider-control-status="active"]:hover .button-bg {
+  background-color: #2a2a2a !important;
+}
+
+/* ─── Video cards ─── */
+.vlance-video-card {
+  position: relative;
+  overflow: hidden;
+}
+.vlance-video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Overlay: bottom-left info + top-right mute btn */
+.vlance-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 35%);
+}
+.vlance-video-info {
+  position: absolute;
+  bottom: 1em;
+  left: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+.vlance-video-tag {
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+.vlance-video-name {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.vlance-mute-btn {
+  position: absolute;
+  top: 0.85em;
+  right: 0.85em;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  pointer-events: all;
+  transition: background 0.18s, transform 0.15s;
+}
+.vlance-mute-btn:hover {
+  background: rgba(0,0,0,0.7);
+  transform: scale(1.1);
+}
+.vlance-mute-btn svg {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+/* ─── Page Loader ─── */
+.vl-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #040000;
+  pointer-events: all;
+  clip-path: inset(0% 0% 0% 0%);
+  will-change: clip-path;
+  overflow: hidden;
+}
+
+/* Primary blob — orange/red core, slow drift */
+.vl-loader::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(ellipse at 50% 95%, rgba(255,220,180,0.18) 0%, transparent 10%),
+    radial-gradient(ellipse at 50% 90%, #ff5500 0%, transparent 32%),
+    radial-gradient(ellipse at 50% 78%, #b91616 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 62%, #2a0000 0%, transparent 68%);
+  animation: vl-blob-a 5.5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Secondary blob — deeper crimson, offset position, different tempo */
+.vl-loader::after {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(ellipse at 40% 85%, #cc1818 0%, transparent 38%),
+    radial-gradient(ellipse at 62% 80%, #b91616 0%, transparent 42%);
+  mix-blend-mode: screen;
+  animation: vl-blob-b 7.5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes vl-blob-a {
+  0%   { transform: translate(0%,   0%)   scale(1);    opacity: 0.9;  }
+  25%  { transform: translate(-3%, -3%)   scale(1.07); opacity: 1;    }
+  55%  { transform: translate(2%,  -1%)   scale(0.96); opacity: 0.82; }
+  80%  { transform: translate(-1%, -5%)   scale(1.04); opacity: 0.95; }
+  100% { transform: translate(3%,  -2%)   scale(0.93); opacity: 0.78; }
+}
+
+@keyframes vl-blob-b {
+  0%   { transform: translate(0%,   0%)   scale(1);    opacity: 0.65; }
+  30%  { transform: translate(5%,  -4%)   scale(1.12); opacity: 0.8;  }
+  65%  { transform: translate(-4%, -6%)   scale(0.88); opacity: 0.55; }
+  100% { transform: translate(2%,  -3%)   scale(1.05); opacity: 0.72; }
+}
+
+.vl-loader__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Logo icon — starts hidden; GSAP animates in */
+.vl-loader__icon {
+  width: clamp(52px, 6vw, 80px);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0;
+  transform: translateY(-18px) scale(0.88);
+  will-change: transform, opacity;
+}
+
+/* "VLANCE" letters — each clipped upward, GSAP sweeps them into view */
+.vl-loader__word {
+  display: flex;
+  overflow: hidden;
+  line-height: 1;
+  padding: 0.1em 0;
+}
+
+.vl-loader__word span {
+  display: block;
+  font-size: clamp(3.2rem, 9.5vw, 8rem);
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: #fffefe;
+  line-height: 1;
+  transform: translateY(110%);
+  will-change: transform;
+}
+
+
+/* ─── Smooth scroll ─── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Nav scroll anchor offset ─── */
+[id] {
+  scroll-margin-top: 4em;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   STATS SECTION
+   ════════════════════════════════════════════════════════════════ */
+.vl-stats {
+  position: relative;
+  background: #fffefe;
+  padding: clamp(5rem, 9vh, 8rem) 0;
+  overflow: hidden;
+}
+
+/* Faint horizontal hairline across the very top */
+.vl-stats::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(4,0,0,0.12) 50%, transparent);
+  pointer-events: none;
+}
+
+.vl-stats__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 5vw, 4.5rem);
+}
+
+
+/* Center-axis column — numbers stacked near centre, tiny alternating nudge */
+.vl-stats__grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.vl-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(2.5rem, 5vh, 5rem) 0;
+}
+
+.vl-stat-card__num {
+  font-size: clamp(5rem, 11vw, 12rem) !important;
+  font-weight: 900 !important;
+  color: #b91616;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.04em;
+}
+
+.vl-stat-card__label {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-optical-sizing: auto;
+  font-variation-settings: "wdth" 100;
+  font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+  font-weight: 600;
+  color: #040000;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 0;
+  max-width: 22ch;
+}
+
+/* ─── Contact word reveal ─── */
+.vl-reveal-word {
+  display: inline-block;
+  pointer-events: none;
+}
+
+.vlance-contact-section .h-l {
+  pointer-events: none;
+}
+
+/* Applied once the pin completes — locks words + buttons permanently regardless of scrub state */
+.vl-contact-word-revealed {
+  opacity: 1 !important;
+  transform: none !important;
+}
+.vl-contact-btn-revealed {
+  opacity: 1 !important;
+  transition: opacity 0.45s ease !important;
+}
+
+/* ─── Decorative star accents ─── */
+.vl-star {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.vlance-footer {
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Global: every section clips its own horizontal overflow ── */
+.under-nav-bar,
+.product-slider__wrap,
+.vl-stats,
+.vlance-contact-section {
+  overflow-x: clip;
+}
+
+/* Hero clips horizontally on mobile (decorative SVGs are hidden there) */
+@media (max-width: 900px) {
+  .home-hero {
+    overflow-x: clip !important;
+  }
+}
+
+/* ── CSS custom property overrides
+   Osmo/Slater define large gap variables — shrink at mobile ── */
+@media (max-width: 768px) {
+  :root {
+    --container-padding: 1.25rem;
+    --gap-s:   0.5rem;
+    --gap-m:   1rem;
+    --gap-l:   1.5rem;
+    --gap-xl:  2.5rem;
+    --gap-xxl: 3.5rem;
+  }
+}
+@media (max-width: 480px) {
+  :root {
+    --container-padding: 1rem;
+    --gap-m: 0.75rem;
+    --gap-l: 1.25rem;
+  }
+}
+
+/* ── Container padding ── */
+@media (max-width: 900px) {
+  .container {
+    padding-left:  clamp(1.25rem, 5vw, 3rem) !important;
+    padding-right: clamp(1.25rem, 5vw, 3rem) !important;
+  }
+}
+
+/* ──────────────────────────────────────────
+   HERO — Clouds & decorative elements
+   ────────────────────────────────────────── */
+
+/* Cloud base has clamp(420px, 58vw, 940px) — min 420px is wider than any phone.
+   Override to scale proportionally at small viewports. */
+@media (max-width: 900px) {
+  .vl-cloud-1, .vl-cloud-2 {
+    width: clamp(200px, 65vw, 500px);
+  }
+}
+@media (max-width: 600px) {
+  .vl-cloud-1, .vl-cloud-2 {
+    width: clamp(140px, 55vw, 260px);
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 768px) {
+  .vl-footer-cloud {
+    width: clamp(130px, 42vw, 260px);
+    opacity: 0.16;
+  }
+}
+
+/* ── Hero text — tablet ── */
+@media (max-width: 900px) {
+  .vl-ht-pre {
+    font-size: clamp(1rem, 2.8vw, 2rem) !important;
+  }
+  .vl-ht-line {
+    font-size: clamp(2.4rem, 8vw, 7rem) !important;
+  }
+  .home-hero__description-p {
+    font-size: clamp(1rem, 2.5vw, 1.8rem) !important;
+  }
+  .home-hero__description-row {
+    margin-top:     clamp(2rem, 5vh, 4rem) !important;
+    padding-top:    clamp(1rem, 2.5vh, 2rem);
+    padding-bottom: clamp(1rem, 2.5vh, 2rem);
+  }
+}
+
+/* ── Hero text — phone ── */
+@media (max-width: 600px) {
+  /* "Are you" — noticeably bigger */
+  .vl-ht-pre {
+    font-size: clamp(1.5rem, 6vw, 2.5rem) !important;
+    margin-bottom: 0.3em;
+  }
+  /* Main title lines — bigger + prevent lines from touching */
+  .vl-hero-heading {
+    gap: 0.12em;
+  }
+  .vl-ht-line {
+    font-size: clamp(2.5rem, 11.5vw, 5rem) !important;
+    line-height: 1.0 !important;
+  }
+  /* Description — bigger, better line-height, highlights readable */
+  .home-hero__description-p {
+    font-size: clamp(1.1rem, 4.5vw, 1.6rem) !important;
+    line-height: 1.6 !important;
+  }
+  .home-hero__description-highlight {
+    display: inline;
+    padding: 0.12em 0.38em;
+    border-radius: 0.35em;
+    background-color: rgba(0,0,0,0.06) !important;
+  }
+  .home-hero__description-highlight.is--round {
+    border-radius: 100em;
+  }
+  .home-hero__description-row {
+    margin-top:     clamp(1.5rem, 4vh, 3rem) !important;
+    padding-top:    clamp(0.75rem, 2vh, 1.5rem);
+    padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
+  }
+  .home-hero__content {
+    padding-bottom: clamp(2.5rem, 6vh, 6rem);
+  }
+}
+
+/* ──────────────────────────────────────────
+   GENERAL HEADING SCALE (services .h-l etc.)
+   ────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .h-l {
+    font-size: clamp(2.4rem, 9vw, 6rem) !important;
+  }
+}
+@media (max-width: 480px) {
+  .h-l {
+    font-size: clamp(2rem, 9.5vw, 5rem) !important;
+  }
+}
+
+/* ──────────────────────────────────────────
+   SERVICES / WORK SLIDER
+   ────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .vl-slider-track {
+    display: none;
+  }
+  .product-slider__text-row {
+    padding-top: clamp(2.5rem, 5vh, 5rem);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Contain the slider so fanned cards never overflow the section */
+  .gsap-slider,
+  .gsap-slider__collection {
+    overflow: hidden;
+    max-width: 100%;
+  }
+  /* Cards: fit in narrow viewport without overflowing the fan layout */
+  .gsap-slider__item {
+    width: min(72vw, 280px) !important;
+  }
+  /* Nav pills: use relative layout, wrap, add side padding */
+  .product-slider__nav {
+    position: relative !important;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    padding: 0.75rem 1.25rem;
+    justify-content: flex-start;
+  }
+}
+
+/* ──────────────────────────────────────────
+   STATS
+   ────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .vl-stats {
+    padding: clamp(3rem, 6vh, 6rem) 0;
+  }
+  .vl-stats__inner {
+    padding-left:  clamp(1rem, 5vw, 3rem);
+    padding-right: clamp(1rem, 5vw, 3rem);
+  }
+  .vl-stat-card {
+    padding: clamp(1.5rem, 4vh, 3.5rem) 0;
+  }
+  .vl-stat-card__num {
+    font-size: clamp(3rem, 13vw, 9rem) !important;
+  }
+  .vl-stat-card__label {
+    font-size: clamp(0.95rem, 3vw, 1.8rem);
+    max-width: 32ch;
+  }
+}
+
+/* ──────────────────────────────────────────
+   CONTACT
+   ────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .vlance-contact-section .h-l {
+    font-size: clamp(3.5rem, 11vw, 12rem) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .vlance-contact-section {
+    padding: clamp(2.5rem, 6vh, 6rem) 1.5rem;
+  }
+  /* Each word ("Ready?", "Set.", "Go!") gets its own line at 22vw */
+  .vlance-contact-section .h-l {
+    font-size: clamp(5rem, 22vw, 7rem) !important;
+    line-height: 1.1 !important;
+    white-space: normal !important;
+  }
+  .vlance-contact-inner {
+    gap: 1.2em;
+    max-width: 100%;
+  }
+  .vlance-contact-actions {
+    gap: 0.75em;
+    margin-top: 1.5em;
+  }
+  .vlance-contact-icon-btn {
+    width: 4.5em;
+    height: 4.5em;
+  }
+  .vlance-contact-icon-btn svg {
+    width: 1.7em;
+    height: 1.7em;
+  }
+  .vlance-contact-btn {
+    font-size: 0.95em;
+    padding: 0.875em 1.8em;
+    height: 4.5em;
+  }
+}
+
+/* ──────────────────────────────────────────
+   FOOTER
+   ────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .vlance-footer-wordmark {
+    font-size: 33vw !important;
+    margin-top: 2rem !important;
+  }
+  .vlance-footer .container {
+    padding-left:  1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+  .vlance-footer-inner {
+    gap: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  .vlance-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .vlance-footer-nav {
+    gap: 1.2em;
+  }
+}
+
+/* ──────────────────────────────────────────
+   STARS — hide on small phones
+   ────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .vl-star {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHONE EXTRAS (≤600px) — monkey, stats, footer polish
+   ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+
+  /* ── Show monkey & blue guy peeking from bottom corners of hero ── */
+  .vl-monkey-wrap {
+    display: block !important;
+    width: 130px !important;
+    top: auto !important;
+    bottom: 60px !important;
+    left: -14px !important;
+  }
+  .vl-blueguy-wrap {
+    display: block !important;
+    width: 110px !important;
+    bottom: 60px !important;
+    right: -14px !important;
+  }
+
+  /* ── Stats: remove top hairline, bigger numbers, less top gap ── */
+  .vl-stats::after {
+    display: none;
+  }
+  .vl-stats {
+    padding-top: clamp(2rem, 4vh, 4rem) !important;
+  }
+  .vl-stat-card__num {
+    font-size: clamp(4.5rem, 20vw, 8rem) !important;
+  }
+  .vl-stat-card {
+    padding: clamp(1.2rem, 2.5vh, 2.5rem) 0 !important;
+  }
+  .vl-stat-card__label {
+    font-size: clamp(1rem, 3.5vw, 1.4rem) !important;
+  }
+
+  /* ── Footer: stack vertically, bigger logo, readable nav ── */
+  .vlance-footer-wordmark {
+    font-size: 34vw !important;
+    margin-top: 1.5rem !important;
+    -webkit-text-stroke: 3px #b91616 !important;
+  }
+  .vlance-footer-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.6em !important;
+  }
+  .vlance-footer-logo {
+    font-size: 1.25rem !important;
+    color: #040000 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .vlance-footer-inner > .eyebrow {
+    font-size: 0.78rem !important;
+    letter-spacing: 0.04em;
+    color: #888 !important;
+  }
+  .vlance-footer-nav {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 1.25em !important;
+    margin-top: 0.2em;
+  }
+  .vlance-footer-nav a {
+    font-size: 0.82rem !important;
+    letter-spacing: 0.03em;
+    color: #888 !important;
+  }
+}
