@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<html class="w-mod-js" data-wf-domain="vlance.co" lang="en">
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
   <title>Vlance — Freelance Dev Built to Ship</title>
   <meta name="description" content="Freelance web design and development studio. From landing pages to full products — built to ship."/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
-  <!-- Osmo's exact CSS from CDN -->
-  <link href="https://cdn.prod.website-files.com/68a5787bba0829184628bd51/css/osmo-v2.shared.36af92bad.min.css" rel="stylesheet" type="text/css" crossorigin="anonymous"/>
-  <link href="https://slater.app/16596/45154.css" rel="stylesheet" type="text/css"/>
-  <link href="https://slater.app/16596/45446.css" rel="stylesheet" type="text/css"/>
-  <link href="https://slater.app/16596/45511.css" rel="stylesheet" type="text/css"/>
 
   <!-- Playful display font -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -19,6 +13,24 @@
 
   <!-- Vlance overrides -->
   <link rel="stylesheet" href="vlance.css"/>
+
+  <!-- Wistia player -->
+  <script src="https://fast.wistia.com/player.js" async></script>
+  <script src="https://fast.wistia.com/embed/4vnnq886hl.js" async type="module"></script>
+  <script src="https://fast.wistia.com/embed/935jjrrrfb.js" async type="module"></script>
+  <script src="https://fast.wistia.com/embed/m7vdy6618q.js" async type="module"></script>
+  <script src="https://fast.wistia.com/embed/39p9d9cou2.js" async type="module"></script>
+  <style>
+    wistia-player[media-id='4vnnq886hl']:not(:defined),
+    wistia-player[media-id='935jjrrrfb']:not(:defined),
+    wistia-player[media-id='m7vdy6618q']:not(:defined),
+    wistia-player[media-id='39p9d9cou2']:not(:defined) {
+      background: center / contain no-repeat;
+      display: block;
+      filter: blur(5px);
+      padding-top: 177.78%;
+    }
+  </style>
 </head>
 <body class="body">
 
@@ -38,199 +50,11 @@
 
 <div class="global">
 
-  <!-- ═══════════════ NAV ═══════════════ -->
-  <div data-marketing-theme="dark" data-nav-theme="light" data-nav-status="not-active"
-       data-scrolling-started="false" data-scrolling-direction="down" class="nav" id="nav">
-    <div data-nav-toggle="close" class="nav__bg"></div>
-    <div class="nav-bar__wrap">
-      <div class="nav-bar__width">
-        <div class="nav-bar">
-          <div class="nav-bar__back">
-            <div class="nav-bar__outline"></div>
-            <div class="nav-bar__bg"></div>
-          </div>
-
-          <div data-nav-bar-height="" class="nav-bar__top">
-
-            <!-- Hamburger -->
-            <div class="nav-bar__menu">
-              <div data-nav-toggle="toggle" class="nav-menu" id="nav-toggle">
-                <div class="nav-menu__hamburger">
-                  <div class="nav-menu__hamburger-bar"></div>
-                  <div class="nav-menu__hamburger-bar"></div>
-                </div>
-                <span class="nav-menu__label">Menu</span>
-              </div>
-            </div>
-
-            <!-- Logo -->
-            <div class="nav-bar__logo">
-              <a href="#" class="nav-logo w-inline-block vlance-logo-link">
-                <img src="https://github.com/venivservices-wq/Vlance/blob/main/vlance%20logo.png?raw=true" alt="Vlance" class="vlance-logo-img"/>
-              </a>
-            </div>
-
-            <!-- Buttons -->
-            <div class="nav-bar__buttons">
-              <div class="nav-bar__login-button">
-                <a class="button w-inline-block" data-button-rotate="" data-shape="round"
-                   href="#services" data-size="" data-theme="">
-                  <div data-wf--button-theme--variant="neutral-525" class="button-bg"></div>
-                  <div class="button-label__wrap">
-                    <div class="button-label"><span>Work</span></div>
-                    <div aria-hidden="true" class="button-label"><span>Work</span></div>
-                  </div>
-                </a>
-              </div>
-              <div class="nav-bar__signup-button">
-                <a class="button w-inline-block" data-button-rotate="" data-shape=""
-                   href="#contact" data-size="" data-theme="">
-                  <div data-wf--button-theme--variant="electric" class="button-bg"></div>
-                  <div class="button-label__wrap">
-                    <div class="button-label"><span>Hire Me</span></div>
-                    <div aria-hidden="true" class="button-label"><span>Hire Me</span></div>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="nav-bar__line"></div>
-          </div>
-
-          <!-- Dropdown bottom -->
-          <div class="nav-bar__bottom">
-            <div class="nav-bar__bottom-overflow">
-              <div class="nav-bar__bottom-inner">
-                <div class="nav-bar__bottom-row">
-                  <div class="nav-bar__bottom-col is--products">
-                    <div class="nav-bar__tag-row"><span class="eyebrow">Navigation</span></div>
-                    <ul class="nav-bar__ul-big">
-                      <li class="nav-bar__big-li">
-                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
-                          <span class="nav-bar__big-span">Work</span>
-                        </a>
-                        <div class="line is--nav-transparent"></div>
-                      </li>
-                      <li class="nav-bar__big-li">
-                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
-                          <span class="nav-bar__big-span">Services</span>
-                        </a>
-                        <div class="line is--nav-transparent"></div>
-                      </li>
-                      <li class="nav-bar__big-li">
-                        <a href="#contact" class="nav-bar__big-a w-inline-block" data-nav-close="">
-                          <span class="nav-bar__big-span">Contact</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div class="nav-bar__bottom-col">
-                    <div class="nav-bar__tag-row"><span class="eyebrow">Services</span></div>
-                    <ul class="nav-bar__ul-big">
-                      <li class="nav-bar__big-li">
-                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
-                          <span class="nav-bar__big-span">Web Development</span>
-                        </a>
-                        <div class="line is--nav-transparent"></div>
-                      </li>
-                      <li class="nav-bar__big-li">
-                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
-                          <span class="nav-bar__big-span">UI / UX Design</span>
-                        </a>
-                        <div class="line is--nav-transparent"></div>
-                      </li>
-                      <li class="nav-bar__big-li">
-                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
-                          <span class="nav-bar__big-span">Motion & Animation</span>
-                        </a>
-                        <div class="line is--nav-transparent"></div>
-                      </li>
-                      <li class="nav-bar__big-li">
-                        <a href="#services" class="nav-bar__big-a w-inline-block" data-nav-close="">
-                          <span class="nav-bar__big-span">Branding</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <!-- Mobile buttons -->
-                  <div class="nav-bar__mobile-buttons">
-                    <a class="button w-inline-block" data-size="full" data-theme="" href="#services"
-                       data-button-rotate="" data-shape="" data-nav-close="">
-                      <div data-wf--button-theme--variant="neutral-600" class="button-bg"></div>
-                      <div class="button-label__wrap">
-                        <div class="button-label"><span>View Work</span></div>
-                        <div aria-hidden="true" class="button-label"><span>View Work</span></div>
-                      </div>
-                    </a>
-                    <a class="button w-inline-block" data-size="full" data-theme="" href="#contact"
-                       data-button-rotate="" data-shape="" data-nav-close="">
-                      <div data-wf--button-theme--variant="electric" class="button-bg"></div>
-                      <div class="button-label__wrap">
-                        <div class="button-label"><span>Hire Me</span></div>
-                        <div aria-hidden="true" class="button-label"><span>Hire Me</span></div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <!-- Cursor drag indicator -->
-    <div class="cursor">
-      <div class="cursor__drag-dots">
-        <div class="cursor__drag-dot"></div>
-        <div class="cursor__drag-dot"></div>
-      </div>
-      <div class="cursor-bubble">
-        <div class="cursor-bubble__drag"><span class="cursor-bubble__drag-span">Drag</span></div>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /.global -->
-
-<main class="main" id="main">
-
-  <!-- ═══════════════ UNDER-NAV MARQUEE ═══════════════ -->
-  <div class="under-nav-bar">
-    <div class="under-nav-bar__inner">
-      <a href="#services" class="nav-marquee w-inline-block">
-        <div data-css-marquee="" style="animation-duration:30s" class="marquee-css">
-          <div data-css-marquee-list="nav" class="marquee-css__list">
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-          </div>
-          <div data-css-marquee-list="nav" class="marquee-css__list" aria-hidden="true">
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Explore Vlance Work</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-            <div class="marquee-css__item"><p class="eyebrow is--nav-marquee">Available for Projects</p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 187 187" fill="none" class="marquee-css__item-svg"><path d="M126.049 76.7471L167.276 35.5197L150.805 19.0486L109.577 60.276C107.82 62.0398 104.808 60.7915 104.808 58.3009V0H81.517V70.3375C81.517 76.511 76.511 81.517 70.3375 81.517H0V104.808H58.3009C60.7915 104.808 62.0398 107.82 60.276 109.577L19.0548 150.805L35.5259 167.276L76.7533 126.049C78.5109 124.291 81.5232 125.533 81.5232 128.024V186.324H104.814V115.987C104.814 109.813 109.82 104.808 115.993 104.808H186.331V81.517H128.03C125.539 81.517 124.291 78.5047 126.055 76.7471H126.049Z" fill="currentColor"/></svg></div>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
-
   <!-- ═══════════════ HERO ═══════════════ -->
   <section data-theme-section="light" class="home-hero" id="hero">
 
-    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star" style="top:9%;right:7%;height:65px;width:auto;">
-    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star" style="top:50%;right:3%;height:38px;width:auto;">
+    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star vl-star--hero-1">
+    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star vl-star--hero-2">
 
     <!-- ═══ CLOUDS ═══ -->
     <div class="vl-clouds-bg" aria-hidden="true">
@@ -291,7 +115,7 @@
     <div class="home-hero__bg">
       <div class="home-hero__bg-line"></div>
     </div>
-    <div class="container is--md-m">
+    <div class="container">
       <div class="home-hero__content">
 
         <!-- Title row -->
@@ -430,16 +254,12 @@
             <div data-gsap-slider-item-status="active" data-gsap-slider-item="" class="gsap-slider__item">
               <div class="product-card vlance-video-card">
                 <div class="product-card__before"></div>
-                <video class="vlance-video-bg" src="videos/Video 5 - Copy.mp4" autoplay muted loop playsinline></video>
+                <wistia-player class="vlance-video-bg" media-id="39p9d9cou2" aspect="0.5625"></wistia-player>
                 <div class="vlance-video-overlay">
                   <div class="vlance-video-info">
                     <span class="vlance-video-tag">TT Shop video</span>
                     <span class="vlance-video-name">Dayne</span>
                   </div>
-                  <button class="vlance-mute-btn" aria-label="Toggle mute">
-                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                  </button>
                 </div>
               </div>
             </div>
@@ -448,16 +268,12 @@
             <div data-gsap-slider-item-status="inview" data-gsap-slider-item="" class="gsap-slider__item">
               <div class="product-card vlance-video-card">
                 <div class="product-card__before"></div>
-                <video class="vlance-video-bg" src="videos/Anna video.mp4" autoplay muted loop playsinline></video>
+                <wistia-player class="vlance-video-bg" media-id="4vnnq886hl" aspect="0.5625"></wistia-player>
                 <div class="vlance-video-overlay">
                   <div class="vlance-video-info">
                     <span class="vlance-video-tag">TT Shop video</span>
                     <span class="vlance-video-name">Anna</span>
                   </div>
-                  <button class="vlance-mute-btn" aria-label="Toggle mute">
-                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                  </button>
                 </div>
               </div>
             </div>
@@ -466,16 +282,12 @@
             <div data-gsap-slider-item-status="inview" data-gsap-slider-item="" class="gsap-slider__item">
               <div class="product-card vlance-video-card">
                 <div class="product-card__before"></div>
-                <video class="vlance-video-bg" src="videos/Lee video.mp4" autoplay muted loop playsinline></video>
+                <wistia-player class="vlance-video-bg" media-id="935jjrrrfb" aspect="0.5625"></wistia-player>
                 <div class="vlance-video-overlay">
                   <div class="vlance-video-info">
                     <span class="vlance-video-tag">Organic Video</span>
                     <span class="vlance-video-name">Lee</span>
                   </div>
-                  <button class="vlance-mute-btn" aria-label="Toggle mute">
-                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                  </button>
                 </div>
               </div>
             </div>
@@ -484,16 +296,12 @@
             <div data-gsap-slider-item-status="inview" data-gsap-slider-item="" class="gsap-slider__item">
               <div class="product-card vlance-video-card">
                 <div class="product-card__before"></div>
-                <video class="vlance-video-bg" src="videos/Maze video.mp4" autoplay muted loop playsinline></video>
+                <wistia-player class="vlance-video-bg" media-id="m7vdy6618q" aspect="0.5625"></wistia-player>
                 <div class="vlance-video-overlay">
                   <div class="vlance-video-info">
                     <span class="vlance-video-tag">TikTok Creative Challenge video</span>
                     <span class="vlance-video-name">Maze</span>
                   </div>
-                  <button class="vlance-mute-btn" aria-label="Toggle mute">
-                    <svg class="vlance-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-                    <svg class="vlance-icon-unmuted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                  </button>
                 </div>
               </div>
             </div>
@@ -508,8 +316,8 @@
   <!-- ═══════════════ STATS ═══════════════ -->
   <section class="vl-stats" id="stats">
 
-    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star" style="top:16%;left:4%;height:55px;width:auto;">
-    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star" style="top:60%;right:5%;height:40px;width:auto;">
+    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star vl-star--stats-1">
+    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star vl-star--stats-2">
 
 <div class="vl-stats__inner">
       <div class="vl-stats__grid">
@@ -550,8 +358,8 @@
   <!-- ═══════════════ CONTACT ═══════════════ -->
   <section data-theme-section="dark" class="vlance-contact-section" id="contact">
 
-    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star" style="top:18%;left:7%;height:46px;width:auto;">
-    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star" style="top:24%;right:9%;height:62px;width:auto;">
+    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star vl-star--contact-1">
+    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star vl-star--contact-2">
 
 <div class="vlance-contact-inner">
       <h2 class="h-l">Ready? Set. Go!</h2>
@@ -582,19 +390,19 @@
     <img src="svg/cloud 1.svg" class="vl-footer-cloud vl-footer-cloud-1" alt="" aria-hidden="true">
     <img src="svg/cloud 2.svg" class="vl-footer-cloud vl-footer-cloud-2" alt="" aria-hidden="true">
 
-    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star" style="bottom:28%;left:5%;height:58px;width:auto;">
-    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star" style="bottom:32%;right:6%;height:36px;width:auto;">
+    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star vl-star--footer-1">
+    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star vl-star--footer-2">
 
     <div class="vlance-footer-wordmark" aria-hidden="true">VLANCE</div>
     <div class="container">
       <div class="vlance-footer-inner">
         <span class="vlance-footer-logo">Vlance</span>
-        <span class="eyebrow">© 2026 Vlance. All rights reserved.</span>
         <nav class="vlance-footer-nav">
           <a href="#hero" class="eyebrow">Top</a>
           <a href="#services" class="eyebrow">Work</a>
           <a href="#contact" class="eyebrow">Contact</a>
         </nav>
+        <span class="eyebrow vlance-footer-copyright">© 2026 Vlance. All rights reserved.</span>
       </div>
     </div>
   </footer>

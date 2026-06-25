@@ -936,7 +936,7 @@ function initBlueGuy() {
 }
 
 
-// ─── Contact: pinned word-by-word reveal ──────────────────────────────────────
+// ─── Contact: word-by-word entrance (no pin — plays once on scroll-in) ───────
 function initContactReveal() {
   const contact = document.querySelector('.vlance-contact-section');
   if (!contact || typeof ScrollTrigger === 'undefined') return;
@@ -944,52 +944,29 @@ function initContactReveal() {
   const heading = contact.querySelector('.h-l');
   if (!heading) return;
 
-  // Split "Ready? Set. Go!" into individual word spans
   const words = heading.textContent.trim().split(/\s+/);
   heading.innerHTML = words
     .map(w => `<span class="vl-reveal-word">${w}</span>`)
     .join(' ');
   const wordEls = Array.from(heading.querySelectorAll('.vl-reveal-word'));
-
   const buttons = Array.from(contact.querySelectorAll('.vlance-contact-icon-btn, .vlance-contact-btn'));
 
   gsap.set(wordEls, { opacity: 0, y: 60 });
   gsap.set(buttons, { opacity: 0 });
 
-  let done = false;
-
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: contact,
-      start: 'top top',
-      end: '+=750',
-      pin: true,
-      pinSpacing: true,
-      scrub: 0.8,
-      invalidateOnRefresh: true,
-      onLeave: () => {
-        if (done) return;
-        done = true;
-
-        // Lock words + buttons permanently so CSS !important beats any future scrub
-        wordEls.forEach(w => w.classList.add('vl-contact-word-revealed'));
-        buttons.forEach(btn => btn.classList.add('vl-contact-btn-revealed'));
-
-        // Kill the pin so it never re-pins on scroll-back.
-        // kill(false) removes the GSAP pin spacer, shrinking the page by 750px.
-        // The user's scroll position stays put, so they land naturally mid-way
-        // into the footer — no empty gap, no forced scroll-back.
-        tl.scrollTrigger.kill(false);
-      },
+      start: 'top 75%',
+      toggleActions: 'play none none none',
     }
   });
 
   wordEls.forEach((word, i) => {
-    tl.to(word, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, i * 0.55);
+    tl.to(word, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, i * 0.35);
   });
 
-  // Buttons are NOT part of the scrub — they reveal permanently via onLeave above.
-  // Keeping them out of the scrub means scrub-reversal can never hide them again.
+  tl.to(buttons, { opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.1 }, '>-0.15');
 }
 
 
