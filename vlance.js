@@ -1009,6 +1009,59 @@ function initStarParallax() {
 }
 
 
+// ─── Nav: 3 visible pills + ← → arrow navigation ─────────────────────────────
+function initNavScroll() {
+  const nav = document.querySelector('.product-slider__nav');
+  if (!nav || window.innerWidth > 768) return;
+
+  const buttons = Array.from(nav.querySelectorAll('[data-gsap-slider-control]'));
+  const n = buttons.length;
+  if (n < 2) return;
+
+  const mod = i => ((i % n) + n) % n;
+  let ai = Math.max(0, buttons.findIndex(b =>
+    b.getAttribute('data-gsap-slider-control-status') === 'active'));
+
+  // Build arrow row above the hidden nav
+  const row = document.createElement('div');
+  row.className = 'vl-nav-row';
+  nav.parentNode.insertBefore(row, nav);
+
+  function makeArrow(dir) {
+    const btn = document.createElement('button');
+    btn.className = 'vl-nav-arrow';
+    btn.setAttribute('aria-label', dir === 'prev' ? 'Previous' : 'Next');
+    btn.innerHTML = dir === 'prev'
+      ? '<svg width="10" height="16" viewBox="0 0 10 16" fill="none"><path d="M9 1L1 8l8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg width="10" height="16" viewBox="0 0 10 16" fill="none"><path d="M1 1l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    return btn;
+  }
+
+  const prevBtn = makeArrow('prev');
+  const nextBtn = makeArrow('next');
+  row.appendChild(prevBtn);
+  row.appendChild(nextBtn);
+
+  prevBtn.addEventListener('click', () => {
+    ai = mod(ai - 1);
+    buttons[ai].click();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    ai = mod(ai + 1);
+    buttons[ai].click();
+  });
+
+  // Keep ai in sync if slider changes via other means
+  new MutationObserver(() => {
+    const newAi = buttons.findIndex(b =>
+      b.getAttribute('data-gsap-slider-control-status') === 'active');
+    if (newAi >= 0) ai = newAi;
+  }).observe(nav, {
+    attributes: true, attributeFilter: ['data-gsap-slider-control-status'], subtree: true
+  });
+}
+
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const isMobile = window.innerWidth <= 768;
@@ -1020,6 +1073,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.registerPlugin(Draggable, InertiaPlugin, ScrollTrigger);
     ScrollTrigger.config({ limitCallbacks: true, syncInterval: 40 });
     initOsmoSlider();
+    initNavScroll(); // must run after initOsmoSlider so slider listeners attach first
     initHeroDesc();
     initClouds();
     initMonkey();
