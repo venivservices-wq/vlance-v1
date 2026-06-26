@@ -2368,6 +2368,10 @@ html {
   .vlance-video-card .product-card__before {
     padding-top: 177.78% !important;
   }
+  .vlance-video-name {
+    font-size: 2.2em !important;
+    font-weight: 900 !important;
+  }
   /* Nav pills: use relative layout, wrap, add side padding */
   .product-slider__nav {
     position: relative !important;
