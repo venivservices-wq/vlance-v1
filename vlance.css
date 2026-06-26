@@ -2223,7 +2223,7 @@ html {
     margin-bottom: 0 !important;
   }
   .product-slider__text-row {
-    gap: 0.75rem !important;
+    gap: 0.1rem !important;
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
   }
@@ -2352,6 +2352,9 @@ html {
 }
 
 @media (max-width: 768px) {
+  .product-slider__wrap {
+    margin-top: clamp(9rem, 20vh, 14rem) !important;
+  }
   /* Contain the slider so fanned cards never overflow the section */
   .gsap-slider,
   .gsap-slider__collection {
@@ -2360,7 +2363,7 @@ html {
   }
   /* Cards: wider on mobile for better viewing */
   .gsap-slider__item {
-    width: min(65vw, 260px) !important;
+    width: min(78vw, 320px) !important;
   }
   .vlance-video-card .product-card__before {
     padding-top: 177.78% !important;
@@ -2490,6 +2493,7 @@ html {
   .vl-star--contact-1 { height: 32px; }
   .vl-star--contact-2 { height: 44px; }
   .vl-star--footer-1  { display: none; }
+  .vl-star--footer-2  { display: none; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -2518,16 +2522,17 @@ html {
     display: none;
   }
   .vl-stats {
-    padding-top: clamp(2rem, 4vh, 4rem) !important;
+    padding-top: clamp(5rem, 10vh, 8rem) !important;
   }
   .vl-stat-card__num {
-    font-size: clamp(4.5rem, 20vw, 8rem) !important;
+    font-size: clamp(6rem, 26vw, 10rem) !important;
   }
   .vl-stat-card {
-    padding: clamp(1.2rem, 2.5vh, 2.5rem) 0 !important;
+    padding: clamp(2.5rem, 5vh, 4.5rem) 0 !important;
   }
   .vl-stat-card__label {
-    font-size: clamp(1rem, 3.5vw, 1.4rem) !important;
+    font-size: clamp(1.5rem, 6vw, 2.2rem) !important;
+    max-width: 18ch !important;
   }
 
   /* ── Footer ── */
