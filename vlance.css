@@ -1790,7 +1790,7 @@ body {
 }
 
 /* ─── Slider section: clock/fan track background ─── */
-.product-slider__wrap { position: relative; }
+.product-slider__wrap { position: relative; margin-top: clamp(4rem, 8vh, 7rem); }
 
 .product-slider__text-row {
   padding-top: clamp(4rem, 8vh, 7rem);
@@ -2246,7 +2246,7 @@ html {
 }
 @media (max-width: 600px) {
   .vl-cloud-1, .vl-cloud-2 {
-    width: clamp(220px, 85vw, 380px);
+    width: clamp(300px, 110vw, 500px);
     opacity: 0.5;
   }
 }
@@ -2280,15 +2280,18 @@ html {
 @media (max-width: 600px) {
   /* "Are you" — noticeably bigger */
   .vl-ht-pre {
-    font-size: clamp(2.5rem, 10vw, 4rem) !important;
+    font-size: clamp(1.8rem, 7vw, 3rem) !important;
     margin-bottom: 0.3em;
   }
   /* Main title lines */
   .vl-hero-heading {
     gap: 0.12em;
+    max-width: 85vw;
+    margin-left: auto;
+    margin-right: auto;
   }
   .vl-ht-line {
-    font-size: clamp(3rem, 13.5vw, 5.5rem) !important;
+    font-size: clamp(2.6rem, 10.5vw, 5rem) !important;
     line-height: 1.0 !important;
   }
   /* Description — bigger but narrower on mobile */
@@ -2298,6 +2301,7 @@ html {
   }
   .home-hero__description-row {
     max-width: 18em !important;
+    background-image: none !important;
   }
   .home-hero__description-highlight {
     display: inline;
@@ -2314,7 +2318,7 @@ html {
     padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
   .home-hero__content {
-    padding-top: clamp(4rem, 12vh, 8rem) !important;
+    padding-top: clamp(9rem, 26vh, 14rem) !important;
     padding-bottom: clamp(2.5rem, 6vh, 6rem);
   }
 }
@@ -2407,7 +2411,7 @@ html {
 
 @media (max-width: 600px) {
   .vlance-contact-section {
-    padding: clamp(2.5rem, 6vh, 6rem) 1.5rem clamp(5rem, 12vh, 9rem);
+    padding: clamp(2.5rem, 6vh, 6rem) 1.5rem clamp(8rem, 18vh, 14rem);
   }
   /* Each word ("Ready?", "Set.", "Go!") gets its own line at 22vw */
   .vlance-contact-section .h-l {
@@ -2416,12 +2420,12 @@ html {
     white-space: normal !important;
   }
   .vlance-contact-inner {
-    gap: 0.4em;
+    gap: 0;
     max-width: 100%;
   }
   .vlance-contact-actions {
     gap: 1.1em;
-    margin-top: 0;
+    margin-top: -0.5em;
     flex-wrap: wrap;
   }
   .vlance-contact-icon-btn {
@@ -2484,6 +2488,7 @@ html {
   .vl-star--stats-2   { height: 28px; }
   .vl-star--contact-1 { height: 32px; }
   .vl-star--contact-2 { height: 44px; }
+  .vl-star--footer-1  { display: none; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -2495,15 +2500,15 @@ html {
   /* ── Monkey: top-left on mobile (same as desktop) ── */
   .vl-monkey-wrap {
     display: block !important;
-    width: 130px !important;
-    top: 5vh !important;
+    width: 190px !important;
+    top: 12vh !important;
     bottom: auto !important;
     left: -10px !important;
   }
   .vl-blueguy-wrap {
     display: block !important;
-    width: 110px !important;
-    bottom: -20px !important;
+    width: 160px !important;
+    bottom: -60px !important;
     right: -14px !important;
   }
 
@@ -2529,11 +2534,14 @@ html {
     padding-bottom: 2.5rem !important;
   }
   .vlance-footer-wordmark {
-    font-size: 27vw !important;
+    font-size: 33vw !important;
     font-weight: 500 !important;
     margin-top: 1.5rem !important;
     margin-bottom: 3rem !important;
     -webkit-text-stroke: 3px #b91616 !important;
+    width: 135vw !important;
+    margin-left: -17.5vw !important;
+    text-align: center !important;
   }
   .vlance-footer-inner {
     display: block !important;
