@@ -2228,12 +2228,12 @@ html {
     padding-bottom: 0.5rem !important;
   }
   .product-slider__text {
-    max-width: 14em !important;
+    max-width: 22em !important;
     text-align: center;
   }
   .product-slider__text .p-l {
-    font-size: clamp(1.1rem, 4vw, 1.4rem) !important;
-    font-weight: 500 !important;
+    font-size: clamp(1.5rem, 6vw, 2rem) !important;
+    font-weight: 600 !important;
   }
 }
 
@@ -2369,8 +2369,9 @@ html {
     padding-top: 177.78% !important;
   }
   .vlance-video-name {
-    font-size: 2.2em !important;
+    font-size: 5em !important;
     font-weight: 900 !important;
+    letter-spacing: -0.03em !important;
   }
   /* Nav pills: use relative layout, wrap, add side padding */
   .product-slider__nav {
