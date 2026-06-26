@@ -2291,7 +2291,7 @@ html {
     margin-right: auto;
   }
   .vl-ht-line {
-    font-size: clamp(2.6rem, 10.5vw, 5rem) !important;
+    font-size: clamp(3.6rem, 14.5vw, 6.5rem) !important;
     line-height: 1.0 !important;
   }
   /* Description — bigger but narrower on mobile */
@@ -2313,7 +2313,7 @@ html {
     border-radius: 100em;
   }
   .home-hero__description-row {
-    margin-top:     clamp(1.5rem, 4vh, 3rem) !important;
+    margin-top:     clamp(4rem, 10vh, 7rem) !important;
     padding-top:    clamp(0.75rem, 2vh, 1.5rem);
     padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
@@ -2418,6 +2418,7 @@ html {
     font-size: clamp(5rem, 22vw, 7rem) !important;
     line-height: 1.1 !important;
     white-space: normal !important;
+    margin-bottom: 0.4em !important;
   }
   .vlance-contact-inner {
     gap: 0;
@@ -2500,15 +2501,15 @@ html {
   /* ── Monkey: top-left on mobile (same as desktop) ── */
   .vl-monkey-wrap {
     display: block !important;
-    width: 190px !important;
+    width: 260px !important;
     top: 12vh !important;
     bottom: auto !important;
     left: -10px !important;
   }
   .vl-blueguy-wrap {
     display: block !important;
-    width: 160px !important;
-    bottom: -60px !important;
+    width: 220px !important;
+    bottom: -100px !important;
     right: -14px !important;
   }
 

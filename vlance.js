@@ -1011,6 +1011,8 @@ function initStarParallax() {
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  const isMobile = window.innerWidth <= 768;
+
   initCSSMarquee();
   initMuteButtons();
   initAutoMute();
@@ -1018,15 +1020,17 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.registerPlugin(Draggable, InertiaPlugin, ScrollTrigger);
     ScrollTrigger.config({ limitCallbacks: true, syncInterval: 40 });
     initOsmoSlider();
-    initServiceAnimations();
-    initStatsAnimations();
-    initContactFooterAnimations();
     initHeroDesc();
     initClouds();
     initMonkey();
     initBlueGuy();
-    initContactReveal();
     initStarParallax();
+    initContactFooterAnimations();
+    if (!isMobile) {
+      initServiceAnimations();
+      initStatsAnimations();
+      initContactReveal();
+    }
   }
 });
 
