@@ -1799,6 +1799,9 @@ body {
 
 /* Desktop: bigger bolder subtitle, bigger nav buttons */
 @media (min-width: 769px) {
+  .vl-nav-row,
+  .vl-nav-arrow { display: none !important; }
+
   .product-slider__text .p-l {
     font-size: clamp(1.4rem, 2vw, 2rem) !important;
     font-weight: 600 !important;
