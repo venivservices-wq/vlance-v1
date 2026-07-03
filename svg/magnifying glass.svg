@@ -1,0 +1,53 @@
+<svg id="magnifying_glass" data-name="magnifying glass" xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke-width: 50px;
+      }
+
+      .cls-1, .cls-4, .cls-5 {
+        stroke: #b91616;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #f0f2f6;
+      }
+
+      .cls-3 {
+        fill: #fff;
+        stroke-width: 1px;
+        opacity: 0.54;
+      }
+
+      .cls-4, .cls-5 {
+        fill: #b91616;
+        fill-rule: evenodd;
+      }
+
+      .cls-4, .cls-5, .cls-6 {
+        stroke-width: 5px;
+      }
+
+      .cls-5 {
+        opacity: 0.41;
+      }
+
+      .cls-6 {
+        fill: #ffdbe0;
+        stroke: #ffdbe0;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="1734.5" cy="798.5" r="403.5"/>
+  <circle id="inner_circle" data-name="inner circle" class="cls-2" cx="1734.81" cy="798.81" r="366.81"/>
+  <circle id="white_circle" data-name="white circle" class="cls-3" cx="1734.81" cy="798.81" r="366.81"/>
+  <path class="cls-4" d="M1741,1212a27,27,0,0,1,27,27v634a27,27,0,0,1-54,0V1239A27,27,0,0,1,1741,1212Z"/>
+  <path class="cls-5" d="M1672,506l-47,32"/>
+  <path class="cls-5" d="M1722,502l-96,77"/>
+  <path class="cls-5" d="M1761,509l-48,73"/>
+  <path id="Shape_1_copy" data-name="Shape 1 copy" class="cls-5" d="M1770,945l-47,32"/>
+  <path id="Shape_2_copy" data-name="Shape 2 copy" class="cls-5" d="M1820,941l-96,77"/>
+  <path id="Shape_3_copy" data-name="Shape 3 copy" class="cls-5" d="M1859,948l-48,73"/>
+  <circle class="cls-6" cx="1866.5" cy="1783.5" r="150.5"/>
+</svg>

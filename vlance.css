@@ -130,13 +130,24 @@
 /* ─── Global resets ─── */
 html {
   -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   font-size: var(--size-font);
   -ms-overflow-style: none;
   scrollbar-width: none;
   overscroll-behavior: none;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.vlance-footer {
+  margin-top: auto;
 }
 
 body::-webkit-scrollbar,
@@ -884,6 +895,19 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
   align-items: stretch;
   display: flex;
   position: relative;
+  overflow: hidden;
+}
+
+.vl-hero-bck {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .home-hero__title-row {
@@ -915,19 +939,44 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
   .home-hero__content { padding-bottom: 0; }
 }
 
-.home-hero__description-row {
-  background-image: linear-gradient(
-    180deg,
-    transparent,
-    var(--color-neutral-200) 20%,
-    var(--color-neutral-200) 80%,
-    transparent
-  );
-  text-align: center;
+/* ─── UGC text section ─── */
+.vl-ugc-section {
+  position: relative;
   width: 100%;
+  height: clamp(250px, 30vw, 450px);
+  overflow: visible;
+  z-index: 4;
+}
+
+.vl-ugc-bck {
+  position: absolute;
+  top: -8%;
+  left: -15%;
+  width: 130%;
+  height: auto;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+.home-hero__description-row {
+  background-image: none;
+  text-align: center;
+  width: 90%;
   max-width: 33em;
-  padding-top: 2em;
-  padding-bottom: 2em;
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .home-hero__description-row {
+    top: 25%;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -1387,10 +1436,12 @@ body:not([data-scrolled]) .vlance-logo-img {
   background-color: #fffefe;
   color: #040000;
   text-align: center;
+  overflow: clip;
 }
 
 .vlance-contact-section .h-l {
   font-size: clamp(6rem, 13vw, 14rem) !important;
+  margin-bottom: 0 !important;
 }
 
 
@@ -1410,7 +1461,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 
 /* ── Hero description text ── */
 .home-hero__description-p {
-  font-size: clamp(1.3rem, 2.8vw, 2.2rem) !important;
+  font-size: clamp(1.8rem, 3.5vw, 3rem) !important;
   font-weight: 500 !important;
   line-height: 1.45 !important;
   letter-spacing: -0.015em !important;
@@ -1445,7 +1496,7 @@ body:not([data-scrolled]) .vlance-logo-img {
   gap: 1.2em;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 0.75em;
+  margin-top: 1.8em;
 }
 
 .vlance-contact-icon-btn {
@@ -1504,7 +1555,9 @@ body:not([data-scrolled]) .vlance-logo-img {
 
 /* ─── Footer ─── */
 .vlance-footer {
-  padding-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0;
+  min-height: clamp(600px, 68vh, 900px);
   background-color: #fffefe;
   color: #888;
   overflow: clip;
@@ -1512,19 +1565,30 @@ body:not([data-scrolled]) .vlance-logo-img {
 
 .vlance-footer-wordmark {
   display: block;
-  margin: calc(4rem + 200px) 0 0;
+  margin: calc(2rem + 120px) 0 0;
+  margin-left: -15vw;
   padding: 0;
-  font-size: 30.5vw;
-  font-weight: 900;
-  line-height: 0.82;
-  letter-spacing: -0.03em;
+  font-size: 13vw;
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
   color: #b91616;
   white-space: nowrap;
-  text-align: center;
+  text-align: left;
   user-select: none;
   -webkit-text-stroke: 6px #b91616;
   transform: translateX(-8%);
+  position: relative;
+  z-index: 0;
 }
+.vlance-footer .container {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 0;
+  right: 0;
+  z-index: 4;
+}
+
 .vlance-footer-inner {
   display: flex;
   align-items: center;
@@ -1536,24 +1600,23 @@ body:not([data-scrolled]) .vlance-logo-img {
   font-size: 1.1em;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #040000;
+  color: #fff;
 }
 .vlance-footer-copyright {
-  flex-basis: 100%;
-  text-align: center;
-  color: #888;
+  color: #fff;
+  margin-left: auto;
 }
 .vlance-footer-nav {
   display: flex;
   gap: 1.5em;
 }
 .vlance-footer-nav a {
-  color: #888;
+  color: #fff;
   text-decoration: none;
   transition: color 0.18s;
 }
 .vlance-footer-nav a:hover {
-  color: #040000;
+  color: rgba(255,255,255,0.6);
 }
 
 /* ─── Prevent nav wrapper from bleeding past viewport width ─── */
@@ -1597,22 +1660,17 @@ body:not([data-scrolled]) .vlance-logo-img {
   right: -12%;
 }
 
-/* ─── Footer clouds ─── */
-.vl-footer-cloud {
+/* ─── Footer background SVG ─── */
+.vl-footer-bck {
   position: absolute;
-  width: clamp(260px, 34vw, 620px);
+  bottom: 0;
+  left: 0;
+  width: 100%;
   height: auto;
-  opacity: 0.22;
   pointer-events: none;
+  z-index: 2;
 }
-.vl-footer-cloud-1 {
-  top: 2%;
-  left: -5%;
-}
-.vl-footer-cloud-2 {
-  bottom: 14%;
-  right: -7%;
-}
+
 
 /* ─── Monkey peek ─── */
 .home-hero {
@@ -1622,7 +1680,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 .vl-monkey-wrap {
   position: absolute;
   top: 14vh;
-  left: 2vw;
+  left: 8vw;
   width: clamp(220px, 22vw, 380px);
   z-index: 1;
   pointer-events: none;
@@ -1636,16 +1694,149 @@ body:not([data-scrolled]) .vlance-logo-img {
   overflow: visible;
 }
 
+/* ── Tablet: scale down contact decorations before they crowd text ── */
+@media (max-width: 1024px) {
+  .vl-contact-monkey {
+    width: clamp(160px, 20vw, 280px);
+    right: 1vw;
+  }
+  .vl-contact-flags {
+    width: clamp(160px, 20vw, 260px);
+    left: 2vw;
+  }
+}
+
+/* ── Tablet / small screens: hide decorative characters that overlap content ── */
 @media (max-width: 900px) {
-  .vl-monkey-wrap  { display: none; }
-  .vl-blueguy-wrap { display: none; }
+  .vl-blueguy-wrap   { display: none; }
+  .vl-stats-monkey   { display: none; }
+  .vl-contact-monkey { display: none; }
+  .vl-contact-flags  { display: none; }
+}
+
+/* ── Mobile: hero monkey top-left, large ── */
+@media (max-width: 768px) {
+  .vl-monkey-wrap {
+    top: 14vh;
+    left: -4vw;
+    width: clamp(280px, 80vw, 420px);
+  }
+
+  .home-hero {
+    max-height: 900px;
+  }
+
+  .vl-hero-bck {
+    top: auto;
+    bottom: 0;
+    height: auto;
+    object-position: center bottom;
+  }
+
+  .vl-ugc-section {
+    margin-top: -50px;
+    z-index: 3;
+  }
+
+  .vl-ugc-section::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -15%;
+    right: -15%;
+    height: 100px;
+    background: #b91616;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .vl-ugc-bck {
+    height: 500px;
+    top: -30px;
+  }
+
+  .vl-blueguy-wrap {
+    display: block;
+    width: 90px !important;
+    left: 5% !important;
+    right: auto !important;
+    top: 50px !important;
+    bottom: auto !important;
+  }
+
+  .vl-stats-bck {
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .vl-stats {
+    position: relative;
+    z-index: 4;
+  }
+}
+
+.vl-stats-bck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.vl-stats-monkey {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  right: -8vw;
+  width: clamp(50px, 6vw, 90px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.vl-stats-monkey svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── Contact section flags ─── */
+.vl-contact-flags {
+  position: absolute;
+  left: 6vw;
+  top: 50%;
+  width: clamp(260px, 32vw, 540px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Contact section monkey ─── */
+.vl-contact-monkey {
+  position: absolute;
+  top: 50%;
+  right: 5vw;
+  width: clamp(280px, 34vw, 520px);
+  transform: rotate(-120deg);
+  transform-origin: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.vl-contact-monkey svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .vl-blueguy-wrap {
   position: absolute;
-  bottom: 4vh;
-  right: 6vw;
-  width: clamp(180px, 18vw, 320px);
+  top: 10%;
+  left: 3vw;
+  width: clamp(120px, 13vw, 220px);
   z-index: 1;
   pointer-events: none;
   will-change: transform;
@@ -1712,7 +1903,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 }
 
 .home-hero__description-row {
-  margin-top: clamp(4rem, 8vh, 7rem) !important;
+  margin-top: 0 !important;
   padding-top: clamp(2rem, 4vh, 4rem);
   padding-bottom: clamp(2rem, 4vh, 4rem);
   text-align: center;
@@ -1738,7 +1929,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 
 /* ─── Hero layout ─── */
 .home-hero {
-  overflow: visible !important;
+  overflow: hidden !important;
   min-height: 100svh !important;
   justify-content: flex-start !important;
 }
@@ -1766,7 +1957,7 @@ body {
 
 /* Ensure enough hero height on all sizes */
 .home-hero {
-  min-height: max(100svh, 600px) !important;
+  min-height: max(130svh, 750px) !important;
 }
 
 /* Lighter gray pill highlights */
@@ -1790,11 +1981,16 @@ body {
 }
 
 /* ─── Slider section: clock/fan track background ─── */
-.product-slider__wrap { position: relative; margin-top: clamp(4rem, 8vh, 7rem); }
+.product-slider__wrap { position: relative; z-index: 3; margin-top: calc(clamp(4rem, 8vh, 7rem) + 600px); }
 
 .product-slider__text-row {
-  padding-top: clamp(4rem, 8vh, 7rem);
-  gap: 0.75rem;
+  padding-top: 0;
+  padding-bottom: 1rem;
+  gap: 0;
+}
+
+.product-slider__title .h-l {
+  margin-bottom: 0 !important;
 }
 
 /* Desktop: bigger bolder subtitle, bigger nav buttons */
@@ -1811,6 +2007,34 @@ body {
     padding: 0 1.8em !important;
     height: 3.2em !important;
   }
+}
+
+/* ─── Work section background ─── */
+.vl-work-section-bck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Magnifying glass on title ─── */
+.vl-glass-svg {
+  position: absolute;
+  top: calc(50% + 30px);
+  left: 0;
+  height: clamp(160px, 18vw, 280px);
+  width: auto;
+  pointer-events: none;
+  z-index: 5;
+  overflow: visible;
+}
+
+.vl-char {
+  display: inline;
+  transition: color 0.12s ease;
 }
 
 .vl-slider-track {
@@ -2060,7 +2284,8 @@ html {
   position: relative;
   background: #fffefe;
   padding: clamp(5rem, 9vh, 8rem) 0;
-  overflow: hidden;
+  padding-top: clamp(12rem, 22vh, 18rem);
+  overflow: visible;
 }
 
 /* Faint horizontal hairline across the very top */
@@ -2161,8 +2386,7 @@ html {
 /* ── Global: every section clips its own horizontal overflow ── */
 .under-nav-bar,
 .product-slider__wrap,
-.vl-stats,
-.vlance-contact-section {
+.vl-stats {
   overflow-x: clip;
 }
 
@@ -2254,12 +2478,6 @@ html {
   }
 }
 
-@media (max-width: 768px) {
-  .vl-footer-cloud {
-    width: clamp(130px, 42vw, 260px);
-    opacity: 0.16;
-  }
-}
 
 /* ── Hero text — tablet ── */
 @media (max-width: 900px) {
@@ -2321,7 +2539,7 @@ html {
     padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
   .home-hero__content {
-    padding-top: clamp(9rem, 26vh, 14rem) !important;
+    padding-top: clamp(14rem, 36vh, 20rem) !important;
     padding-bottom: clamp(2.5rem, 6vh, 6rem);
   }
 }
@@ -2442,7 +2660,7 @@ html {
 
 @media (max-width: 600px) {
   .vlance-contact-section {
-    padding: clamp(2.5rem, 6vh, 6rem) 1.5rem clamp(8rem, 18vh, 14rem);
+    padding: 2rem 1.5rem 2.5rem !important;
   }
   /* Each word ("Ready?", "Set.", "Go!") gets its own line at 22vw */
   .vlance-contact-section .h-l {
@@ -2485,21 +2703,80 @@ html {
    FOOTER
    ────────────────────────────────────────── */
 
+@keyframes vl-flags-wave {
+  0%, 100% { transform: rotate(-38deg); }
+  50%       { transform: rotate(-8deg);  }
+}
+
 @media (max-width: 768px) {
+  /* Contact section: stack flags → text → monkey in a column */
+  .vlance-contact-section {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 2rem 1.5rem 2.5rem !important;
+  }
+  .vl-contact-flags {
+    display: block !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 65vw !important;
+    max-width: 260px !important;
+    margin-top: 4rem !important;
+    margin-bottom: 0.5rem !important;
+    animation: vl-flags-wave 1.4s ease-in-out infinite !important;
+    order: 1;
+  }
+  .vlance-contact-inner {
+    order: 2;
+  }
+  .vl-contact-monkey {
+    display: block !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    transform: translateX(-30vw) rotate(90deg) !important;
+    transform-origin: center center !important;
+    width: 55vw !important;
+    max-width: 220px !important;
+    margin-top: 2.5rem !important;
+    margin-bottom: 1rem !important;
+    order: 3;
+  }
+
+  .vlance-footer {
+    margin-top: 0 !important;
+    min-height: 0 !important;
+    height: clamp(80px, 14vh, 110px) !important;
+    max-height: 110px !important;
+    overflow: hidden !important;
+    background-color: #b91616 !important;
+  }
   .vlance-footer-wordmark {
-    font-size: 27vw !important;
-    margin-top: 2rem !important;
-    transform: translateX(0) !important;
+    display: none !important;
+  }
+  .vl-footer-bck {
+    display: none !important;
+    width: auto;
+    height: 350%;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
   }
   .vlance-footer-logo {
     display: none !important;
   }
   .vlance-footer .container {
-    padding-left:  1.25rem !important;
+    padding-left: 1.25rem !important;
     padding-right: 1.25rem !important;
   }
   .vlance-footer-inner {
     gap: 0.85em;
+  }
+  .vlance-footer-nav a,
+  .vlance-footer-copyright {
+    color: #fff !important;
   }
 }
 
@@ -2514,8 +2791,8 @@ html {
    ────────────────────────────────────────── */
 
 @media (max-width: 480px) {
-  .vl-star--hero-1    { display: none; }
-  .vl-star--hero-2    { display: none; }
+  .vl-star--hero-1    { height: 30px; }
+  .vl-star--hero-2    { height: 20px; }
   .vl-star--stats-1   { display: none; }
   .vl-star--stats-2   { display: none; }
   .vl-star--contact-1 { height: 32px; }
@@ -2529,21 +2806,6 @@ html {
    ══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 600px) {
-
-  /* ── Monkey: top-left on mobile (same as desktop) ── */
-  .vl-monkey-wrap {
-    display: block !important;
-    width: 260px !important;
-    top: 12vh !important;
-    bottom: auto !important;
-    left: -10px !important;
-  }
-  .vl-blueguy-wrap {
-    display: block !important;
-    width: 220px !important;
-    bottom: -100px !important;
-    right: -14px !important;
-  }
 
   /* ── Stats: remove top hairline, bigger numbers, less top gap ── */
   .vl-stats::after {
@@ -2565,17 +2827,13 @@ html {
 
   /* ── Footer ── */
   .vlance-footer {
-    padding-bottom: 2.5rem !important;
+    padding-bottom: 0 !important;
   }
   .vlance-footer-wordmark {
-    font-size: 33vw !important;
-    font-weight: 500 !important;
-    margin-top: 1.5rem !important;
-    margin-bottom: 3rem !important;
+    font-size: 16vw !important;
+    font-weight: 300 !important;
     -webkit-text-stroke: 3px #b91616 !important;
-    width: 135vw !important;
-    margin-left: -17.5vw !important;
-    text-align: center !important;
+    width: auto !important;
   }
   .vlance-footer-inner {
     display: block !important;
@@ -2585,7 +2843,7 @@ html {
     display: block;
     font-size: 0.78rem !important;
     letter-spacing: 0.04em;
-    color: #888 !important;
+    color: #fff !important;
     margin-top: 0.5em;
   }
   .vlance-footer-nav {
@@ -2596,10 +2854,46 @@ html {
     display: inline-block;
     font-size: 0.82rem !important;
     letter-spacing: 0.03em;
-    color: #888 !important;
+    color: #fff !important;
     margin: 0 0.6em;
   }
   .vlance-footer-copyright {
-    margin-top: 1.5rem !important;
+    margin-left: auto;
+    color: #fff !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TABLET POLISH (769px – 1024px)
+   ══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1025px) {
+  .vlance-footer-wordmark {
+    font-weight: 600;
+    -webkit-text-stroke: 8px #b91616;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  /* Footer wordmark — slightly less aggressive stroke on tablet */
+  .vlance-footer-wordmark {
+    font-size: 11vw !important;
+    -webkit-text-stroke: 4px #b91616 !important;
+  }
+
+  /* Footer min-height a bit shorter on tablet so it doesn't dominate */
+  .vlance-footer {
+    min-height: clamp(480px, 60vh, 700px) !important;
+  }
+
+  /* Stats section: pull top padding back in slightly */
+  .vl-stats {
+    padding-top: clamp(8rem, 14vh, 12rem) !important;
+  }
+
+  /* Contact section: tighter padding on tablet */
+  .vlance-contact-section {
+    padding: clamp(4rem, 7vh, 7rem) 0 !important;
   }
 }

@@ -72,14 +72,12 @@
   <!-- ═══════════════ HERO ═══════════════ -->
   <section data-theme-section="light" class="home-hero" id="hero">
 
-    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star vl-star--hero-1">
-    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star vl-star--hero-2">
+    <!-- Hero background -->
+    <picture>
+      <source media="(max-width: 768px)" srcset="svg/hero-bck-mobile-view.svg">
+      <img src="svg/Hero bck.svg" alt="" aria-hidden="true" class="vl-hero-bck">
+    </picture>
 
-    <!-- ═══ CLOUDS ═══ -->
-    <div class="vl-clouds-bg" aria-hidden="true">
-      <img src="svg/cloud 1.svg" class="vl-cloud-1" alt="">
-      <img src="svg/cloud 2.svg" class="vl-cloud-2" alt="">
-    </div>
 
     <!-- ═══ MONKEY PEEK ═══ -->
     <div class="vl-monkey-wrap" aria-hidden="true">
@@ -109,27 +107,6 @@
       </svg>
     </div>
 
-    <!-- ═══ BLUE GUY ═══ -->
-    <div class="vl-blueguy-wrap" aria-hidden="true">
-      <svg class="vl-blueguy-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1728" height="1257" viewBox="0 0 1728 1257">
-        <defs>
-          <style>.bg-1{stroke:#3a5bff;fill:url(#vl-bg-grad)}.bg-1,.bg-2,.bg-3{stroke-width:1px}.bg-2{fill:#fff;stroke:#fff}.bg-3{stroke:#000}</style>
-          <linearGradient id="vl-bg-grad" x1="721.524" y1="38" x2="951.476" y2="1221" gradientUnits="userSpaceOnUse">
-            <stop offset="0"     stop-color="#3a5bff"/>
-            <stop offset="0.526" stop-color="#623dfe"/>
-            <stop offset="0.561" stop-color="#643bfe"/>
-            <stop offset="1"     stop-color="#4605ff"/>
-          </linearGradient>
-        </defs>
-        <path   id="bg-body"     class="bg-1" d="M836.5,38h0A747.5,747.5,0,0,1,1584,785.5V1161a60,60,0,0,1-60,60H149a60,60,0,0,1-60-60V785.5A747.5,747.5,0,0,1,836.5,38Z"/>
-        <circle id="bg-leye-out" class="bg-2" cx="579"      cy="588"     r="180"/>
-        <circle id="bg-leye-in"  class="bg-3" cx="579"      cy="588"     r="97.094"/>
-        <circle id="bg-reye-out" class="bg-2" cx="1027"     cy="586"     r="180"/>
-        <circle id="bg-reye-in"  class="bg-3" cx="1026.998" cy="588"     r="97.092"/>
-      </svg>
-    </div>
-
-
 <div data-wf--padding-hero--variant="nav-large" class="padding-hero"></div>
     <div class="home-hero__bg">
       <div class="home-hero__bg-line"></div>
@@ -147,27 +124,31 @@
           </h1>
         </div>
 
-        <!-- Description row -->
-        <div class="home-hero__description-row">
-          <p class="home-hero__description-p">
-            High-converting <span class="home-hero__description-highlight is--round">UGC</span>
-            and <span class="home-hero__description-highlight">TikTok Shop</span>
-            video editing optimized for
-            <span class="home-hero__description-highlight is--round">sales</span>,
-            <span class="home-hero__description-highlight">engagement</span>,
-            and <span class="home-hero__description-highlight">fast results</span>
-          </p>
-        </div>
-
-
       </div><!-- /.home-hero__content -->
     </div><!-- /.container -->
 
   </section>
 
+  <!-- UGC text section with background -->
+  <div class="vl-ugc-section">
+    <img src="svg/bck for ugc text.svg" class="vl-ugc-bck" aria-hidden="true" alt="">
+    <div class="home-hero__description-row">
+      <p class="home-hero__description-p">
+        High-converting <span class="home-hero__description-highlight is--round">UGC</span>
+        and <span class="home-hero__description-highlight">TikTok Shop</span>
+        video editing optimized for
+        <span class="home-hero__description-highlight is--round">sales</span>,
+        <span class="home-hero__description-highlight">engagement</span>,
+        and <span class="home-hero__description-highlight">fast results</span>
+      </p>
+    </div>
+  </div>
+
   <!-- ═══════════════ SERVICES / TOOLKIT ═══════════════ -->
   <section data-theme-section="light" class="product-slider__wrap" id="services">
 
+    <!-- Work section background -->
+    <img src="svg/work section svg.svg" class="vl-work-section-bck" aria-hidden="true" alt="">
 
 <!-- Decorative clock/fan track — arcs + ticks + dots indicating rotation slider -->
     <svg class="vl-slider-track" xmlns="http://www.w3.org/2000/svg"
@@ -213,8 +194,35 @@
     <div class="product-slider">
       <div class="container">
         <div class="product-slider__text-row">
-          <div class="product-slider__title">
+          <div class="product-slider__title" style="position:relative;">
             <h2 class="h-l">A look at<br>our work</h2>
+            <!-- Magnifying glass — pans across title on scroll -->
+            <svg id="vl-glass-svg" class="vl-glass-svg" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="1100 300 1350 1600" aria-hidden="true">
+              <defs>
+                <style>
+                  .mg-1,.mg-2{fill:none;stroke-width:50px}
+                  .mg-1,.mg-4,.mg-5{stroke:#b91616}
+                  .mg-2,.mg-3{stroke:#f0f2f6}
+                  .mg-3{fill:#fff;stroke-width:1px;opacity:0}
+                  .mg-4{fill:#b91616;fill-rule:evenodd}
+                  .mg-5{fill:#b91616;fill-rule:evenodd;opacity:0.41;stroke-width:5px}
+                  .mg-6{fill:#ffdbe0;stroke:#ffdbe0;stroke-width:5px}
+                </style>
+              </defs>
+              <circle id="vl-glass-center" cx="1734.5" cy="798.5" r="1" fill="none" stroke="none"/>
+              <circle class="mg-1" cx="1734.5" cy="798.5" r="403.5"/>
+              <circle class="mg-2" cx="1734.81" cy="798.81" r="366.81"/>
+              <circle class="mg-3" cx="1734.81" cy="798.81" r="366.81"/>
+              <path class="mg-4" d="M1741,1212a27,27,0,0,1,27,27v634a27,27,0,0,1-54,0V1239A27,27,0,0,1,1741,1212Z"/>
+              <path class="mg-5" d="M1672,506l-47,32"/>
+              <path class="mg-5" d="M1722,502l-96,77"/>
+              <path class="mg-5" d="M1761,509l-48,73"/>
+              <path class="mg-5" d="M1770,945l-47,32"/>
+              <path class="mg-5" d="M1820,941l-96,77"/>
+              <path class="mg-5" d="M1859,948l-48,73"/>
+
+            </svg>
           </div>
           <div class="product-slider__text">
             <p class="p-l">Drag through a selection of recent edits:</p>
@@ -336,8 +344,34 @@
   <!-- ═══════════════ STATS ═══════════════ -->
   <section class="vl-stats" id="stats">
 
-    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star vl-star--stats-1">
-    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star vl-star--stats-2">
+    <!-- ═══ NUMBERS SECTION BACKGROUND ═══ -->
+    <picture>
+      <source media="(max-width: 768px)" srcset="svg/numbers-mobile.svg">
+      <img src="svg/numbers section svg.svg" class="vl-stats-bck" aria-hidden="true" alt="">
+    </picture>
+
+    <!-- ═══ BLUE GUY ═══ -->
+    <div class="vl-blueguy-wrap" aria-hidden="true">
+      <svg class="vl-blueguy-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1728" height="1257" viewBox="0 0 1728 1257">
+        <defs>
+          <style>
+            .bg-1{stroke:#b91616;fill:url(#vl-bg-grad)}.bg-1,.bg-2,.bg-3{stroke-width:1px}.bg-2{fill:#fff;stroke:#fff}.bg-3{stroke:#000}
+          </style>
+          <linearGradient id="vl-bg-grad" x1="721.524" y1="38" x2="951.476" y2="1221" gradientUnits="userSpaceOnUse">
+            <stop offset="0"     stop-color="#730e0d"/>
+            <stop offset="0.526" stop-color="#981212"/>
+            <stop offset="0.989" stop-color="#b91616"/>
+            <stop offset="1"     stop-color="#b91616"/>
+          </linearGradient>
+        </defs>
+        <path   id="bg-body"     class="bg-1" d="M836.5,38h0A747.5,747.5,0,0,1,1584,785.5V1161a60,60,0,0,1-60,60H149a60,60,0,0,1-60-60V785.5A747.5,747.5,0,0,1,836.5,38Z"/>
+        <circle id="bg-leye-out" class="bg-2" cx="579"      cy="588"     r="180"/>
+        <circle id="bg-leye-in"  class="bg-3" cx="579"      cy="588"     r="97.094"/>
+        <circle id="bg-reye-out" class="bg-2" cx="1027"     cy="586"     r="180"/>
+        <circle id="bg-reye-in"  class="bg-3" cx="1026.998" cy="588"     r="97.092"/>
+      </svg>
+    </div>
+
 
 <div class="vl-stats__inner">
       <div class="vl-stats__grid">
@@ -378,8 +412,8 @@
   <!-- ═══════════════ CONTACT ═══════════════ -->
   <section data-theme-section="dark" class="vlance-contact-section" id="contact">
 
-    <img src="png/star3.png" alt="" aria-hidden="true" class="vl-star vl-star--contact-1">
-    <img src="png/star1.png" alt="" aria-hidden="true" class="vl-star vl-star--contact-2">
+    <!-- ═══ CONTACT FLAGS ═══ -->
+    <img src="svg/Checkered-Racing-Flags.svg" class="vl-contact-flags" aria-hidden="true" alt="">
 
 <div class="vlance-contact-inner">
       <h2 class="h-l">Ready? Set. Go!</h2>
@@ -401,19 +435,42 @@
         </a>
       </div>
     </div>
+
+    <!-- ═══ CONTACT MONKEY ═══ -->
+    <div class="vl-contact-monkey" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1728" height="1957" viewBox="0 0 1728 1957">
+        <defs>
+          <linearGradient id="vl-cm-grad" x1="864.5" y1="2004" x2="864.5" y2="59" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#e64613"/>
+            <stop offset="0.502" stop-color="#b92614"/>
+            <stop offset="0.986" stop-color="#710d0d"/>
+          </linearGradient>
+        </defs>
+        <circle class="mk-1" cx="1411" cy="508" r="113"/>
+        <circle class="mk-1" cx="301"  cy="508" r="113"/>
+        <path   style="fill:url(#vl-cm-grad);stroke:#000;stroke-width:1px" d="M864.5,59h0A578.5,578.5,0,0,1,1443,637.5V2004a0,0,0,0,1,0,0H286a0,0,0,0,1,0,0V637.5A578.5,578.5,0,0,1,864.5,59Z"/>
+        <path   class="mk-3" d="M850.418,508A174.458,174.458,0,1,1,675.96,682.457,174.453,174.453,0,0,1,850.418,508Z"/>
+        <circle cx="816" cy="682" r="14"/>
+        <circle cx="878" cy="682" r="14"/>
+        <rect   x="764" y="752" width="172" height="15"/>
+        <rect   class="mk-1" x="504" y="374" width="727" height="268" rx="123.5" ry="123.5"/>
+        <circle id="cm-leye-out" class="mk-4" cx="701.5"   cy="508.5"   r="95.5"/>
+        <circle id="cm-leye-in"  class="mk-5" cx="701.188" cy="507.938" r="61.688"/>
+        <circle id="cm-reye-out" class="mk-4" cx="980.5"   cy="507.5"   r="95.5"/>
+        <circle id="cm-reye-in"  class="mk-5" cx="980.19"  cy="506.938" r="61.69"/>
+      </svg>
+    </div>
   </section>
 
   <!-- ═══════════════ FOOTER ═══════════════ -->
   <footer data-theme-section="dark" class="vlance-footer">
 
-    <!-- Decorative clouds — placed before wordmark so wordmark paints on top -->
-    <img src="svg/cloud 1.svg" class="vl-footer-cloud vl-footer-cloud-1" alt="" aria-hidden="true">
-    <img src="svg/cloud 2.svg" class="vl-footer-cloud vl-footer-cloud-2" alt="" aria-hidden="true">
+    <img src="svg/footer svg.svg" class="vl-footer-bck" aria-hidden="true" alt="">
 
-    <img src="png/star2.png" alt="" aria-hidden="true" class="vl-star vl-star--footer-1">
-    <img src="png/star4.png" alt="" aria-hidden="true" class="vl-star vl-star--footer-2">
 
-    <div class="vlance-footer-wordmark" aria-hidden="true">VLANCE</div>
+
+
+    <div class="vlance-footer-wordmark" aria-hidden="true">VLANCE VLANCE VLANCE VLANCE VLANCE VLANCE VLANCE VLANCE VLANCE VLANCE</div>
     <div class="container">
       <div class="vlance-footer-inner">
         <span class="vlance-footer-logo">Vlance</span>

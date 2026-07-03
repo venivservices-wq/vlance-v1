@@ -699,18 +699,205 @@ function initHeroDesc() {
 
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: '55% top',
-      scrub: 1.6
+      trigger: '.vl-ugc-section',
+      start: 'top 75%',
+      end: 'bottom 30%',
+      scrub: 1.8
     }
   });
 
   units.forEach((unit, i) => {
-    tl.to(unit, { opacity: 1, ease: 'power1.out', duration: 0.6 }, i * 0.28);
+    tl.to(unit, { opacity: 1, ease: 'power1.out', duration: 0.6 }, i * 0.35);
   });
 }
 
+
+// ─── SVG background parallax ──────────────────────────────────────────────────
+function initSvgParallax() {
+  if (typeof ScrollTrigger === 'undefined') return;
+
+  // Hero background — drifts up slowly as you scroll through hero
+  const heroBck = document.querySelector('.vl-hero-bck');
+  if (heroBck) {
+    gsap.to(heroBck, {
+      yPercent: -8,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1.2
+      }
+    });
+  }
+
+
+  // UGC background — rises gently as section scrolls into view
+  const ugcBck = document.querySelector('.vl-ugc-bck');
+  if (ugcBck) {
+    gsap.to(ugcBck, {
+      yPercent: -12,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.vl-ugc-section',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.2
+      }
+    });
+  }
+
+  // Monkey — floats up slightly as hero scrolls away
+  const monkey = document.querySelector('.vl-monkey-wrap');
+  if (monkey) {
+    gsap.to(monkey, {
+      yPercent: -25,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1.5
+      }
+    });
+  }
+
+  // Work section background — drifts up as section scrolls
+  const workBck = document.querySelector('.vl-work-section-bck');
+  if (workBck) {
+    gsap.to(workBck, {
+      yPercent: -15,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.product-slider__wrap',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.2
+      }
+    });
+  }
+
+
+  // Numbers section background SVG
+  const statsBck = document.querySelector('.vl-stats-bck');
+  if (statsBck) {
+    gsap.to(statsBck, {
+      yPercent: -15,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.vl-stats',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.2
+      }
+    });
+  }
+
+  // Footer wordmark — starts behind the footer SVG, rises into view on scroll
+  const wordmark = document.querySelector('.vlance-footer-wordmark');
+  if (wordmark) {
+    gsap.fromTo(wordmark,
+      { y: 260 },
+      {
+        y: -30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.vlance-footer',
+          start: 'top 90%',
+          end: 'top 20%',
+          scrub: 1.8
+        }
+      }
+    );
+  }
+
+
+
+}
+
+// ─── Magnifying glass pans over title + zoom effect ───────────────────────────
+function initGlassAnimation() {
+  if (typeof ScrollTrigger === 'undefined') return;
+  const glassSvg = document.querySelector('#vl-glass-svg');
+  const titleH2  = document.querySelector('.product-slider__title .h-l');
+  const titleDiv = document.querySelector('.product-slider__title');
+  const section  = document.querySelector('.product-slider__wrap');
+  if (!glassSvg || !titleH2 || !titleDiv || !section) return;
+
+
+  // Wrap every character in a span so we can colour them individually
+  function wrapChars(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const frag = document.createDocumentFragment();
+      for (const ch of node.textContent) {
+        if (ch === ' ') {
+          frag.appendChild(document.createTextNode(' '));
+        } else {
+          const s = document.createElement('span');
+          s.className = 'vl-char';
+          s.textContent = ch;
+          frag.appendChild(s);
+        }
+      }
+      node.parentNode.replaceChild(frag, node);
+    } else {
+      Array.from(node.childNodes).forEach(wrapChars);
+    }
+  }
+  wrapChars(titleH2);
+  const charSpans = Array.from(titleH2.querySelectorAll('.vl-char'));
+
+  const glassCenter = document.querySelector('#vl-glass-center');
+  const G_R_F = 403.5 / 1600;
+
+  function updateCharColors() {
+    const svgH = glassSvg.getBoundingClientRect().height;
+    const r    = svgH * G_R_F;
+    const cr   = glassCenter.getBoundingClientRect();
+    const gcx  = (cr.left + cr.right)  / 2;
+    const gcy  = (cr.top  + cr.bottom) / 2;
+
+    charSpans.forEach(span => {
+      const sr = span.getBoundingClientRect();
+      const cy = (sr.top + sr.bottom) / 2;
+      // Sample at 25%, 50%, 75% of the letter's width
+      const samples = [0.25, 0.5, 0.75].map(t => sr.left + sr.width * t);
+      const hits = samples.filter(x => Math.sqrt((x - gcx) ** 2 + (cy - gcy) ** 2) <= r).length;
+      span.style.color = hits >= 2 ? '#b91616' : '';
+    });
+  }
+
+  let anim, st;
+
+  const setup = () => {
+    const tr   = titleH2.getBoundingClientRect();
+    const svgH = glassSvg.getBoundingClientRect().height;
+    const svgW = svgH * (1350 / 1600);
+    const max  = Math.max(0, tr.width - svgW);
+
+    if (st)   st.kill();
+    if (anim) anim.kill();
+
+    gsap.set(glassSvg, { yPercent: -50, rotation: -20, x: 0 });
+    updateCharColors();
+
+    anim = gsap.fromTo(glassSvg,
+      { x: 0 },
+      { x: max, ease: 'sine.inOut', duration: 1, onUpdate: updateCharColors }
+    );
+
+    st = ScrollTrigger.create({
+      trigger:   section,
+      start:     'top 65%',
+      end:       'bottom 40%',
+      scrub:     2,
+      animation: anim
+    });
+  };
+
+  requestAnimationFrame(() => requestAnimationFrame(setup));
+  window.addEventListener('resize', setup);
+}
 
 // ─── Cloud parallax ───────────────────────────────────────────────────────────
 function initClouds() {
@@ -819,17 +1006,153 @@ function initMonkey() {
     const delay = 1600 + Math.random() * 4200;
     setTimeout(() => {
       gsap.to(blinkEls, {
-        scaleY: 0.06,
-        duration: 0.07,
+        scaleY: 0,
+        duration: 0.06,
         ease: 'power3.in',
-        transformOrigin: '50% 50%',
+        transformOrigin: 'center',
+        overwrite: true,
         onComplete() {
           gsap.to(blinkEls, {
             scaleY: 1,
-            duration: 0.13,
+            duration: 0.1,
             ease: 'power2.out',
-            transformOrigin: '50% 50%',
-            onComplete: scheduleBlink
+            transformOrigin: 'center',
+            overwrite: true,
+            onComplete() {
+              gsap.set(blinkEls, { clearProps: 'scaleY,transformOrigin' });
+              scheduleBlink();
+            }
+          });
+        }
+      });
+    }, delay);
+  }
+  scheduleBlink();
+}
+
+
+// ─── Contact flags wave ───────────────────────────────────────────────────────
+function initContactFlags() {
+  const flags = document.querySelector('.vl-contact-flags');
+  if (!flags) return;
+
+  // Establish base state: vertically centred + 30° clockwise tilt
+  gsap.set(flags, { yPercent: -50, rotation: 30, transformOrigin: 'center bottom' });
+
+  // Wave: oscillates ±7° around the 30° base
+  gsap.fromTo(flags,
+    { rotation: 23 },
+    { rotation: 37, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 }
+  );
+
+  // Skew for billowing feel
+  gsap.fromTo(flags,
+    { skewX: -4 },
+    { skewX: 4, duration: 1.9, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.5 }
+  );
+}
+
+
+// ─── Contact monkey ───────────────────────────────────────────────────────────
+function initContactMonkey() {
+  const wrap = document.querySelector('.vl-contact-monkey');
+  if (!wrap) return;
+  const svg = wrap.querySelector('svg');
+  if (!svg) return;
+
+  const lIn  = svg.querySelector('#cm-leye-in');
+  const rIn  = svg.querySelector('#cm-reye-in');
+  const lOut = svg.querySelector('#cm-leye-out');
+  const rOut = svg.querySelector('#cm-reye-out');
+  if (!lIn || !rIn) return;
+
+  const LC = { x: 701.188, y: 507.938 };
+  const RC = { x: 980.19,  y: 506.938 };
+  const MAX_TRAVEL = 26;
+
+  // Align monkey center with the heading's vertical center
+  const section = wrap.closest('.vlance-contact-section');
+  const heading = section && section.querySelector('.h-l');
+  gsap.set(wrap, { yPercent: -50, rotation: -120 });
+  function alignMonkey() {
+    if (!section || !heading) return;
+    const secRect  = section.getBoundingClientRect();
+    const headRect = heading.getBoundingClientRect();
+    const relTop   = headRect.top - secRect.top + headRect.height / 2;
+    gsap.set(wrap, { top: relTop });
+  }
+  alignMonkey();
+  window.addEventListener('resize', alignMonkey);
+
+  // Subtle left/right sway (peek in and out from right edge)
+  gsap.to(wrap, {
+    x: 14,
+    duration: 3.2,
+    ease: 'sine.inOut',
+    yoyo: true,
+    repeat: -1
+  });
+
+  // Gentle lean
+  gsap.to(wrap, {
+    rotation: -123,
+    duration: 16,
+    ease: 'sine.inOut',
+    yoyo: true,
+    repeat: -1
+  });
+
+  // Eye tracking
+  function movePupils(clientX, clientY) {
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return;
+    const pt = svg.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const sp = pt.matrixTransform(ctm.inverse());
+    [{ el: lIn, c: LC }, { el: rIn, c: RC }].forEach(({ el, c }) => {
+      const dx   = sp.x - c.x;
+      const dy   = sp.y - c.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      const t    = Math.min(dist, MAX_TRAVEL) / dist;
+      gsap.to(el, {
+        attr: { cx: c.x + dx * t, cy: c.y + dy * t },
+        duration: 0.2,
+        ease: 'power2.out',
+        overwrite: true
+      });
+    });
+  }
+
+  document.addEventListener('mousemove', e => movePupils(e.clientX, e.clientY));
+  document.addEventListener('mouseleave', () => {
+    [{ el: lIn, c: LC }, { el: rIn, c: RC }].forEach(({ el, c }) => {
+      gsap.to(el, { attr: { cx: c.x, cy: c.y }, duration: 0.5, ease: 'power2.out' });
+    });
+  });
+
+  // Random blink
+  const blinkEls = [lOut, lIn, rOut, rIn].filter(Boolean);
+  function scheduleBlink() {
+    const delay = 1600 + Math.random() * 4200;
+    setTimeout(() => {
+      gsap.to(blinkEls, {
+        scaleY: 0,
+        duration: 0.06,
+        ease: 'power3.in',
+        transformOrigin: 'center',
+        overwrite: true,
+        onComplete() {
+          gsap.to(blinkEls, {
+            scaleY: 1,
+            duration: 0.1,
+            ease: 'power2.out',
+            transformOrigin: 'center',
+            overwrite: true,
+            onComplete() {
+              gsap.set(blinkEls, { clearProps: 'scaleY,transformOrigin' });
+              scheduleBlink();
+            }
           });
         }
       });
@@ -857,19 +1180,18 @@ function initBlueGuy() {
   // Max travel: outer r 180 − inner r 97 = 83 SVG units
   const MAX_TRAVEL = 70;
 
-  // ── Right-side up, gentle sway from base ────────────────────────────────
   gsap.set(wrap, { rotation: 0, transformOrigin: 'bottom center' });
 
-  // Float
+  // Idle float (y only — doesn't conflict with scroll path's left/top/scale)
   gsap.to(wrap, {
-    y: -14,
+    y: -10,
     duration: 3.8,
     ease: 'sine.inOut',
     yoyo: true,
     repeat: -1
   });
 
-  // Sway
+  // Idle sway
   gsap.to(wrap, {
     rotation: 2.5,
     duration: 4.6,
@@ -877,6 +1199,21 @@ function initBlueGuy() {
     yoyo: true,
     repeat: -1
   });
+
+  // ── Scroll-driven path: start near 1B → drift right → hold right → return left ──
+  if (typeof ScrollTrigger !== 'undefined') {
+    const pathTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#stats',
+        start: 'top 55%',
+        end: 'bottom 45%',
+        scrub: 3
+      }
+    });
+
+    pathTl
+      .to(wrap, { left: '22vw', top: '70%', ease: 'none', duration: 1 });
+  }
 
   // ── Eye tracking ─────────────────────────────────────────────────────────
   function movePupils(clientX, clientY) {
@@ -916,17 +1253,22 @@ function initBlueGuy() {
     const delay = 2000 + Math.random() * 4500;
     setTimeout(() => {
       gsap.to(blinkEls, {
-        scaleY: 0.06,
-        duration: 0.07,
+        scaleY: 0,
+        duration: 0.06,
         ease: 'power3.in',
-        transformOrigin: '50% 50%',
+        transformOrigin: 'center',
+        overwrite: true,
         onComplete() {
           gsap.to(blinkEls, {
             scaleY: 1,
-            duration: 0.13,
+            duration: 0.1,
             ease: 'power2.out',
-            transformOrigin: '50% 50%',
-            onComplete: scheduleBlink
+            transformOrigin: 'center',
+            overwrite: true,
+            onComplete() {
+              gsap.set(blinkEls, { clearProps: 'scaleY,transformOrigin' });
+              scheduleBlink();
+            }
           });
         }
       });
@@ -1075,15 +1417,18 @@ document.addEventListener('DOMContentLoaded', () => {
     initOsmoSlider();
     initNavScroll(); // must run after initOsmoSlider so slider listeners attach first
     initHeroDesc();
+    initSvgParallax();
+    initGlassAnimation();
     initClouds();
     initMonkey();
     initBlueGuy();
+    initContactMonkey();
+    initContactFlags();
     initStarParallax();
     initContactFooterAnimations();
     if (!isMobile) {
       initServiceAnimations();
       initStatsAnimations();
-      initContactReveal();
     }
   }
 });
