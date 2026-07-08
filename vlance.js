@@ -356,6 +356,14 @@ function initOsmoSlider() {
             const dest = -(cur + wrapDiff(target, cur, total)) * step;
             gsap.to(proxy, { x: dest, duration: DURATION, ease: EASE, onUpdate: render });
           };
+        } else if (v === 'prev' || v === 'next') {
+          btn.onclick = () => {
+            gsap.killTweensOf(proxy);
+            const cur    = getIdx();
+            const target = mod(Math.round(cur) + (v === 'next' ? 1 : -1), total);
+            const dest   = -(cur + wrapDiff(target, cur, total)) * step;
+            gsap.to(proxy, { x: dest, duration: DURATION, ease: EASE, onUpdate: render });
+          };
         }
       });
 
@@ -628,6 +636,103 @@ function initStatsAnimations() {
 }
 
 
+
+// ─── Perks bands scroll reveal ────────────────────────────────────────────────
+function initPerksAnimation() {
+  const bands = document.querySelectorAll('.vl-perk-band');
+  if (!bands.length || typeof ScrollTrigger === 'undefined') return;
+
+  const progressEl   = document.querySelector('.vl-perks-progress');
+  const progressDots = document.querySelectorAll('.vl-perk-dot');
+
+  // ── Word-split each title ──────────────────────────────────────────────────
+  bands.forEach(band => {
+    const title = band.querySelector('.vl-perk-title');
+    if (!title) return;
+    title.innerHTML = title.textContent.trim().split(' ')
+      .map(w => `<span class="vl-pw"><span class="vl-pw-i">${w}</span></span>`)
+      .join(' ');
+  });
+
+  // ── Show/hide progress dots while section is active ───────────────────────
+  if (progressEl) {
+    ScrollTrigger.create({
+      trigger: '.vl-perks-section',
+      start: 'top center',
+      end: 'bottom center',
+      onEnter:     () => progressEl.classList.add('is-visible'),
+      onLeave:     () => progressEl.classList.remove('is-visible'),
+      onEnterBack: () => progressEl.classList.add('is-visible'),
+      onLeaveBack: () => progressEl.classList.remove('is-visible'),
+    });
+  }
+
+  function setActiveDot(i) {
+    progressDots.forEach((d, j) => d.classList.toggle('is-active', j === i));
+    if (progressEl) progressEl.classList.toggle('on-dark', bands[i]?.classList.contains('vl-perk-band--dark'));
+  }
+
+  // ── Per-band animations ────────────────────────────────────────────────────
+  bands.forEach((band, i) => {
+    const title = band.querySelector('.vl-perk-title');
+    const words = band.querySelectorAll('.vl-pw-i');
+    const sub   = band.querySelector('.vl-perk-sub');
+
+    // Activate progress dot when band locks to top
+    ScrollTrigger.create({
+      trigger: band,
+      start: 'top top+=1',
+      end: 'bottom top',
+      onEnter:     () => setActiveDot(i),
+      onEnterBack: () => setActiveDot(i),
+    });
+
+    // Blur-out + scale-up as next band slides over this one
+    if (i < bands.length - 1) {
+      gsap.to([title, sub], {
+        filter: 'blur(16px)', opacity: 0.18, scale: 1.06, ease: 'power1.in',
+        scrollTrigger: { trigger: bands[i + 1], start: 'top bottom', end: 'top top', scrub: 0.8 }
+      });
+    }
+
+    if (i === 0) {
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: band, start: 'top 80%', toggleActions: 'play none none none' }
+      });
+      tl.fromTo(words,
+        { y: '110%' },
+        { y: '0%', duration: 0.9, ease: 'power3.out', stagger: 0.08 }
+      ).fromTo(sub,
+        { clipPath: 'inset(0 0 100% 0)', filter: 'blur(10px)', opacity: 0 },
+        { clipPath: 'inset(0 0 0% 0)',   filter: 'blur(0px)',  opacity: 1, duration: 0.75, ease: 'power2.out' },
+        0.4
+      );
+      return;
+    }
+
+    // Bands 2–4: scrub in
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: band, start: 'top bottom', end: 'top top', scrub: 0.6 }
+    });
+    words.forEach((word, wi) => {
+      tl.fromTo(word, { y: '110%' }, { y: '0%', ease: 'power3.out' }, wi * 0.06);
+    });
+    tl.fromTo(sub,
+      { clipPath: 'inset(0 0 100% 0)', filter: 'blur(10px)', opacity: 0 },
+      { clipPath: 'inset(0 0 0% 0)',   filter: 'blur(0px)',  opacity: 1, ease: 'power2.out' },
+      0.3
+    );
+
+
+    // Title parallax drift while pinned
+    gsap.to(title, {
+      y: -45, ease: 'none',
+      scrollTrigger: { trigger: band, start: 'top top', end: 'bottom top', scrub: 2 }
+    });
+  });
+
+}
+
 // ─── Contact + Footer scroll animations ───────────────────────────────────────
 function initContactFooterAnimations() {
   if (typeof ScrollTrigger === 'undefined') return;
@@ -799,7 +904,7 @@ function initSvgParallax() {
     gsap.fromTo(wordmark,
       { y: 260 },
       {
-        y: -30,
+        y: -160,
         ease: 'none',
         scrollTrigger: {
           trigger: '.vlance-footer',
@@ -1162,120 +1267,6 @@ function initContactMonkey() {
 }
 
 
-// ─── Blue guy ─────────────────────────────────────────────────────────────────
-function initBlueGuy() {
-  const wrap = document.querySelector('.vl-blueguy-wrap');
-  const svg  = document.querySelector('.vl-blueguy-svg');
-  if (!wrap || !svg) return;
-
-  const lIn  = svg.querySelector('#bg-leye-in');
-  const rIn  = svg.querySelector('#bg-reye-in');
-  const lOut = svg.querySelector('#bg-leye-out');
-  const rOut = svg.querySelector('#bg-reye-out');
-  if (!lIn || !rIn) return;
-
-  // Pupil centers in SVG coords
-  const LC = { x: 579,      y: 588 };
-  const RC = { x: 1026.998, y: 588 };
-  // Max travel: outer r 180 − inner r 97 = 83 SVG units
-  const MAX_TRAVEL = 70;
-
-  gsap.set(wrap, { rotation: 0, transformOrigin: 'bottom center' });
-
-  // Idle float (y only — doesn't conflict with scroll path's left/top/scale)
-  gsap.to(wrap, {
-    y: -10,
-    duration: 3.8,
-    ease: 'sine.inOut',
-    yoyo: true,
-    repeat: -1
-  });
-
-  // Idle sway
-  gsap.to(wrap, {
-    rotation: 2.5,
-    duration: 4.6,
-    ease: 'sine.inOut',
-    yoyo: true,
-    repeat: -1
-  });
-
-  // ── Scroll-driven path: start near 1B → drift right → hold right → return left ──
-  if (typeof ScrollTrigger !== 'undefined') {
-    const pathTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#stats',
-        start: 'top 55%',
-        end: 'bottom 45%',
-        scrub: 3
-      }
-    });
-
-    pathTl
-      .to(wrap, { left: '22vw', top: '70%', ease: 'none', duration: 1 });
-  }
-
-  // ── Eye tracking ─────────────────────────────────────────────────────────
-  function movePupils(clientX, clientY) {
-    const ctm = svg.getScreenCTM();
-    if (!ctm) return;
-    const pt = svg.createSVGPoint();
-    pt.x = clientX;
-    pt.y = clientY;
-    const sp = pt.matrixTransform(ctm.inverse());
-
-    [{ el: lIn, c: LC }, { el: rIn, c: RC }].forEach(({ el, c }) => {
-      const dx   = sp.x - c.x;
-      const dy   = sp.y - c.y;
-      const dist = Math.hypot(dx, dy) || 1;
-      const t    = Math.min(dist, MAX_TRAVEL) / dist;
-      gsap.to(el, {
-        attr: { cx: c.x + dx * t, cy: c.y + dy * t },
-        duration: 0.2,
-        ease: 'power2.out',
-        overwrite: true
-      });
-    });
-  }
-
-  document.addEventListener('mousemove', e => movePupils(e.clientX, e.clientY));
-
-  document.addEventListener('mouseleave', () => {
-    [{ el: lIn, c: LC }, { el: rIn, c: RC }].forEach(({ el, c }) => {
-      gsap.to(el, { attr: { cx: c.x, cy: c.y }, duration: 0.5, ease: 'power2.out' });
-    });
-  });
-
-  // ── Random blink ─────────────────────────────────────────────────────────
-  const blinkEls = [lOut, lIn, rOut, rIn].filter(Boolean);
-
-  function scheduleBlink() {
-    const delay = 2000 + Math.random() * 4500;
-    setTimeout(() => {
-      gsap.to(blinkEls, {
-        scaleY: 0,
-        duration: 0.06,
-        ease: 'power3.in',
-        transformOrigin: 'center',
-        overwrite: true,
-        onComplete() {
-          gsap.to(blinkEls, {
-            scaleY: 1,
-            duration: 0.1,
-            ease: 'power2.out',
-            transformOrigin: 'center',
-            overwrite: true,
-            onComplete() {
-              gsap.set(blinkEls, { clearProps: 'scaleY,transformOrigin' });
-              scheduleBlink();
-            }
-          });
-        }
-      });
-    }, delay);
-  }
-  scheduleBlink();
-}
 
 
 // ─── Contact: word-by-word entrance (no pin — plays once on scroll-in) ───────
@@ -1421,11 +1412,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initGlassAnimation();
     initClouds();
     initMonkey();
-    initBlueGuy();
     initContactMonkey();
     initContactFlags();
     initStarParallax();
     initContactFooterAnimations();
+    initPerksAnimation();
     if (!isMobile) {
       initServiceAnimations();
       initStatsAnimations();
