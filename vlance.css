@@ -3203,6 +3203,13 @@ html {
     overflow: hidden;
     max-width: 100%;
   }
+  /* Pull the arrow row and the videos closer together on mobile */
+  .gsap-slider {
+    gap: 0.5em;
+  }
+  .vl-nav-row {
+    padding: 0.4rem 0;
+  }
   /* Cards: wider on mobile for better viewing */
   .gsap-slider__item {
     width: min(78vw, 320px) !important;
@@ -3380,6 +3387,14 @@ html {
   .vlance-footer-inner {
     gap: 0.85em;
   }
+  /* Bigger footer row text (logo + WORK/CONTACT nav + copyright) on mobile */
+  .vlance-footer-logo {
+    font-size: 1.4em !important;
+  }
+  .vlance-footer-nav a,
+  .vlance-footer-copyright {
+    font-size: 0.85rem !important;
+  }
   .vlance-footer {
     /* Fixed 200px top margin (from the base rule) is disproportionate on a
        375–430px-wide screen — it was tuned for desktop's much larger canvas */
@@ -3394,8 +3409,9 @@ html {
        tighter letter-spacing keeps it fitting even at a bigger size. Top
        moved down from 20% to 32% so it sits closer to the clouds (anchored
        to the bottom) instead of leaving a big empty gap between them. */
-    top: 60% !important;
+    top: 68% !important;
     font-size: 28.5vw !important;
+    font-weight: 500 !important;
     letter-spacing: 0.02em !important;
     /* The base -53% X offset was tuned for desktop's font-size/letter-spacing
        combo; at mobile's different values it pushed the text noticeably left
@@ -3445,12 +3461,12 @@ html {
     max-width: 18ch !important;
   }
 
-  /* ── Footer — same layout as desktop, just a thinner wordmark stroke ── */
+  /* ── Footer — thicker wordmark (heavier fill weight + wider stroke) ── */
   .vlance-footer {
     padding-bottom: 0 !important;
   }
   .vlance-footer-wordmark {
-    -webkit-text-stroke: 2px #b91616 !important;
+    -webkit-text-stroke: 4px #b91616 !important;
   }
 }
 
