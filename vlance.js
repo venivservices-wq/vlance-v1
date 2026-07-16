@@ -850,17 +850,23 @@ function initHeroDesc() {
   const units = Array.from(desc.querySelectorAll('.vl-word, .home-hero__description-highlight'));
   gsap.set(units, { opacity: 0.15 });
 
+  // Mobile: the UGC section is tall (portrait), so the default end point spreads
+  // the fill over a long scroll. Pull the end in and tighten the per-word
+  // stagger so the whole thing fills in over noticeably less scrolling.
+  const isMobile = window.innerWidth <= 768;
+
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: '.vl-ugc-section',
-      start: 'top 75%',
-      end: 'bottom 60%',
+      start: isMobile ? 'top 82%' : 'top 75%',
+      end:   isMobile ? 'center 62%' : 'bottom 60%',
       scrub: 0.8
     }
   });
 
+  const step = isMobile ? 0.11 : 0.18;
   units.forEach((unit, i) => {
-    tl.to(unit, { opacity: 1, ease: 'power1.out', duration: 0.4 }, i * 0.18);
+    tl.to(unit, { opacity: 1, ease: 'power1.out', duration: 0.4 }, i * step);
   });
 }
 

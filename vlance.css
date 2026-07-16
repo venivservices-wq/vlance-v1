@@ -1942,6 +1942,10 @@ body:not([data-scrolled]) .vlance-logo-img {
   width: 100%;
 }
 
+/* Desktop and mobile use different line groupings of the same words, so each
+   set is toggled on at its breakpoint (see the two markup blocks in the H1) */
+.vl-ht-line--mobile { display: none; }
+
 .home-hero__description-row {
   margin-top: 0 !important;
   padding-top: clamp(2rem, 4vh, 4rem);
@@ -3129,6 +3133,9 @@ html {
     font-size: clamp(4.4rem, 17.5vw, 7.8rem) !important;
     line-height: 1.0 !important;
   }
+  /* Switch to the mobile line grouping: Looking / to get / your / TikToks / viral */
+  .vl-ht-line--desktop { display: none; }
+  .vl-ht-line--mobile  { display: block; }
   /* Description — bigger but narrower on mobile */
   .home-hero__description-p {
     font-size: clamp(2rem, 8vw, 3rem) !important;
