@@ -3136,7 +3136,7 @@ html {
     padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
   .home-hero__content {
-    padding-top: clamp(9.5rem, 23vh, 12.5rem) !important;
+    padding-top: clamp(10.25rem, 24.5vh, 13.25rem) !important;
     padding-bottom: clamp(2.5rem, 6vh, 6rem);
   }
 }
