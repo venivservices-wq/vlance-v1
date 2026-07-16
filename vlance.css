@@ -2177,6 +2177,11 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Pull the section up closer to the stats/numbers above it on mobile */
+  .vl-testimonials-section {
+    padding-top: clamp(1.5rem, 5vw, 3.5rem) !important;
+    margin-top: clamp(1rem, 3vh, 2.5rem) !important;
+  }
   .vl-testimonials-grid {
     grid-template-columns: 1fr;
   }
