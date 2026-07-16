@@ -1026,10 +1026,10 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
   width: clamp(220px, 68vw, 400px);
   height: auto;
 }
-/* translateX pushes ~a quarter of the cloud's own width off-screen, so most of
-   its bulk hugs the edge instead of crowding the text column in the middle */
-.vl-ugc-cloud--right { transform: translateX(28%); }
-.vl-ugc-cloud--left  { transform: translateX(-28%); }
+/* translateX pushes most of the cloud's width off-screen, so it hugs the edge
+   instead of crowding the text column in the middle and hurting readability */
+.vl-ugc-cloud--right { transform: translateX(42%); }
+.vl-ugc-cloud--left  { transform: translateX(-42%); }
 
 .vl-ugc-bck--mobile { display: none; }
 
@@ -1812,7 +1812,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 
 .vl-stats-bck {
     object-fit: contain;
-    object-position: center center;
+    object-position: center 65%;
   }
 
   .vl-stats {
@@ -1828,7 +1828,7 @@ body:not([data-scrolled]) .vlance-logo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center 65%;
   pointer-events: none;
   z-index: 0;
 }
@@ -2164,7 +2164,11 @@ body {
   }
 }
 
-/* ─── Client carousel ─── */
+/* ─── Client carousel ───
+   Auto-scrolls continuously (driven by JS, see initClientsCarousel), and can
+   also be dragged/swiped — dragging just adds to the same position the
+   auto-scroll uses, so it's a way to move through it faster, then it keeps
+   auto-scrolling from wherever you let go. */
 .vl-clients-carousel {
   width: 100%;
   overflow-x: clip;
@@ -2174,18 +2178,18 @@ body {
   position: relative;
   z-index: 10;
   margin-top: clamp(-14rem, -16vw, -8rem);
-}
-
-@keyframes vl-clients-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-25%); }
+  touch-action: pan-y;
 }
 
 .vl-clients-track {
   display: flex;
   gap: 0;
   width: max-content;
-  animation: vl-clients-scroll 32s linear infinite;
+  cursor: grab;
+  will-change: transform;
+}
+.vl-clients-track.is-dragging {
+  cursor: grabbing;
 }
 
 .vl-clients-card {

@@ -663,6 +663,64 @@ function initUGCClouds() {
   gsap.fromTo(cloudLeft,  { y: leftFrom },  { y: leftTo,  ease: 'none', scrollTrigger: trig });
 }
 
+// ─── Client carousel: auto-scroll + drag to go faster ─────────────────────────
+function initClientsCarousel() {
+  const carousel = document.querySelector('.vl-clients-carousel');
+  const track    = document.querySelector('.vl-clients-track');
+  if (!carousel || !track || typeof gsap === 'undefined') return;
+
+  const SPEED = 40; // px/sec auto-scroll
+  let x        = 0;
+  let loopW    = 0;
+  let dragging = false;
+  let lastX    = 0;
+
+  // Track is 4 duplicated sets of cards laid end to end (see markup comment);
+  // one set's width is exactly one seamless loop.
+  const measure = () => { loopW = track.scrollWidth / 4; };
+  measure();
+  window.addEventListener('resize', measure);
+
+  const wrap = () => {
+    if (loopW <= 0) return;
+    x = ((x % loopW) + loopW) % loopW - loopW; // keep in (-loopW, 0]
+  };
+
+  gsap.ticker.add((time, deltaTime) => {
+    if (!dragging) {
+      x -= SPEED * (deltaTime / 1000);
+      wrap();
+      gsap.set(track, { x });
+    }
+  });
+
+  const start = clientX => {
+    dragging = true;
+    lastX = clientX;
+    track.classList.add('is-dragging');
+  };
+  const move = clientX => {
+    if (!dragging) return;
+    x += clientX - lastX;
+    lastX = clientX;
+    wrap();
+    gsap.set(track, { x });
+  };
+  const end = () => {
+    dragging = false;
+    track.classList.remove('is-dragging');
+  };
+
+  track.addEventListener('touchstart', e => start(e.touches[0].clientX), { passive: true });
+  track.addEventListener('touchmove',  e => move(e.touches[0].clientX),  { passive: true });
+  track.addEventListener('touchend',    end);
+  track.addEventListener('touchcancel', end);
+
+  track.addEventListener('mousedown', e => { start(e.clientX); e.preventDefault(); });
+  window.addEventListener('mousemove', e => move(e.clientX));
+  window.addEventListener('mouseup',   end);
+}
+
 // ─── Perks bands scroll reveal ────────────────────────────────────────────────
 function initPerksAnimation() {
   const bands = document.querySelectorAll('.vl-perk-band');
@@ -1433,6 +1491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initContactFooterAnimations();
     initPerksAnimation();
     initUGCClouds();
+    initClientsCarousel();
     if (!isMobile) {
       initServiceAnimations();
       initStatsAnimations();
