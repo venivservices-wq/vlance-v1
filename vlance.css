@@ -2069,45 +2069,69 @@ body {
   white-space: nowrap;
 }
 
+/* Single column of 4 cards, each narrower than the container and staggered
+   left / right / left / right for a zigzag rhythm (desktop + tablet) */
 .vl-testimonials-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(1rem, 1.5vw, 1.5rem);
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
   background: none;
   border: none;
 }
 
 .vl-testimonial-card {
-  background: #f7f8fa;
-  border: 1px solid #eceef2;
+  width: min(70%, 680px);
+}
+.vl-testimonial-card:nth-child(odd)  { justify-self: start; }
+.vl-testimonial-card:nth-child(even) { justify-self: end; }
+
+/* Red spiral / star accents overlaid on a card corner — sit half on the card,
+   half outside it, above the card content, with a gentle continuous drift.
+   nested transform: the animation drives the inner one so the base
+   corner-anchoring isn't overwritten. */
+.vl-testimonial-deco {
+  position: absolute;
+  width: clamp(58px, 7vw, 104px);
+  height: auto;
+  z-index: 3;
+  pointer-events: none;
+}
+.vl-testimonial-deco--star {
+  top: 0;
+  right: 0;
+  transform: translate(38%, -45%);
+  animation: vl-deco-star 6s ease-in-out infinite;
+}
+.vl-testimonial-deco--spiral {
+  bottom: 0;
+  left: 0;
+  transform: translate(-40%, 42%);
+  animation: vl-deco-spiral 7.5s ease-in-out infinite;
+}
+@keyframes vl-deco-star {
+  0%, 100% { transform: translate(38%, -45%) rotate(-8deg); }
+  50%      { transform: translate(38%, -52%) rotate(8deg); }
+}
+@keyframes vl-deco-spiral {
+  0%, 100% { transform: translate(-40%, 42%) rotate(5deg); }
+  50%      { transform: translate(-40%, 34%) rotate(-7deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-testimonial-deco { animation: none; }
+}
+
+/* Card: subtle blue-toned gray fill so the box is visible, but still no
+   border, no shadow, no quote icon, no stars — just the person (photo + name)
+   on top and the testimonial text below */
+.vl-testimonial-card {
+  background: #f3f5f9;
+  border: none;
   border-radius: 16px;
-  padding: clamp(2rem, 3.5vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   position: relative;
-  overflow: hidden;
-}
-
-.vl-testimonial-card::before {
-  content: '\201C';
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: clamp(8rem, 14vw, 14rem);
-  font-weight: 900;
-  line-height: 1;
-  color: #b91616;
-  opacity: 0.07;
-  position: absolute;
-  top: -1.5rem;
-  right: 1rem;
-  pointer-events: none;
-  user-select: none;
-}
-
-.vl-testimonial-stars {
-  color: #b91616;
-  font-size: clamp(0.85rem, 1vw, 1rem);
-  letter-spacing: 0.15em;
 }
 
 .vl-testimonial-quote {
@@ -2118,33 +2142,21 @@ body {
   line-height: 1.65;
   letter-spacing: -0.01em;
   margin: 0;
-  position: relative;
-  z-index: 1;
-  flex: 1;
 }
 
 .vl-testimonial-author {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e8e3e3;
+  gap: 0.85rem;
 }
 
 .vl-testimonial-avatar {
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
-  background: #b91616;
-  color: #fff;
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
   flex-shrink: 0;
-  letter-spacing: 0;
+  display: block;
 }
 
 .vl-testimonial-name {
@@ -2168,12 +2180,22 @@ body {
   .vl-testimonials-grid {
     grid-template-columns: 1fr;
   }
+  /* Mobile: keep a smaller version of the left/right stagger */
+  .vl-testimonial-card {
+    width: 90%;
+  }
+  .vl-testimonial-card:nth-child(odd)  { justify-self: start; }
+  .vl-testimonial-card:nth-child(even) { justify-self: end; }
   .vl-testimonials-eyebrow {
     font-size: clamp(1.4rem, 5vw, 2.4rem) !important;
     white-space: nowrap;
   }
-  .vl-testimonials-heading {
-    font-size: clamp(3.6rem, 14.5vw, 6.5rem) !important;
+  /* h2. prefix raises specificity above the general `.h-l` mobile rule, which
+     otherwise wins here because it appears later in the file with equal
+     specificity and its own !important (this is why sizes silently diverged) */
+  h2.vl-testimonials-heading {
+    font-size: clamp(4.2rem, 17vw, 7.5rem) !important;
+    line-height: 0.95 !important;
     white-space: nowrap;
   }
 }
@@ -3435,7 +3457,7 @@ html {
        tighter letter-spacing keeps it fitting even at a bigger size. Top
        moved down from 20% to 32% so it sits closer to the clouds (anchored
        to the bottom) instead of leaving a big empty gap between them. */
-    top: 68% !important;
+    top: 60% !important;
     font-size: 28.5vw !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
