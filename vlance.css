@@ -1043,13 +1043,16 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
   .vl-ugc-bck--mobile  { display: block; }
   .vl-ugc-bg           { display: block; }
 
+  /* Same creamy white as desktop — the clouds behind it are darkened to a
+     deep red on mobile (see .vl-ugc-cloud path fills) so the white text
+     stays readable where they overlap */
   .vl-ugc-section .home-hero__description-p {
-    color: #040000 !important;
+    color: rgba(255, 255, 255, 0.82) !important;
     font-weight: 700 !important;
   }
   .vl-ugc-section .home-hero__description-highlight {
-    color: #040000 !important;
-    background-color: rgba(4, 0, 0, 0.1) !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
   }
 }
 
@@ -3112,18 +3115,18 @@ html {
 @media (max-width: 600px) {
   /* "Are you" — noticeably bigger */
   .vl-ht-pre {
-    font-size: clamp(1.8rem, 7vw, 3rem) !important;
+    font-size: clamp(2.2rem, 8.5vw, 3.6rem) !important;
     margin-bottom: 0.3em;
   }
   /* Main title lines */
   .vl-hero-heading {
     gap: 0.12em;
-    max-width: 85vw;
+    max-width: 92vw;
     margin-left: auto;
     margin-right: auto;
   }
   .vl-ht-line {
-    font-size: clamp(3.6rem, 14.5vw, 6.5rem) !important;
+    font-size: clamp(4.4rem, 17.5vw, 7.8rem) !important;
     line-height: 1.0 !important;
   }
   /* Description — bigger but narrower on mobile */
@@ -3384,7 +3387,7 @@ html {
        tighter letter-spacing keeps it fitting even at a bigger size. Top
        moved down from 20% to 32% so it sits closer to the clouds (anchored
        to the bottom) instead of leaving a big empty gap between them. */
-    top: 42% !important;
+    top: 60% !important;
     font-size: 28.5vw !important;
     letter-spacing: 0.02em !important;
     /* The base -53% X offset was tuned for desktop's font-size/letter-spacing
