@@ -969,6 +969,11 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
   width: 100%;
   height: auto;
   padding: clamp(2rem, 4vw, 5rem) 2rem clamp(8rem, 14vw, 16rem);
+  /* Without this, width:100% + padding (no global border-box reset in this
+     codebase) adds the padding on top of 100%, rendering 2x the horizontal
+     padding wider than the viewport — all overflowing off the right edge
+     since the box starts at x:0. That's what read as "off-center". */
+  box-sizing: border-box;
   overflow: visible;
   z-index: 4;
   display: flex;
@@ -1655,14 +1660,14 @@ body:not([data-scrolled]) .vlance-logo-img {
   text-align: center;
   user-select: none;
   -webkit-text-stroke: 0;
-  z-index: 0;
+  z-index: 1;
 }
 .vlance-footer .container {
   position: absolute;
   bottom: 1.5rem;
   left: 0;
   right: 0;
-  z-index: 4;
+  z-index: 5;
 }
 
 .vlance-footer-inner {
@@ -1672,14 +1677,16 @@ body:not([data-scrolled]) .vlance-logo-img {
   gap: 1.5em;
   flex-wrap: wrap;
 }
+/* Footer background is light (#fffefe) — text needs to be dark to read,
+   not white-on-near-white */
 .vlance-footer-logo {
   font-size: 1.1em;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: #040000;
 }
 .vlance-footer-copyright {
-  color: #fff;
+  color: #040000;
   margin-left: auto;
 }
 .vlance-footer-nav {
@@ -1687,12 +1694,12 @@ body:not([data-scrolled]) .vlance-logo-img {
   gap: 1.5em;
 }
 .vlance-footer-nav a {
-  color: #fff;
+  color: #040000;
   text-decoration: none;
   transition: color 0.18s;
 }
 .vlance-footer-nav a:hover {
-  color: rgba(255,255,255,0.6);
+  color: rgba(4, 0, 0, 0.6);
 }
 
 /* ─── Prevent nav wrapper from bleeding past viewport width ─── */
@@ -1744,7 +1751,7 @@ body:not([data-scrolled]) .vlance-logo-img {
   width: 100%;
   height: auto;
   pointer-events: none;
-  z-index: 2;
+  z-index: 0;
 }
 
 
@@ -3038,6 +3045,9 @@ html {
     text-align: center;
     overflow: visible;
   }
+  .product-slider__wrap {
+    margin-top: clamp(1.5rem, 4vh, 3rem) !important;
+  }
   .vl-work-section-bck {
     width: 120%;
     height: 180%;
@@ -3175,7 +3185,7 @@ html {
 
 @media (max-width: 768px) {
   .product-slider__wrap {
-    margin-top: clamp(9rem, 20vh, 14rem) !important;
+    margin-top: clamp(1.5rem, 4vh, 3rem) !important;
   }
   /* Contain the slider so fanned cards never overflow the section */
   .gsap-slider,
@@ -3288,15 +3298,24 @@ html {
 
 @media (max-width: 768px) {
   /* Perks: tighten on mobile */
+  .vl-perks-section {
+    padding-bottom: 30px;
+  }
   .vl-perks-header {
-    margin-top: clamp(3rem, 8vw, 5rem);
-    margin-bottom: clamp(1rem, 3vw, 2rem);
+    margin-top: clamp(4rem, 10vw, 6.5rem);
+    margin-bottom: clamp(3rem, 7vw, 4.5rem);
   }
   .vl-perks-heading {
-    font-size: clamp(3.6rem, 14.5vw, 6.5rem) !important;
+    font-size: clamp(4.2rem, 17vw, 7.5rem) !important;
   }
   .vl-perk-band {
     height: 50vh;
+  }
+  /* First band sits right under the heading — pull it up to the top of its
+     box instead of vertical-centering, so it doesn't read as a big gap */
+  .vl-perk-band:first-child {
+    justify-content: flex-start;
+    padding-top: clamp(1rem, 4vw, 2rem);
   }
   .vl-perk-title {
     font-size: clamp(2.4rem, 10vw, 4rem);
@@ -3338,28 +3357,12 @@ html {
     order: 3;
   }
 
-  .vlance-footer {
-    margin-top: 0 !important;
-    min-height: 0 !important;
-    height: clamp(80px, 14vh, 110px) !important;
-    max-height: 110px !important;
-    overflow: hidden !important;
-    background-color: #b91616 !important;
-  }
-  .vlance-footer-wordmark {
-    display: none !important;
-  }
-  .vl-footer-bck {
-    display: none !important;
-    width: auto;
-    height: 350%;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 0;
-  }
-  .vlance-footer-logo {
-    display: none !important;
-  }
+  /* Same treatment as desktop (wordmark + bg svg + logo/nav/copyright row),
+     just capped to a small max-height that only fits the clouds + wordmark
+     instead of desktop's 1000px+ dramatic reveal. Every child is
+     position:absolute, so the section has no natural content height of its
+     own — max-height (with height matched to it) is what actually controls
+     how tall it renders. */
   .vlance-footer .container {
     padding-left: 1.25rem !important;
     padding-right: 1.25rem !important;
@@ -3367,9 +3370,27 @@ html {
   .vlance-footer-inner {
     gap: 0.85em;
   }
-  .vlance-footer-nav a,
-  .vlance-footer-copyright {
-    color: #fff !important;
+  .vlance-footer {
+    /* Fixed 200px top margin (from the base rule) is disproportionate on a
+       375–430px-wide screen — it was tuned for desktop's much larger canvas */
+    margin-top: clamp(2rem, 8vw, 4rem) !important;
+    min-height: 0 !important;
+    height: 420px !important;
+    max-height: 420px !important;
+  }
+  .vlance-footer-wordmark {
+    /* 28vw (the desktop size) is wide enough at "VLANCE" + letter-spacing
+       that it overflows its own 100vw box horizontally on narrow screens —
+       tighter letter-spacing keeps it fitting even at a bigger size. Top
+       moved down from 20% to 32% so it sits closer to the clouds (anchored
+       to the bottom) instead of leaving a big empty gap between them. */
+    top: 42% !important;
+    font-size: 28.5vw !important;
+    letter-spacing: 0.02em !important;
+    /* The base -53% X offset was tuned for desktop's font-size/letter-spacing
+       combo; at mobile's different values it pushed the text noticeably left
+       instead of centering it */
+    transform: translate(-50.5%, -50%) !important;
   }
 }
 
@@ -3414,41 +3435,12 @@ html {
     max-width: 18ch !important;
   }
 
-  /* ── Footer ── */
+  /* ── Footer — same layout as desktop, just a thinner wordmark stroke ── */
   .vlance-footer {
     padding-bottom: 0 !important;
   }
   .vlance-footer-wordmark {
-    font-size: 26.5vw !important;
-    font-weight: 300 !important;
     -webkit-text-stroke: 2px #b91616 !important;
-    width: 100vw !important;
-  }
-  .vlance-footer-inner {
-    display: block !important;
-    text-align: center !important;
-  }
-  .vlance-footer-inner > .eyebrow {
-    display: block;
-    font-size: 0.78rem !important;
-    letter-spacing: 0.04em;
-    color: #fff !important;
-    margin-top: 0.5em;
-  }
-  .vlance-footer-nav {
-    display: block !important;
-    margin-top: 0.5em;
-  }
-  .vlance-footer-nav a {
-    display: inline-block;
-    font-size: 0.82rem !important;
-    letter-spacing: 0.03em;
-    color: #fff !important;
-    margin: 0 0.6em;
-  }
-  .vlance-footer-copyright {
-    margin-left: auto;
-    color: #fff !important;
   }
 }
 
@@ -3471,9 +3463,15 @@ html {
     -webkit-text-stroke: 4px #b91616 !important;
   }
 
-  /* Footer min-height a bit shorter on tablet so it doesn't dominate */
+  /* Footer capped to a small max-height on tablet, same as mobile — just
+     enough to fit the clouds + wordmark, not desktop's full 1000px+ reveal */
   .vlance-footer {
-    min-height: clamp(480px, 60vh, 700px) !important;
+    min-height: 0 !important;
+    height: 520px !important;
+    max-height: 520px !important;
+  }
+  .vlance-footer-wordmark {
+    top: 32% !important;
   }
 
   /* Stats section: pull top padding back in slightly */

@@ -738,15 +738,6 @@ function initPerksAnimation() {
   const progressEl   = document.querySelector('.vl-perks-progress');
   const progressDots = document.querySelectorAll('.vl-perk-dot');
 
-  // ── Word-split each title ──────────────────────────────────────────────────
-  bands.forEach(band => {
-    const title = band.querySelector('.vl-perk-title');
-    if (!title) return;
-    title.innerHTML = title.textContent.trim().split(' ')
-      .map(w => `<span class="vl-pw"><span class="vl-pw-i">${w}</span></span>`)
-      .join(' ');
-  });
-
   // ── Show/hide progress dots while section is active ───────────────────────
   if (progressEl) {
     ScrollTrigger.create({
@@ -765,10 +756,9 @@ function initPerksAnimation() {
     if (progressEl) progressEl.classList.toggle('on-dark', bands[i]?.classList.contains('vl-perk-band--dark'));
   }
 
-  // ── Per-band animations ────────────────────────────────────────────────────
+  // ── Per-band scroll lock + stack + blur ────────────────────────────────────
   bands.forEach((band, i) => {
     const title = band.querySelector('.vl-perk-title');
-    const words = band.querySelectorAll('.vl-pw-i');
     const sub   = band.querySelector('.vl-perk-sub');
 
     // Activate progress dot when band locks to top
@@ -787,41 +777,6 @@ function initPerksAnimation() {
         scrollTrigger: { trigger: bands[i + 1], start: blurStart, end: 'top top', scrub: 0.8 }
       });
     }
-
-    if (i === 0) {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: band, start: 'top 80%', toggleActions: 'play none none none' }
-      });
-      tl.fromTo(words,
-        { y: '110%' },
-        { y: '0%', duration: 0.9, ease: 'power3.out', stagger: 0.08 }
-      ).fromTo(sub,
-        { clipPath: 'inset(0 0 100% 0)', filter: 'blur(10px)', opacity: 0 },
-        { clipPath: 'inset(0 0 0% 0)',   filter: 'blur(0px)',  opacity: 1, duration: 0.75, ease: 'power2.out' },
-        0.4
-      );
-      return;
-    }
-
-    // Bands 2–4: scrub in
-    const tl = gsap.timeline({
-      scrollTrigger: { trigger: band, start: 'top bottom', end: 'top top', scrub: 0.6 }
-    });
-    words.forEach((word, wi) => {
-      tl.fromTo(word, { y: '110%' }, { y: '0%', ease: 'power3.out' }, wi * 0.06);
-    });
-    tl.fromTo(sub,
-      { clipPath: 'inset(0 0 100% 0)', filter: 'blur(10px)', opacity: 0 },
-      { clipPath: 'inset(0 0 0% 0)',   filter: 'blur(0px)',  opacity: 1, ease: 'power2.out' },
-      0.3
-    );
-
-
-    // Title parallax drift while pinned
-    gsap.to(title, {
-      y: -45, ease: 'none',
-      scrollTrigger: { trigger: band, start: 'top top', end: 'bottom top', scrub: 2 }
-    });
   });
 
 }
