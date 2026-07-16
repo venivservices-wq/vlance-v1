@@ -2439,6 +2439,32 @@ body {
   background: #b91616;
 }
 
+/* Wavy top + bottom edges on the red bands. The red bands are always flanked
+   by white bands, so a white wavy strip painted onto each edge reads as the
+   red section having a wavy boundary — and it works regardless of the sticky
+   scroll-stacking (unlike clip-path, which depends on what's revealed behind).
+   preserveAspectRatio=none lets the wave stretch to full band width. */
+.vl-perk-band--dark::before,
+.vl-perk-band--dark::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: clamp(18px, 4vw, 42px);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.vl-perk-band--dark::before {
+  top: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0,0 H1200 V20 C1150,20 1150,36 1100,36 1050,36 1050,20 1000,20 950,20 950,36 900,36 850,36 850,20 800,20 750,20 750,36 700,36 650,36 650,20 600,20 550,20 550,36 500,36 450,36 450,20 400,20 350,20 350,36 300,36 250,36 250,20 200,20 150,20 150,36 100,36 50,36 50,20 0,20 Z'/%3E%3C/svg%3E");
+}
+.vl-perk-band--dark::after {
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0,40 H1200 V20 C1150,20 1150,4 1100,4 1050,4 1050,20 1000,20 950,20 950,4 900,4 850,4 850,20 800,20 750,20 750,4 700,4 650,4 650,20 600,20 550,20 550,4 500,4 450,4 450,20 400,20 350,20 350,4 300,4 250,4 250,20 200,20 150,20 150,4 100,4 50,4 50,20 0,20 Z'/%3E%3C/svg%3E");
+}
+
 .vl-perk-title,
 .vl-perk-sub {
   position: relative;
@@ -3195,7 +3221,7 @@ html {
 
 @media (max-width: 768px) {
   .product-slider__wrap {
-    margin-top: clamp(1.5rem, 4vh, 3rem) !important;
+    margin-top: clamp(0rem, 1vh, 1rem) !important;
   }
   /* Contain the slider so fanned cards never overflow the section */
   .gsap-slider,
