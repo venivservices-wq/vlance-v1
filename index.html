@@ -72,11 +72,67 @@
   <!-- ═══════════════ HERO ═══════════════ -->
   <section data-theme-section="light" class="home-hero" id="hero">
 
-    <!-- Hero background -->
-    <picture>
-      <source media="(max-width: 768px)" srcset="svg/hero-bck-mobile-view.svg">
-      <img src="svg/Hero bck.svg" alt="" aria-hidden="true" class="vl-hero-bck">
-    </picture>
+    <!-- Hero background: inline SVGs (desktop + mobile) so the clouds inside
+         can be scroll-animated separately from the static mountain/gradient shapes -->
+    <svg class="vl-hero-bck vl-hero-bck--desktop" id="hero-svg-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+      <defs>
+        <style>
+          #hero-svg-desktop .cls-1{fill:#f8f8f8;stroke:#fcfcfc;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+          #hero-svg-desktop .cls-2{fill:#b91616;fill-rule:evenodd}
+          #hero-svg-desktop .cls-3{fill:#b91616;stroke:#b91616;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+          #hero-svg-desktop .cls-4{fill:#f0f2f6;stroke:#fcfcfc;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+          #hero-svg-desktop .cls-5{fill:url(#hero-grad-desktop);stroke:#b91616;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+        </style>
+        <linearGradient id="hero-grad-desktop" x1="1961.645" y1="1633.75" x2="1883.354" y2="2715.38" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#b91616"/>
+          <stop offset="0.001" stop-color="#b91616"/>
+          <stop offset="1" stop-color="#b91616"/>
+        </linearGradient>
+      </defs>
+      <path class="cls-1" d="M-125,903c22.092-24.677,678-425,678-425l712,319,726-207,917,345,875-242s511.04,1241.63,495,1263-179.3,389.44-269,438-419.11,186.38-748,195-1334.38-42.69-1536-32-1803.372,10.19-1817,5-549-522-549-522l160-468S-147.092,927.677-125,903Z"/>
+      <path class="cls-2" d="M3679.34,561.981c9.67,0.235,10.77,14.2,1.26,15.95l-76.52,14.056,26.44,73.168c3.29,9.1-9.33,15.188-14.41,6.956l-47.78-77.457-90.99-2.217c-9.67-.236-10.77-14.2-1.26-15.951l76.52-14.055-26.44-73.169c-3.28-9.1,9.33-15.187,14.41-6.956l47.79,77.458Z"/>
+      <path class="cls-2" d="M233.26,385.047c-0.088-9,12.861-10.463,14.788-1.675l15.5,70.686,67.179-26.9c8.352-3.345,14.416,8.191,6.925,13.173L267.16,487.212l0.83,84.652c0.088,9-12.861,10.464-14.788,1.676l-15.5-70.687-67.18,26.9c-8.351,3.344-14.415-8.192-6.924-13.174L234.09,469.7Z"/>
+      <path class="cls-3" d="M2470.65,2481.33C2701.19,1797.88,2998,1047.75,3212,1081c236.92,36.81,274.21,1035.94,361,1032,85.74-3.89,81.49-980.05,261.8-1006.84,189.41-28.15,453.72,1000.79,664.7,970.03,155.93-22.74,146.89-605.57,289.51-625.08,109.98-15.05,248.16,313.38,358.98,634.34"/>
+      <path class="cls-3" d="M-468.354,2516.33C-237.814,1832.88,59,1082.75,273,1116c236.921,36.81,274.208,1035.94,361,1032,85.738-3.89,81.49-980.05,261.795-1006.84,189.415-28.15,453.725,1000.79,664.705,970.03,155.93-22.74,146.89-605.57,289.51-625.08,109.98-15.05,248.16,313.38,358.98,634.34"/>
+      <!-- Left cloud — animated by GSAP -->
+      <g id="hero-cloud-left--desktop">
+        <path class="cls-4" d="M-31,1572c57.564-100.55,148.067-177.36,258.837-204.01,59.939-14.42,161.434-15.27,286.021,39.55,75.745,33.33,111.1,76.56,185.611,112.56,91.5,44.22,200.219,69.66,307.321,60.85,52.25-4.3,161.01-35.03,264.72-91.27,83.33-45.18,125.94-85.97,203.87-91.27,125.81-8.55,229.74,74.92,273.85,118.65,30.52,30.25,89.96,120.23,121.71,231.21,30.01,104.89,23.27,202.69,12.17,231.21-19.58,50.35-71.88,118.19-185.61,170.37-200.43,91.96-400.64,40.67-593.34,3.04-138.828-27.11-316.768-52.07-480.761-69.97-63.975-6.98-252.721-46.76-352.963-69.97-35.094-8.13-68.216-17.77-106.5-36.51C124.227,1957,99.1,1934.08,60.483,1912.55c-25.732-14.34-55.188-29.88-76.069-39.55-32.556-15.07-52.626-22.25-63.9-42.59C-105.257,1783.92-54.836,1698.66-52,1639a296.973,296.973,0,0,0-3-58"/>
+      </g>
+      <!-- Right cloud — animated by GSAP -->
+      <g id="hero-cloud-right--desktop">
+        <path class="cls-4" d="M3939,1871c16.4-106.74-4.9-214.25-71.9-294.24-69.74-83.27-200.32-150.71-258.55-107.89-9.76,7.18-20.52,21.05-29.23,42.71-10.38,25.82-2.48,44.39-13.49,60.68-30.09,44.53-163.68,34.01-258.55-33.71-58.26-41.59-95.5-108.54-146.13-159.59-27.4-27.62-59.24-55.47-107.92-67.43-68.61-16.84-157.87,2.15-179.86,51.7-25.7,57.92,59.63,114.77,40.47,170.82-44.24,129.46-557.78,61.99-571.05,128.12-8.26,41.16,184.42,99.14,179.86,173.07-3.87,62.64-147.82,84.21-197.85,179.81-27.12,51.84-29.55,114.77-11.24,186.56"/>
+      </g>
+      <path class="cls-5" d="M-19.9,1633.75Q677.45,1769.245,1377.98,1808.48c276.63,15.43,560.12,19.41,857.03,12.49,299.67-6.99,594.44-25.55,892.4-56.17,287.25-29.52,568.69-69.34,852.87-120.65,41.51,138.4,44.92,265.91,4.16,380.67-352.95,993.84-3940.654,814.02-4137.468,97.77-20.313-73.92-40.31-284.57,81.6-436.2A379.278,379.278,0,0,1-19.9,1633.75Z"/>
+    </svg>
+    <svg class="vl-hero-bck vl-hero-bck--mobile" id="hero-svg-mobile" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <style>
+          #hero-svg-mobile .cls-1{fill:#f8f8f8;stroke:#fcfcfc;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+          #hero-svg-mobile .cls-2{fill:#b91616;fill-rule:evenodd}
+          #hero-svg-mobile .cls-3{fill:#b91616;stroke:#b91616;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+          #hero-svg-mobile .cls-4{fill:#f0f2f6;stroke:#fcfcfc;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+          #hero-svg-mobile .cls-5{fill:url(#hero-grad-mobile);stroke:#b91616;stroke-linecap:square;stroke-linejoin:bevel;stroke-width:1px;fill-rule:evenodd}
+        </style>
+        <linearGradient id="hero-grad-mobile" x1="1646.166" y1="1123.47" x2="1544.773" y2="2524.25" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#b91616"/>
+          <stop offset="0.001" stop-color="#b91616"/>
+          <stop offset="1" stop-color="#b91616"/>
+        </linearGradient>
+      </defs>
+      <path class="cls-1" d="M-735,957c22.092-24.677,678-425,678-425L655,851l726-207,917,345,875-242s511.04,1241.63,495,1263-179.3,389.44-269,438-419.11,186.38-748,195-1334.38-42.69-1536-32-1803.372,10.19-1817,5-549-522-549-522l160-468S-757.092,981.677-735,957Z"/>
+      <path class="cls-2" d="M294.343,615.981c9.669,0.235,10.77,14.2,1.257,15.95l-76.519,14.056,26.439,73.168c3.287,9.1-9.33,15.188-14.409,6.956l-47.785-77.457-90.985-2.217c-9.669-.236-10.77-14.2-1.257-15.951L167.6,616.431l-26.439-73.169c-3.287-9.1,9.33-15.187,14.409-6.956l47.785,77.458Z"/>
+      <path class="cls-2" transform="translate(-40 -30)" d="M972.26,67.047c-0.088-9,12.861-10.463,14.788-1.675l15.5,70.686,67.17-26.9c8.36-3.345,14.42,8.191,6.93,13.173l-70.49,46.883,0.83,84.652c0.09,9-12.861,10.464-14.788,1.676l-15.5-70.687-67.179,26.9c-8.352,3.344-14.416-8.192-6.925-13.174L973.09,151.7Z"/>
+      <path class="cls-3" d="M-311.354,2402.33C-80.814,1718.88,216,968.75,430,1002c236.921,36.81,274.208,1035.94,361,1032,85.738-3.89,81.49-980.05,261.8-1006.84,189.41-28.154,453.72,1000.79,664.7,970.03,155.93-22.74,146.89-605.57,289.51-625.08,109.98-15.05,248.16,313.38,358.98,634.34"/>
+      <!-- Left cloud — animated by GSAP -->
+      <g id="hero-cloud-left--mobile">
+        <path class="cls-4" d="M-563.346,1462.42c34.705-60.62,89.267-106.93,156.048-123,36.137-8.69,97.326-9.2,172.438,23.85,45.665,20.09,66.981,46.15,111.9,67.86C-67.8,1457.78-2.25,1473.12,62.32,1467.81c31.5-2.59,97.068-21.12,159.6-55.02,50.237-27.24,75.927-51.83,122.908-55.03,75.851-5.15,138.507,45.17,165.1,71.53,18.4,18.24,54.236,72.49,73.378,139.4,18.09,63.23,14.026,122.19,7.338,139.39-11.807,30.36-43.335,71.25-111.9,102.71-120.836,55.45-241.538,24.52-357.717,1.84-83.7-16.35-190.973-31.4-289.842-42.19-38.57-4.21-152.361-28.19-212.8-42.18-21.157-4.9-41.126-10.72-64.205-22.01-23.941-11.72-39.089-25.54-62.371-38.52-15.514-8.65-33.272-18.01-45.861-23.84-19.628-9.09-31.728-13.42-38.524-25.68-15.537-28.03,14.861-79.43,16.571-115.4a179.132,179.132,0,0,0-1.809-34.97"/>
+      </g>
+      <!-- Right cloud — animated by GSAP -->
+      <g id="hero-cloud-right--mobile">
+        <path class="cls-4" d="M1810.14,1542.72c12.16-79.13-3.63-158.84-53.3-218.14-51.71-61.73-148.52-111.74-191.69-79.99-7.24,5.32-15.21,15.61-21.67,31.66-7.69,19.15-1.84,32.92-10,44.99-22.31,33.02-121.35,25.21-191.68-24.99-43.2-30.84-70.81-80.47-108.34-118.31-20.32-20.49-43.92-41.14-80.01-50-50.87-12.48-117.05,1.6-133.35,38.33-19.05,42.94,44.21,85.09,30.01,126.65-32.8,95.97-413.537,45.95-423.373,94.98-6.123,30.52,136.726,73.5,133.345,128.31-2.865,46.44-109.593,62.44-146.68,133.31-20.111,38.44-21.908,85.09-8.334,138.31"/>
+      </g>
+      <path class="cls-5" d="M-367.8,1657.98q709.3,39.255,1408.648-17.28c276.16-22.4,557.55-57.07,850.75-104.37,295.92-47.74,585.42-106.26,876.43-177.18,280.55-68.37,553.94-146.14,828.49-235.69,59.97,131.46,80.72,257.32,55.97,376.56C3438.18,2532.68-140.577,2843.17-433.109,2160.4c-30.193-70.47-78.693-276.43,21.425-443.25A378.83,378.83,0,0,1-367.8,1657.98Z"/>
+    </svg>
 
 
     <!-- ═══ MONKEY PEEK ═══ -->
@@ -131,10 +187,64 @@
 
   <!-- UGC text section with background -->
   <div class="vl-ugc-section">
-    <picture>
-      <source media="(max-width: 768px)" srcset="svg/ugc%20mobile%20svg.svg">
-      <img src="svg/bck for ugc text.svg" class="vl-ugc-bck" aria-hidden="true" alt="">
-    </picture>
+    <!-- Hidden clip source: gives the mobile red fill a wavy bottom edge instead of
+         a straight line. clipPathUnits="objectBoundingBox" means the 0–1 coordinates
+         are fractions of the box it's applied to, so the wave always scales to fit,
+         at any screen size. -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <clipPath id="ugc-mobile-curve" clipPathUnits="objectBoundingBox">
+          <path d="M0,0 L1,0 L1,0.97
+            C0.9167,0.97 0.9167,1 0.833,1
+            C0.75,1 0.75,0.97 0.667,0.97
+            C0.583,0.97 0.583,1 0.5,1
+            C0.417,1 0.417,0.97 0.333,0.97
+            C0.25,0.97 0.25,1 0.167,1
+            C0.083,1 0.083,0.97 0,0.97
+            L0,0 Z"/>
+        </clipPath>
+      </defs>
+    </svg>
+    <!-- Mobile-only fill with a wavy bottom edge (mobile cloud asset has no blob of its own) -->
+    <div class="vl-ugc-bg" aria-hidden="true"></div>
+    <!-- Desktop: inline SVG, stretched to the section box so the red blob's curved
+         edges and the clouds always reach the section's full width/height -->
+    <svg class="vl-ugc-bck vl-ugc-bck--desktop" id="ugc-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" preserveAspectRatio="none" aria-hidden="true">
+      <defs><style>
+        #ugc-svg .u1{fill:#b91616;stroke:#b91616;stroke-width:10px;stroke-linecap:square;stroke-linejoin:bevel;fill-rule:evenodd}
+        #ugc-svg .u2{fill:#f0f2f6;stroke:#fcfcfc;stroke-width:1px;stroke-linecap:square;stroke-linejoin:bevel;fill-rule:evenodd}
+        #ugc-svg .u3{fill:none;stroke:#b91616;stroke-width:10px;stroke-linecap:square;stroke-linejoin:bevel;fill-rule:evenodd}
+      </style></defs>
+      <!-- Red background blob — curved edges, no animation, stays stationary -->
+      <path class="u1" d="M-364.647-80.032c-265.412,187.5-270.389,711.84-310.9,1182-29.989,348-76.344,553.56,40.516,659.51,173.768,157.54,799.957-48.56,1001.646-54.02,311.178-8.43,597.954,46.64,733.789,101.29,118.9,47.83,260.99,148.89,434.42,193.57,328.11,84.54,598.28-12,832.83-83.28,244.45-74.29,432.67-75.43,673.02-162.06,68.29-24.62,257.88-85.31,436.67-90.04,121.1-3.21,230.04,14.91,360.14,29.26,114.26,12.6,225.67,21.59,272.36,6.75,262.44-83.38,376.64-465.94,420.92-756.295,63.61-417.206-40.93-695.024-139.56-819.324C4282.89-9.17,4140.09-89.292,3972.54-145.026c-477.3-158.77-958.37-64.078-1150.21-31.513-438.38,74.419-773.66,7.049-1226.73,33.764-334.54,19.725-601.231,54.365-882.352,9-210.583-33.979-395.607-28.722-603.239-49.519-65.923-6.6-265.9-27.732-447.927,85.534C-347.107-92.039-355.963-86.167-364.647-80.032Z"/>
+      <!-- Right cloud — animated by GSAP -->
+      <g id="ugc-cloud-right">
+        <path class="u2" d="M3842.05,2091.89c-132.02,37.51-270.96,27.6-382.41-44.28-116-74.82-221.65-228.86-176.83-309.05,7.52-13.44,23.32-29.2,49.25-43.59,30.93-17.17,55.6-10.13,74.41-26.58,51.4-44.97,17.07-211.79-83.29-320.74-61.64-66.92-151.94-103.33-224.29-159.13-39.17-30.2-79.31-65.96-102.06-125.46-32.06-83.876-22.18-199.437,36.84-234.974,68.99-41.545,154.14,57.093,221.8,24.1,156.29-76.2-9.78-713.2,71.53-740.362,50.61-16.9,154.11,216.94,246.62,199.533,78.39-14.752,82.89-199.7,195.56-277.858,61.11-42.384,140.08-55.364,233.5-43.592"/>
+        <path class="u3" d="M3286.64,1235.3c12.74-69.99,50.73-134.34,112.1-171.77,101.91-62.15,241-33.13,310.33,48.26,18.82,22.1,68.25,89.73,43.07,156.72-24.16,64.3-108.15,112.09-181.11,82.52-52.82-21.42-87.13-78.12-82.51-129.74,2.75-30.79,42.2-88.15,138.04-134.41a407.218,407.218,0,0,1,125.07-36.84"/>
+      </g>
+      <!-- Left cloud — animated by GSAP -->
+      <g id="ugc-cloud-left">
+        <path class="u2" d="M-39.135,2073.71c129.718,36.86,266.24,27.12,375.746-43.5,113.98-73.52,217.785-224.88,173.745-303.67-7.385-13.21-22.907-28.69-48.39-42.83-30.394-16.87-54.632-9.95-73.109-26.12-50.512-44.18-16.775-208.09,81.835-315.15,60.565-65.75,149.293-101.53,220.387-156.36,38.478-29.67,77.924-64.8,100.274-123.27,31.5-82.415,21.8-195.963-36.192-230.881-67.794-40.821-151.455,56.1-217.942,23.68-153.559-74.875,9.614-700.777-70.278-727.463-49.73-16.61-151.426,213.161-242.323,196.056-77.026-14.494-81.452-196.219-192.16-273.016C-27.578,9.54-105.179-3.213-196.968,8.353"/>
+        <path class="u3" d="M154.774,643.363c-17.269,20.182-27.269,41.6-27.258,63.978C127.544,761,185.258,795.775,244.4,842.547A657.338,657.338,0,0,1,397.681,1014.32c48.375,78.61,55.117,129.82,38.68,166.68-9,20.18-26.8,41.03-52.2,50.17-53.314,19.16-106.262-24.34-128.417-50.82-23.892-28.56-42.616-72.65-29.853-84.44,13.484-12.46,59.406,13.62,87.1,38.21,26.282,23.35,54.507,61.75,59.522,109.87,1.375,13.2-.605,33.11-2.2,52.7-0.787,9.68-1.6,19.6-2.369,29.01"/>
+      </g>
+    </svg>
+    <!-- Mobile: two independently-sized clouds (own aspect ratio, width capped via
+         clamp()) instead of one asset stretched to the section's full, unpredictable
+         height — keeps cloud size consistent across small screens regardless of how
+         many lines the text wraps into -->
+    <div class="vl-ugc-bck vl-ugc-bck--mobile" aria-hidden="true">
+      <div class="vl-ugc-cloud-wrap vl-ugc-cloud-wrap--right">
+        <svg class="vl-ugc-cloud vl-ugc-cloud--right" xmlns="http://www.w3.org/2000/svg" viewBox="588.33 97.74 792.71 1724.99">
+          <path fill="#f0f2f6" stroke="#fcfcfc" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" fill-rule="evenodd" d="M1346.34,143.344c-101.65-36.446-211.25-36.026-302.55,14.5-95.033,52.586-186.133,167.916-155.2,233.241,5.187,10.954,16.753,24.158,36.351,36.832,23.373,15.116,43.112,10.9,57,24.811,37.973,38.03,2.178,167.166-82.381,247.38C847.63,749.37,774.81,773.171,715.051,813.139c-32.343,21.632-65.753,47.576-86.764,93.083C598.671,970.369,600.3,1061.61,644.75,1092.64c51.963,36.27,124.033-36.65,175.4-7.17,118.649,68.11-45.48,559.38,16.912,585.01,38.836,15.95,132.48-162.14,204.184-143.57,60.76,15.73,54.49,161.16,138.8,228.49,45.72,36.51,107.03,50.89,180.99,46.6"/>
+          <path fill="none" stroke="#b91616" stroke-width="10" stroke-linecap="square" stroke-linejoin="bevel" fill-rule="evenodd" d="M662.718,1348.62c10.025-55.07,39.914-105.71,88.2-135.16,80.186-48.9,189.628-26.06,244.18,37.98,14.8,17.38,53.7,70.6,33.893,123.31-19.02,50.59-85.1,88.19-142.508,64.92-41.562-16.84-68.553-61.46-64.925-102.08,2.165-24.22,33.206-69.36,108.616-105.75a320.408,320.408,0,0,1,98.407-28.99"/>
+        </svg>
+      </div>
+      <div class="vl-ugc-cloud-wrap vl-ugc-cloud-wrap--left">
+        <svg class="vl-ugc-cloud vl-ugc-cloud--left" xmlns="http://www.w3.org/2000/svg" viewBox="-384.93 40.45 845.59 1714.01">
+          <path fill="#f0f2f6" stroke="#fcfcfc" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" fill-rule="evenodd" d="M-238.545,1717.6c103.876,29.52,213.2,21.72,300.889-34.84,91.273-58.86,174.4-180.07,139.131-243.16-5.913-10.58-18.342-22.98-38.749-34.3-24.338-13.51-43.748-7.97-58.544-20.92-40.449-35.38-13.433-166.64,65.531-252.36,48.5-52.66,119.551-81.31,176.482-125.21,30.813-23.763,62.4-51.9,80.3-98.717,25.229-66,17.454-156.923-28.982-184.884-54.287-32.689-121.282,44.923-174.523,18.963C100.021,682.213,230.686,181,166.71,159.635c-39.823-13.3-121.259,170.694-194.048,157C-89.018,305.026-92.562,159.5-181.215,98.007c-48.075-33.349-110.216-43.562-183.719-34.3"/>
+        </svg>
+      </div>
+    </div>
     <div class="home-hero__description-row">
       <p class="home-hero__description-p">
         High-converting <span class="home-hero__description-highlight is--round">UGC</span>
@@ -145,6 +255,41 @@
         and <span class="home-hero__description-highlight">fast results</span>
       </p>
     </div>
+  </div>
+
+  <!-- ═══════════════ CLIENT CAROUSEL ═══════════════ -->
+  <div class="vl-clients-carousel">
+    <div class="vl-clients-track">
+
+      <!-- 4 sets of 5 → -25% animation = seamless on any screen -->
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__role">TikTok Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/fern%20pfp.png" class="vl-clients-card__photo" alt="Maze"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maze</p><p class="vl-clients-card__role">UGC Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__role">Content Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/Sophie%20pfp.png" class="vl-clients-card__photo" alt="Sophie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Sophie</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__role">TikTok Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/fern%20pfp.png" class="vl-clients-card__photo" alt="Maze"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maze</p><p class="vl-clients-card__role">UGC Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__role">Content Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/Sophie%20pfp.png" class="vl-clients-card__photo" alt="Sophie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Sophie</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__role">TikTok Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/fern%20pfp.png" class="vl-clients-card__photo" alt="Maze"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maze</p><p class="vl-clients-card__role">UGC Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__role">Content Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/Sophie%20pfp.png" class="vl-clients-card__photo" alt="Sophie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Sophie</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__role">TikTok Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/fern%20pfp.png" class="vl-clients-card__photo" alt="Maze"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maze</p><p class="vl-clients-card__role">UGC Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__role">Content Creator</p></div></div>
+      <div class="vl-clients-card"><div class="vl-clients-card__frame"><img src="png/clients/Sophie%20pfp.png" class="vl-clients-card__photo" alt="Sophie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Sophie</p><p class="vl-clients-card__role">Brand Owner</p></div></div>
+
+    </div>
+  </div>
+  <div class="vl-clients-cta">
+    <a href="#testimonials" class="vl-clients-cta__btn">Read testimonials</a>
   </div>
 
   <!-- ═══════════════ PERKS ═══════════════ -->
@@ -396,7 +541,7 @@
 
 
   <!-- ═══════════════ TESTIMONIALS ═══════════════ -->
-  <section class="vl-testimonials-section">
+  <section class="vl-testimonials-section" id="testimonials">
     <div class="container vl-testimonials-container">
 
       <div class="vl-testimonials-header">

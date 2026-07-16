@@ -900,14 +900,30 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
 
 .vl-hero-bck {
   position: absolute;
-  top: -20%;
   left: 0;
   width: 100%;
-  height: 130%;
-  object-fit: cover;
-  object-position: center top;
   z-index: 0;
   pointer-events: none;
+  display: block;
+}
+
+/* Oversized + top-aligned: gives the scroll parallax (desktop only) buffer
+   room to drift without ever exposing an edge */
+.vl-hero-bck--desktop {
+  top: -20%;
+  height: 130%;
+}
+
+.vl-hero-bck--mobile {
+  display: none;
+  bottom: 0;
+  height: auto;
+  aspect-ratio: 1080 / 1920;
+}
+
+@media (max-width: 768px) {
+  .vl-hero-bck--desktop { display: none; }
+  .vl-hero-bck--mobile  { display: block; }
 }
 
 .home-hero__title-row {
@@ -940,50 +956,107 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
 }
 
 /* ─── UGC text section ─── */
+.vl-ugc-section .home-hero__description-p {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+.vl-ugc-section .home-hero__description-highlight {
+  color: rgba(255, 255, 255, 0.82) !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
 .vl-ugc-section {
   position: relative;
   width: 100%;
-  height: clamp(250px, 30vw, 450px);
+  height: auto;
+  padding: clamp(2rem, 4vw, 5rem) 2rem clamp(8rem, 14vw, 16rem);
   overflow: visible;
   z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
+/* Mobile-only fallback fill: the mobile cloud asset has no red blob of its own,
+   so this stands in behind it, with a wavy bottom edge (see #ugc-mobile-curve)
+   instead of a straight line. Hidden on desktop so the curved blob path shows. */
+.vl-ugc-bg {
+  position: absolute;
+  inset: 0;
+  background: #b91616;
+  z-index: 0;
+  pointer-events: none;
+  display: none;
+  clip-path: url(#ugc-mobile-curve);
+}
+
+/* Red blob (desktop) + clouds layer — stretched to the section box so the
+   blob's curved edges and the clouds stay pinned to the section's full
+   width/height regardless of aspect ratio */
 .vl-ugc-bck {
   position: absolute;
-  top: -8%;
-  left: -15%;
-  width: 130%;
-  height: auto;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   display: block;
   z-index: 0;
   pointer-events: none;
+  object-fit: fill;
 }
 
+/* Positioning wrapper: handles vertical centering (static, untouched by GSAP)
+   so it stays put; the inner .vl-ugc-cloud handles the animated scroll drift.
+   Kept as two separate elements because GSAP's y-tween replaces the whole
+   translate component of whatever element it's applied to — if centering and
+   drift shared one element, animating y would silently wipe out the
+   translateY(-50%) centering. Staggered vertically so one cloud sits higher
+   and one lower instead of both centering on the same line. */
+.vl-ugc-cloud-wrap {
+  position: absolute;
+  transform: translateY(-50%);
+}
+.vl-ugc-cloud-wrap--right { right: 0; top: 30%; }
+.vl-ugc-cloud-wrap--left  { left: 0;  top: 68%; }
+
+/* Capped width via clamp(), aspect ratio preserved (no distortion). Sized off
+   viewport width only, so it stays a consistent, predictable size no matter
+   how tall the section gets from text wrapping onto more lines on narrow
+   screens. */
+.vl-ugc-cloud {
+  display: block;
+  width: clamp(220px, 68vw, 400px);
+  height: auto;
+}
+/* translateX pushes ~a quarter of the cloud's own width off-screen, so most of
+   its bulk hugs the edge instead of crowding the text column in the middle */
+.vl-ugc-cloud--right { transform: translateX(28%); }
+.vl-ugc-cloud--left  { transform: translateX(-28%); }
+
+.vl-ugc-bck--mobile { display: none; }
+
+@media (max-width: 768px) {
+  .vl-ugc-bck--desktop { display: none; }
+  .vl-ugc-bck--mobile  { display: block; }
+  .vl-ugc-bg           { display: block; }
+
+  .vl-ugc-section .home-hero__description-p {
+    color: #040000 !important;
+    font-weight: 700 !important;
+  }
+  .vl-ugc-section .home-hero__description-highlight {
+    color: #040000 !important;
+    background-color: rgba(4, 0, 0, 0.1) !important;
+  }
+}
 
 .home-hero__description-row {
   background-image: none;
   text-align: center;
   width: 90%;
   max-width: 55rem;
-  position: absolute;
-  top: 8%;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   z-index: 1;
+  margin-top: 0;
   padding: 0;
-}
-
-@media screen and (min-width: 768px) {
-  .home-hero__description-row {
-    top: 25%;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .home-hero__description-row {
-    padding-top: 0;
-    padding-bottom: 2em;
-  }
 }
 
 .home-hero__description-p {
@@ -1719,7 +1792,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 /* ── Mobile: hero monkey top-left, large ── */
 @media (max-width: 768px) {
   .vl-monkey-wrap {
-    top: 14vh;
+    top: 1.25vh;
     left: -4vw;
     width: clamp(280px, 80vw, 420px);
   }
@@ -1728,25 +1801,13 @@ body:not([data-scrolled]) .vlance-logo-img {
     max-height: 900px;
   }
 
-  .vl-hero-bck {
-    top: auto;
-    bottom: 0;
-    height: auto;
-    object-position: center bottom;
-  }
-
   .vl-ugc-section {
-    margin-top: 20px;
+    /* Small negative overlap absorbs sub-pixel rounding between the two
+       sections' box heights so no hairline gap shows at the seam */
+    margin-top: -2px;
     z-index: 3;
-    height: clamp(500px, 120vw, 750px);
-  }
-
-
-  .vl-ugc-bck {
-    height: 1100px;
-    top: -80px;
-    left: -10%;
-    width: 120%;
+    padding: 0 1.5rem clamp(8rem, 18vw, 14rem);
+    align-items: flex-start;
   }
 
 .vl-stats-bck {
@@ -2103,6 +2164,169 @@ body {
   }
 }
 
+/* ─── Client carousel ─── */
+.vl-clients-carousel {
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+  padding: 9rem 0;
+  background: transparent;
+  position: relative;
+  z-index: 10;
+  margin-top: clamp(-14rem, -16vw, -8rem);
+}
+
+@keyframes vl-clients-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-25%); }
+}
+
+.vl-clients-track {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: vl-clients-scroll 32s linear infinite;
+}
+
+.vl-clients-card {
+  width: 320px;
+  background: #ebebed;
+  border-radius: 24px;
+  flex-shrink: 0;
+  margin-right: 2.8rem;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 26px;
+}
+
+/* Arc wave — cards follow a U-shaped curve as they scroll */
+.vl-clients-card:nth-child(5n+1) { transform: translateY(-60px) rotate(-3deg); }
+.vl-clients-card:nth-child(5n+2) { transform: translateY(-20px) rotate(-1.5deg); }
+.vl-clients-card:nth-child(5n+3) { transform: translateY(40px)  rotate(0deg); }
+.vl-clients-card:nth-child(5n+4) { transform: translateY(-20px) rotate(1.5deg); }
+.vl-clients-card:nth-child(5n+5) { transform: translateY(-60px) rotate(3deg); }
+
+.vl-clients-card__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.vl-clients-card__badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  padding: 0.3em 0.8em;
+  border-radius: 100em;
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #111;
+}
+
+.vl-clients-card__img {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vl-clients-card__img span {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.05em;
+  font-family: inherit;
+}
+
+.vl-clients-card__img img,
+.vl-clients-card__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vl-clients-card__body {
+  padding: 1.4rem 0.4rem 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.vl-clients-card__name {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.vl-clients-card__role {
+  font-size: 1.1rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.vl-clients-card__btn {
+  margin-top: 1rem;
+  padding: 0.55em 1.1em;
+  background: none;
+  border: 1.5px solid #222;
+  border-radius: 100em;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  color: #111;
+  transition: background 0.2s, color 0.2s;
+}
+
+.vl-clients-card__btn:hover {
+  background: #111;
+  color: #fff;
+}
+
+.vl-clients-cta {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 3rem;
+  margin-top: -3rem;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .vl-clients-cta {
+    margin-top: -4.5rem;
+  }
+}
+
+.vl-clients-cta__btn {
+  display: inline-block;
+  padding: 1em 2.4em;
+  border: 2px solid #111;
+  border-radius: 100em;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.vl-clients-cta__btn:hover {
+  background: #111;
+  color: #fff;
+}
+
 /* ─── Perks / features section ─── */
 .vl-perks-section {
   position: relative;
@@ -2117,7 +2341,7 @@ body {
 }
 
 .vl-perks-header {
-  margin-top: calc(clamp(6rem, 14vw, 14rem) + 600px);
+  margin-top: clamp(2rem, 5vw, 4rem);
   margin-bottom: clamp(3rem, 5vw, 5rem);
   text-align: center;
   position: relative;
@@ -2194,7 +2418,7 @@ body {
 .vl-perk-band:nth-child(4) { z-index: 4; }
 
 .vl-perk-band--dark {
-  background: #040000;
+  background: #b91616;
 }
 
 .vl-perk-title,
@@ -2259,7 +2483,7 @@ body {
 }
 
 .vl-perk-band--dark .vl-perk-title {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .vl-perk-sub {
@@ -2273,7 +2497,7 @@ body {
 }
 
 .vl-perk-band--dark .vl-perk-sub {
-  color: #7a7373;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .vl-perk-badge {
@@ -2864,7 +3088,7 @@ html {
     font-size: clamp(1rem, 2.5vw, 1.8rem) !important;
   }
   .home-hero__description-row {
-    margin-top:     clamp(2rem, 5vh, 4rem) !important;
+    margin-top:     clamp(1rem, 2.5vh, 2rem) !important;
     padding-top:    clamp(1rem, 2.5vh, 2rem);
     padding-bottom: clamp(1rem, 2.5vh, 2rem);
   }
@@ -2907,12 +3131,12 @@ html {
     border-radius: 100em;
   }
   .home-hero__description-row {
-    margin-top:     clamp(4rem, 10vh, 7rem) !important;
+    margin-top:     clamp(2rem, 5vh, 3.5rem) !important;
     padding-top:    clamp(0.75rem, 2vh, 1.5rem);
     padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
   .home-hero__content {
-    padding-top: clamp(14rem, 36vh, 20rem) !important;
+    padding-top: clamp(9.5rem, 23vh, 12.5rem) !important;
     padding-bottom: clamp(2.5rem, 6vh, 6rem);
   }
 }
@@ -3061,7 +3285,7 @@ html {
 @media (max-width: 768px) {
   /* Perks: tighten on mobile */
   .vl-perks-header {
-    margin-top: clamp(13rem, 28vw, 18rem);
+    margin-top: clamp(3rem, 8vw, 5rem);
     margin-bottom: clamp(1rem, 3vw, 2rem);
   }
   .vl-perks-heading {

@@ -637,10 +637,45 @@ function initStatsAnimations() {
 
 
 
+// ─── UGC cloud parallax (clouds drift, red bg stays stationary) ──────────────
+function initUGCClouds() {
+  const section = document.querySelector('.vl-ugc-section');
+  if (!section || typeof ScrollTrigger === 'undefined') return;
+
+  const isMobile = window.innerWidth <= 768;
+  // Desktop clouds are <g> nested inside the shared #ugc-svg canvas (SVG
+  // user-unit transforms); mobile clouds are standalone root <svg> elements
+  // positioned by CSS (plain CSS-pixel transforms) — different coordinate
+  // systems, so their drift amounts are tuned separately.
+  const cloudRight = isMobile
+    ? document.querySelector('.vl-ugc-cloud--right')
+    : document.getElementById('ugc-cloud-right');
+  const cloudLeft = isMobile
+    ? document.querySelector('.vl-ugc-cloud--left')
+    : document.getElementById('ugc-cloud-left');
+  if (!cloudRight || !cloudLeft) return;
+
+  const trig = { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 1.5 };
+  const [rightFrom, rightTo] = isMobile ? [35, -50] : [160, -240];
+  const [leftFrom, leftTo]   = isMobile ? [25, -40] : [130, -200];
+
+  gsap.fromTo(cloudRight, { y: rightFrom }, { y: rightTo, ease: 'none', scrollTrigger: trig });
+  gsap.fromTo(cloudLeft,  { y: leftFrom },  { y: leftTo,  ease: 'none', scrollTrigger: trig });
+}
+
 // ─── Perks bands scroll reveal ────────────────────────────────────────────────
 function initPerksAnimation() {
   const bands = document.querySelectorAll('.vl-perk-band');
   if (!bands.length || typeof ScrollTrigger === 'undefined') return;
+
+  const isMobile = window.innerWidth <= 768;
+  // How far into the next band's entrance before the current one starts
+  // blurring away. 'top bottom' (old value) fired the instant the next band's
+  // top merely touched the screen's bottom edge — barely any reading time
+  // before the blur kicked in. Delaying to 'center'/'bottom' means much more
+  // of the next band has to scroll into view first. Mobile gets the longest
+  // reading window since scroll gestures cover more of the page at once there.
+  const blurStart = isMobile ? 'bottom bottom' : 'center bottom';
 
   const progressEl   = document.querySelector('.vl-perks-progress');
   const progressDots = document.querySelectorAll('.vl-perk-dot');
@@ -691,7 +726,7 @@ function initPerksAnimation() {
     if (i < bands.length - 1) {
       gsap.to([title, sub], {
         filter: 'blur(16px)', opacity: 0.18, scale: 1.06, ease: 'power1.in',
-        scrollTrigger: { trigger: bands[i + 1], start: 'top bottom', end: 'top top', scrub: 0.8 }
+        scrollTrigger: { trigger: bands[i + 1], start: blurStart, end: 'top top', scrub: 0.8 }
       });
     }
 
@@ -806,13 +841,13 @@ function initHeroDesc() {
     scrollTrigger: {
       trigger: '.vl-ugc-section',
       start: 'top 75%',
-      end: 'bottom 30%',
-      scrub: 1.8
+      end: 'bottom 60%',
+      scrub: 0.8
     }
   });
 
   units.forEach((unit, i) => {
-    tl.to(unit, { opacity: 1, ease: 'power1.out', duration: 0.6 }, i * 0.35);
+    tl.to(unit, { opacity: 1, ease: 'power1.out', duration: 0.4 }, i * 0.18);
   });
 }
 
@@ -821,9 +856,13 @@ function initHeroDesc() {
 function initSvgParallax() {
   if (typeof ScrollTrigger === 'undefined') return;
 
-  // Hero background — drifts up slowly as you scroll through hero
+  // Hero background — drifts up slowly as you scroll through hero.
+  // Skipped on mobile: the mobile layout bottom-anchors this image (bottom:0)
+  // so it sits flush against the UGC section below it; shifting it up on scroll
+  // pulls its bottom edge away from that seam and opens a gap that grows and
+  // shrinks with scroll position.
   const heroBck = document.querySelector('.vl-hero-bck');
-  if (heroBck) {
+  if (heroBck && window.innerWidth > 768) {
     gsap.to(heroBck, {
       yPercent: -8,
       ease: 'none',
@@ -837,20 +876,6 @@ function initSvgParallax() {
   }
 
 
-  // UGC background — rises gently as section scrolls into view
-  const ugcBck = document.querySelector('.vl-ugc-bck');
-  if (ugcBck) {
-    gsap.to(ugcBck, {
-      yPercent: -12,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.vl-ugc-section',
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1.2
-      }
-    });
-  }
 
   // Monkey — floats up slightly as hero scrolls away
   const monkey = document.querySelector('.vl-monkey-wrap');
@@ -1004,34 +1029,24 @@ function initGlassAnimation() {
   window.addEventListener('resize', setup);
 }
 
-// ─── Cloud parallax ───────────────────────────────────────────────────────────
+// ─── Hero cloud parallax ──────────────────────────────────────────────────────
 function initClouds() {
-  const c1 = document.querySelector('.vl-cloud-1');
-  const c2 = document.querySelector('.vl-cloud-2');
-  if (!c1 || !c2) return;
+  const isMobile = window.innerWidth <= 768;
+  const suffix = isMobile ? 'mobile' : 'desktop';
+  const cloudRight = document.getElementById(`hero-cloud-right--${suffix}`);
+  const cloudLeft  = document.getElementById(`hero-cloud-left--${suffix}`);
+  if (!cloudRight || !cloudLeft || typeof ScrollTrigger === 'undefined') return;
 
-  // Cloud 1 moves faster (feels closer); cloud 2 slower (feels further away)
-  gsap.to(c1, {
-    y: -180,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1
-    }
-  });
+  const trig = { trigger: '#hero', start: 'top top', end: 'bottom top' };
+  // Start pushed further down (below the visible crop, so no bottom edge shows
+  // on load) and drift upward as the hero scrolls past. Mobile's viewBox is
+  // ~0.28x the scale of desktop's, so its offsets are scaled down to match.
+  const [rightFrom, rightTo] = isMobile ? [70, -45] : [220, -160];
+  const [leftFrom, leftTo]   = isMobile ? [55, -30]  : [170, -100];
 
-  gsap.to(c2, {
-    y: -90,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1.8
-    }
-  });
+  // Right cloud moves faster (feels closer); left cloud slower (feels further away)
+  gsap.fromTo(cloudRight, { y: rightFrom }, { y: rightTo, ease: 'none', scrollTrigger: { ...trig, scrub: 1 } });
+  gsap.fromTo(cloudLeft,  { y: leftFrom },  { y: leftTo,  ease: 'none', scrollTrigger: { ...trig, scrub: 1.8 } });
 }
 
 
@@ -1417,6 +1432,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initStarParallax();
     initContactFooterAnimations();
     initPerksAnimation();
+    initUGCClouds();
     if (!isMobile) {
       initServiceAnimations();
       initStatsAnimations();
