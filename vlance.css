@@ -1700,35 +1700,23 @@ body:not([data-scrolled]) .vlance-logo-img {
 .vlance-footer {
   position: relative;
   padding-bottom: 0;
-  min-height: clamp(1000px, 110vh, 1400px);
-  margin-top: 200px;
+  /* Every child in here (.vl-footer-bck, .container) is position:absolute,
+     so the footer has zero natural content height of its own — this is the
+     ONLY thing giving it any height at all, not a stylistic minimum. Sized
+     to what the bottom-anchored .container actually needs: 1.5rem bottom
+     offset + nav row (~40px) + gap (1.2rem) + the video strip at its
+     current 200px-wide/9:16 size (~356px), plus a little headroom for the
+     cloud art above it. This used to be clamp(1000px,110vh,1400px), sized
+     for the giant VLANCE wordmark that lived in the empty space above the
+     content — now removed, so that height had no content left to justify
+     it (and 110vh alone could reach ~2000px on a tall/zoomed viewport). */
+  height: 480px;
+  margin-top: 60px;
   background-color: #fffefe;
   color: #888;
   overflow: clip;
 }
 
-.vlance-footer-wordmark {
-  display: block;
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-53%, -50%);
-  width: 100vw;
-  margin: 0;
-  padding: 0;
-  /* Capped: uncapped 28vw on an ultra-wide monitor renders ~1000px tall,
-     which reaches down far enough to hit the video strip above the nav row. */
-  font-size: min(28vw, 900px);
-  font-weight: 300;
-  line-height: 0.85;
-  letter-spacing: 0.06em;
-  color: #b91616;
-  white-space: nowrap;
-  text-align: center;
-  user-select: none;
-  -webkit-text-stroke: 0;
-  z-index: 1;
-}
 .vlance-footer .container {
   position: absolute;
   bottom: 1.5rem;
@@ -1769,7 +1757,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 .vlance-footer-video {
   position: relative;
   flex: none;
-  width: 160px;
+  width: 200px;
   aspect-ratio: 9 / 16;
   border: none;
   border-radius: 4px;
@@ -1912,7 +1900,7 @@ body:not([data-scrolled]) .vlance-logo-img {
 /* ── Mobile: hero monkey top-left, large ── */
 @media (max-width: 768px) {
   .vl-monkey-wrap {
-    top: 1.25vh;
+    top: -2.5vh;
     left: -4vw;
     width: clamp(280px, 80vw, 420px);
   }
@@ -2301,18 +2289,29 @@ body {
     padding-top: clamp(1.5rem, 5vw, 3.5rem) !important;
     margin-top: clamp(1rem, 3vh, 2.5rem) !important;
   }
+  /* Keeps the 4 rows rather than collapsing to 8 stacked cards: the 2
+     columns stay, sized past the viewport so the grid scrolls sideways —
+     swipe to reach each row's second card. One scroll container for the
+     whole grid, so all 4 rows travel together. No row stagger here (that
+     rule is desktop-only), so the grid gets its full width back. */
   .vl-testimonials-grid {
-    grid-template-columns: 1fr;
-    /* No row stagger down here — single column does its own left/right
-       zigzag below, so give the grid the full width back. */
+    grid-template-columns: repeat(2, 78vw);
+    gap: 1rem;
     width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-  /* Mobile: keep a smaller version of the left/right stagger */
+  .vl-testimonials-grid::-webkit-scrollbar {
+    display: none;
+  }
   .vl-testimonial-card {
-    width: 90%;
+    width: 100%;
+    justify-self: stretch;
+    scroll-snap-align: start;
   }
-  .vl-testimonial-card:nth-child(odd)  { justify-self: start; }
-  .vl-testimonial-card:nth-child(even) { justify-self: end; }
   .vl-testimonials-eyebrow {
     font-size: clamp(1.4rem, 5vw, 2.4rem) !important;
     white-space: nowrap;
@@ -3415,7 +3414,9 @@ html {
     padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
   }
   .home-hero__content {
-    padding-top: clamp(10.25rem, 24.5vh, 13.25rem) !important;
+    /* Reduced from 10.25/24.5vh/13.25 — pulls the "Are you" line and the
+       heading under it up, in step with the monkey moving up too. */
+    padding-top: clamp(8.25rem, 20vh, 11rem) !important;
     padding-bottom: clamp(2.5rem, 6vh, 6rem);
   }
 }
@@ -3464,6 +3465,9 @@ html {
   }
   .vl-nav-row {
     padding: 0.4rem 0;
+    /* Extra breathing room specifically between the arrows and the video
+       below them, on top of .gsap-slider's shared 0.5em gap. */
+    margin-bottom: 5px;
   }
   /* Cards: wider on mobile for better viewing */
   .gsap-slider__item {
@@ -3583,23 +3587,50 @@ html {
      :first-child rule below, as it did before the row layout.) */
   .vl-perk-band,
   .vl-perk-band:nth-child(odd) {
-    --perk-band-h: 50vh;
+    /* Taller than the old 50vh: a full-width image is 0.797 x 100vw tall
+       (all four are 2710x2160), so the band needs the extra room or far
+       too much of the image ends up cut off. */
+    --perk-band-h: 60vh;
     flex-direction: column;
+    /* Top-anchored. The base rule's justify-content:center would split any
+       overflow between top and bottom and push the title off the top edge;
+       here the image is the thing meant to run past the bottom. */
+    justify-content: flex-start;
     gap: 1rem;
   }
   .vl-perk-text {
     flex: 0 0 auto;
     max-width: 100%;
+    /* Extra breathing room above the title — on top of the band's own
+       top padding (:first-child overrides that separately below). */
+    margin-top: 0.75rem;
   }
-  /* Stacked layout: no bottom-bleed here, and align-self must go back to
-     center — in a column flex container it controls the horizontal axis, so
-     the desktop's flex-end would push the image right instead of down. */
+  /* Sized down slightly from full 100vw to 92vw. Still centered the same
+     way: align-self:center on a flex item wider than its container
+     overflows symmetrically either way (the centering math stays
+     center = (container - item) / 2, negative or not) — so this needed no
+     breakout hack before at 100vw and still doesn't at 92vw.
+     Cross axis here is horizontal (column flex container), which is why
+     align-self is what positions it left-to-right — the base rule's
+     `align-self: flex-end` was pushing it to the right edge, which is what
+     read as badly centered before this was overridden.
+     flex-shrink 0 matters: shrinking would squash the box and, with the
+     base rule's object-fit:contain, letterbox the image inside it — it
+     would render smaller than 92vw with transparent gaps.
+     margin-top:auto pins it to the bottom when there's room to spare, and
+     the negative bottom margin cancels the band's bottom padding so it
+     reaches the true bottom edge and bleeds past it. */
   .vl-perk-img {
-    flex: 0 1 auto;
-    max-width: min(94%, 460px);
-    max-height: 50%;
+    flex: 0 0 auto;
     align-self: center;
-    margin-bottom: 0;
+    width: 92vw;
+    max-width: 92vw;
+    height: auto;
+    max-height: none;
+    left: auto;
+    transform: none;
+    margin-top: auto;
+    margin-bottom: calc(-1 * clamp(2rem, 6vw, 6rem));
   }
   /* First band sits right under the heading — pull it up to the top of its
      box instead of vertical-centering, so it doesn't read as a big gap */
@@ -3669,41 +3700,31 @@ html {
     font-size: 0.85rem !important;
   }
   .vlance-footer {
-    /* Fixed 200px top margin (from the base rule) is disproportionate on a
-       375–430px-wide screen — it was tuned for desktop's much larger canvas */
-    margin-top: clamp(2rem, 8vw, 4rem) !important;
+    /* Reduced further to match the smaller desktop gap above */
+    margin-top: clamp(1rem, 4vw, 2rem) !important;
     min-height: 0 !important;
     /* Was 420px, before the video strip existed. The strip is bottom-anchored
        with .container and stacks upward, so the footer needs enough room for
        wordmark + strip + nav row without the two overlapping. */
-    height: 520px !important;
-    max-height: 520px !important;
-  }
-  .vlance-footer-wordmark {
-    /* 28vw (the desktop size) is wide enough at "VLANCE" + letter-spacing
-       that it overflows its own 100vw box horizontally on narrow screens —
-       tighter letter-spacing keeps it fitting even at a bigger size.
-       Sits high now (was 60%) because the video strip fills the lower half —
-       the "big empty gap" that 60% was avoiding is now occupied by video. */
-    top: 24% !important;
-    /* Capped as well as vw-scaled: at the 768px end of this range a plain
-       28.5vw is ~219px tall and would reach down into the strip. */
-    font-size: min(28.5vw, 165px) !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.02em !important;
-    /* The base -53% X offset was tuned for desktop's font-size/letter-spacing
-       combo; at mobile's different values it pushed the text noticeably left
-       instead of centering it */
-    transform: translate(-50.5%, -50%) !important;
+    /* Was 540px — measured out too generous once the wordmark (which this
+       height used to be sized around) was removed. Actual content is just
+       the ~210px video strip (118px wide x 16:9) + its margin + the nav
+       row (~24px bottom offset + up to 2 wrapped lines of text) — roughly
+       300px total, so 400px leaves modest headroom for the background art
+       without the leftover empty gap the old value had. */
+    height: 400px !important;
+    max-height: 400px !important;
   }
   /* Footer is height-capped here (vs. desktop's 1000px+) and .container is
-     bottom-anchored, so every pixel this strip adds pushes toward the
-     wordmark. Smaller cards, tighter margin. */
+     bottom-anchored, so every pixel this strip adds pushes the videos
+     higher, away from the nav row. Kept modest now that the footer itself
+     is shorter — a bigger margin here would eat back into the room the
+     height reduction just freed up. */
   .vlance-footer-videos {
-    margin-bottom: 0.6rem;
+    margin-bottom: 1rem;
   }
   .vlance-footer-video {
-    width: 96px;
+    width: 118px;
   }
 }
 
@@ -3748,12 +3769,8 @@ html {
     max-width: 22ch !important;
   }
 
-  /* ── Footer — thicker wordmark (heavier fill weight + wider stroke) ── */
   .vlance-footer {
     padding-bottom: 0 !important;
-  }
-  .vlance-footer-wordmark {
-    -webkit-text-stroke: 4px #b91616 !important;
   }
 }
 
@@ -3761,36 +3778,18 @@ html {
    TABLET POLISH (769px – 1024px)
    ══════════════════════════════════════════════════════════════ */
 
-@media (min-width: 1025px) {
-  .vlance-footer-wordmark {
-    font-weight: 300;
-    -webkit-text-stroke: 6px #b91616;
-  }
-}
-
 @media (min-width: 769px) and (max-width: 1024px) {
 
-  /* Footer wordmark — tablet */
-  .vlance-footer-wordmark {
-    font-size: 26.5vw !important;
-    -webkit-text-stroke: 4px #b91616 !important;
-  }
-
   /* Footer capped to a small max-height on tablet, same as mobile — just
-     enough to fit the clouds + wordmark + video strip, not desktop's full
-     1000px+ reveal. Raised from 520px to make room for the strip. */
+     enough to fit the clouds + video strip, not desktop's full 1000px+
+     reveal. Raised from 520px to make room for the strip. */
   .vlance-footer {
     min-height: 0 !important;
     height: 640px !important;
     max-height: 640px !important;
   }
-  .vlance-footer-wordmark {
-    /* Was 32%; the bottom-anchored video strip now occupies roughly the
-       lower half of this footer, so the wordmark moves up clear of it. */
-    top: 20% !important;
-  }
   .vlance-footer-video {
-    width: 130px;
+    width: 160px;
   }
 
   /* Stats section: pull top padding back in slightly */

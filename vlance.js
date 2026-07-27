@@ -865,7 +865,6 @@ function initContactFooterAnimations() {
   // ── Footer ────────────────────────────────────────────────────────────────
   const footer = document.querySelector('.vlance-footer');
   if (footer) {
-    const wordmark = footer.querySelector('.vlance-footer-wordmark');
     const logo     = footer.querySelector('.vlance-footer-logo');
     const copy     = footer.querySelector('.vlance-footer-inner .eyebrow');
     const navLinks = footer.querySelectorAll('.vlance-footer-nav a');
@@ -1023,26 +1022,6 @@ function initSvgParallax() {
       }
     });
   }
-
-  // Footer wordmark — starts behind the footer SVG, rises into view on scroll
-  const wordmark = document.querySelector('.vlance-footer-wordmark');
-  if (wordmark) {
-    gsap.fromTo(wordmark,
-      { y: 260 },
-      {
-        y: -160,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.vlance-footer',
-          start: 'top 90%',
-          end: 'top 20%',
-          scrub: 1.8
-        }
-      }
-    );
-  }
-
-
 
 }
 
