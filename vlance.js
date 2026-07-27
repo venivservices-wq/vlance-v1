@@ -315,6 +315,23 @@ function initOsmoSlider() {
       listEl.style.height   = H + 'px';
       slides.forEach(s => gsap.set(s, { xPercent: -50 }));
 
+      // Rotated side cards swing below the centered card's bounding box (the
+      // fan pivot sits far under the cards), so a height based on the
+      // unrotated card (H) is too short and the last stretch of every side
+      // card gets left outside listEl's box. Measure actual rendered edges —
+      // but only of the cards actually in view; off-screen ones sit at much
+      // steeper angles and would inflate the height far more than needed.
+      const syncHeight = () => {
+        const top = listEl.getBoundingClientRect().top;
+        let maxBottom = 0;
+        slides.forEach(s => {
+          if (s.getAttribute('data-gsap-slider-item-status') === 'not-active') return;
+          maxBottom = Math.max(maxBottom, s.getBoundingClientRect().bottom - top);
+        });
+        listEl.style.height = maxBottom + 'px';
+      };
+      window.addEventListener('resize', syncHeight);
+
       const setters = slides.map(s => gsap.quickSetter(s, 'rotate', 'deg'));
       const proxy   = document.createElement('div');
       gsap.set(proxy, { x: 0 });
@@ -388,6 +405,7 @@ function initOsmoSlider() {
       })[0];
 
       render();
+      syncHeight();
       return;
     }
 
@@ -694,13 +712,22 @@ function initClientsCarousel() {
     }
   });
 
+  // Cards are <a> links now (TikTok profiles) — a plain click still needs to
+  // navigate, but a drag that happens to end over a card must not. Track
+  // total displacement from press and swallow the click only if it moved.
+  let pressX = 0;
+  let dragged = false;
+
   const start = clientX => {
     dragging = true;
-    lastX = clientX;
+    dragged  = false;
+    pressX   = clientX;
+    lastX    = clientX;
     track.classList.add('is-dragging');
   };
   const move = clientX => {
     if (!dragging) return;
+    if (Math.abs(clientX - pressX) > 5) dragged = true;
     x += clientX - lastX;
     lastX = clientX;
     wrap();
@@ -719,6 +746,36 @@ function initClientsCarousel() {
   track.addEventListener('mousedown', e => { start(e.clientX); e.preventDefault(); });
   window.addEventListener('mousemove', e => move(e.clientX));
   window.addEventListener('mouseup',   end);
+
+  track.addEventListener('click', e => {
+    if (dragged) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+}
+
+// ─── Footer video marquee: same clips as "Our Work", continuous auto-scroll ───
+function initFooterVideoMarquee() {
+  const track = document.querySelector('.vlance-footer-videos__track');
+  if (!track || typeof gsap === 'undefined') return;
+
+  const SPEED = 25; // px/sec — slower than the client carousel, this is background texture
+  let x     = 0;
+  let loopW = 0;
+
+  // Track is 6 duplicated sets of the 4 clips (see markup comment); one
+  // set's width is exactly one seamless loop. Needs enough sets that at
+  // least (N-1) sets' worth of width covers the widest realistic viewport —
+  // otherwise the track runs out of video before reaching the edge and a
+  // gap becomes visible partway through the scroll cycle.
+  const measure = () => { loopW = track.scrollWidth / 6; };
+  measure();
+  window.addEventListener('resize', measure);
+
+  gsap.ticker.add((time, deltaTime) => {
+    if (loopW <= 0) return;
+    x -= SPEED * (deltaTime / 1000);
+    x = ((x % loopW) + loopW) % loopW - loopW; // keep in (-loopW, 0]
+    gsap.set(track, { x });
+  });
 }
 
 // ─── Perks bands scroll reveal ────────────────────────────────────────────────
@@ -760,6 +817,7 @@ function initPerksAnimation() {
   bands.forEach((band, i) => {
     const title = band.querySelector('.vl-perk-title');
     const sub   = band.querySelector('.vl-perk-sub');
+    const img   = band.querySelector('.vl-perk-img');
 
     // Activate progress dot when band locks to top
     ScrollTrigger.create({
@@ -770,12 +828,29 @@ function initPerksAnimation() {
       onEnterBack: () => setActiveDot(i),
     });
 
-    // Blur-out + scale-up as next band slides over this one
+    // Blur-out + scale-up as next band slides over this one — the feature
+    // image blurs along with the text.
     if (i < bands.length - 1) {
-      gsap.to([title, sub], {
-        filter: 'blur(16px)', opacity: 0.18, scale: 1.06, ease: 'power1.in',
-        scrollTrigger: { trigger: bands[i + 1], start: blurStart, end: 'top top', scrub: 0.8 }
-      });
+      const st = () => ({ trigger: bands[i + 1], start: blurStart, end: 'top top', scrub: 0.8 });
+
+      const text = [title, sub].filter(Boolean);
+      if (text.length) {
+        gsap.to(text, {
+          filter: 'blur(16px)', opacity: 0.18, scale: 1.06, ease: 'power1.in',
+          scrollTrigger: st()
+        });
+      }
+
+      // The image goes all the way to 0 rather than resting at 0.18 like the
+      // text: a blurred 18%-opacity photo doesn't read as "faded back", it
+      // reads as a grey smudge, and it stays visible through the wave notches
+      // of the red band stacked over it once this band is buried.
+      if (img) {
+        gsap.to(img, {
+          filter: 'blur(16px)', opacity: 0, scale: 1.06, ease: 'power1.in',
+          scrollTrigger: st()
+        });
+      }
     }
   });
 
@@ -794,6 +869,7 @@ function initContactFooterAnimations() {
     const logo     = footer.querySelector('.vlance-footer-logo');
     const copy     = footer.querySelector('.vlance-footer-inner .eyebrow');
     const navLinks = footer.querySelectorAll('.vlance-footer-nav a');
+    const videos   = footer.querySelector('.vlance-footer-videos');
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -803,6 +879,12 @@ function initContactFooterAnimations() {
         toggleActions: 'play none play reverse'
       }
     });
+
+    // Just a fade — the marquee is already in continuous motion once it's
+    // visible, so it doesn't need its own entrance flourish on top of that.
+    if (videos) {
+      tl.from(videos, { opacity: 0, duration: 0.5, ease: 'power2.out' });
+    }
 
     const footerItems = [logo, copy, ...navLinks].filter(Boolean);
     if (footerItems.length) {
@@ -1453,6 +1535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPerksAnimation();
     initUGCClouds();
     initClientsCarousel();
+    initFooterVideoMarquee();
     if (!isMobile) {
       initServiceAnimations();
       initStatsAnimations();

@@ -1056,6 +1056,68 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
   }
 }
 
+/* ─── Numbers row: compact 2×2 grid, sitting on the page's own background
+   between the hero and .vl-ugc-section — deliberately NOT a descendant of
+   that section (see the HTML comment at its call site for why). Reuses
+   .vl-stat-card / .vl-stat-count so initStatsAnimations() (keyed off
+   #stats, targeting those classes) keeps working unchanged; this scoped
+   override just replaces the old big red-card look with something small. */
+.vl-ugc-stats-row {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: 0.6rem clamp(2.5rem, 6vw, 5rem);
+  margin: clamp(1.5rem, 4vh, 3rem) auto;
+  padding: 0 1.25rem;
+}
+
+.vl-ugc-stats-row .vl-stat-card {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5em;
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  position: relative;
+}
+
+/* Cancel the old grid version's brick-stagger tilt (unscoped rule, targets
+   any .vl-stat-card) via higher specificity rather than !important — a
+   plain override here would otherwise also block the slide-in animation
+   from initStatsAnimations(), which sets transform inline via GSAP. */
+.vl-ugc-stats-row .vl-stat-card:nth-child(odd),
+.vl-ugc-stats-row .vl-stat-card:nth-child(even) {
+  transform: none;
+}
+
+.vl-ugc-stats-row .vl-stat-count {
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 800;
+  color: #040000;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.vl-ugc-stats-row .vl-stat-card__label {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(0.75rem, 1.1vw, 0.95rem);
+  font-weight: 500;
+  color: rgba(4, 0, 0, 0.6);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .vl-ugc-stats-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 1.5rem;
+  }
+}
+
 .home-hero__description-row {
   background-image: none;
   text-align: center;
@@ -1654,7 +1716,9 @@ body:not([data-scrolled]) .vlance-logo-img {
   width: 100vw;
   margin: 0;
   padding: 0;
-  font-size: 28vw;
+  /* Capped: uncapped 28vw on an ultra-wide monitor renders ~1000px tall,
+     which reaches down far enough to hit the video strip above the nav row. */
+  font-size: min(28vw, 900px);
   font-weight: 300;
   line-height: 0.85;
   letter-spacing: 0.06em;
@@ -1671,6 +1735,52 @@ body:not([data-scrolled]) .vlance-logo-img {
   left: 0;
   right: 0;
   z-index: 5;
+}
+
+/* ─── Footer video marquee: same clips as "Our Work", reordered, on a
+   continuous auto-scroll — see initFooterVideoMarquee. Sits above the
+   logo/nav bar, inside the same bottom-anchored .container, but breaks out
+   to full viewport width (same 100vw/left:50%/translateX trick used by
+   .vl-perks-bands) since .container itself is padded. Track is ×6 the 4
+   clips in the markup; JS measures scrollWidth/6 as one loop width, same
+   technique as the client-logo carousel. */
+.vlance-footer-videos {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+  /* Purely decorative: never take a hover or a click. Without this, hovering
+     a tile wakes Wistia's player chrome and its logo fades in over the clip. */
+  pointer-events: none;
+  user-select: none;
+  /* Soften the hard cut at both viewport edges so the loop reads as
+     continuous rather than as a strip that stops at the window. */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+.vlance-footer-videos__track {
+  display: flex;
+  gap: 0.6rem;
+  width: max-content;
+  will-change: transform;
+}
+.vlance-footer-video {
+  position: relative;
+  flex: none;
+  width: 160px;
+  aspect-ratio: 9 / 16;
+  border: none;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.vlance-footer-video wistia-player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .vlance-footer-inner {
@@ -2069,21 +2179,30 @@ body {
   white-space: nowrap;
 }
 
-/* Single column of 4 cards, each narrower than the container and staggered
-   left / right / left / right for a zigzag rhythm (desktop + tablet) */
+/* 2 cards per row, keeping the old left/right zigzag — it just moved from
+   per-card to per-row. The grid is narrowed by the stagger amount so the
+   shifted rows have somewhere to go without overflowing the container
+   (transform doesn't reserve layout space). */
 .vl-testimonials-grid {
+  --row-stagger: clamp(1.5rem, 4vw, 4rem);
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: clamp(1.5rem, 3vw, 2.5rem);
+  width: calc(100% - var(--row-stagger));
   background: none;
   border: none;
 }
 
-.vl-testimonial-card {
-  width: min(70%, 680px);
+/* Top row flush left, next row pushed right, repeat. With 2 per row every
+   group of 4 children spans 2 rows, and 4n+3 / 4n are always the second of
+   those — so the alternation holds at 4 testimonials or 40 without ever
+   adding another rule. */
+@media (min-width: 769px) {
+  .vl-testimonial-card:nth-child(4n+3),
+  .vl-testimonial-card:nth-child(4n) {
+    transform: translateX(var(--row-stagger));
+  }
 }
-.vl-testimonial-card:nth-child(odd)  { justify-self: start; }
-.vl-testimonial-card:nth-child(even) { justify-self: end; }
 
 /* Red spiral / star accents overlaid on a card corner — sit half on the card,
    half outside it, above the card content, with a gentle continuous drift.
@@ -2184,6 +2303,9 @@ body {
   }
   .vl-testimonials-grid {
     grid-template-columns: 1fr;
+    /* No row stagger down here — single column does its own left/right
+       zigzag below, so give the grid the full width back. */
+    width: 100%;
   }
   /* Mobile: keep a smaller version of the left/right stagger */
   .vl-testimonial-card {
@@ -2242,14 +2364,26 @@ body {
   display: flex;
   flex-direction: column;
   padding: 16px 16px 26px;
+  /* Cards with a handle are real <a> links now — undo the UA default blue/
+     underline so linked and unlinked (Anna/Dayne) cards look identical. */
+  color: inherit;
+  text-decoration: none;
 }
 
-/* Arc wave — cards follow a U-shaped curve as they scroll */
-.vl-clients-card:nth-child(5n+1) { transform: translateY(-60px) rotate(-3deg); }
-.vl-clients-card:nth-child(5n+2) { transform: translateY(-20px) rotate(-1.5deg); }
-.vl-clients-card:nth-child(5n+3) { transform: translateY(40px)  rotate(0deg); }
-.vl-clients-card:nth-child(5n+4) { transform: translateY(-20px) rotate(1.5deg); }
-.vl-clients-card:nth-child(5n+5) { transform: translateY(-60px) rotate(3deg); }
+/* Arc wave — cards follow a U-shaped curve as they scroll.
+   Groups of 11 now (was 5); both ends of the group sit at the same low point
+   so it still tiles seamlessly when the track repeats. */
+.vl-clients-card:nth-child(11n+1)  { transform: translateY(-60px) rotate(-3deg); }
+.vl-clients-card:nth-child(11n+2)  { transform: translateY(-50px) rotate(-2.4deg); }
+.vl-clients-card:nth-child(11n+3)  { transform: translateY(-25px) rotate(-1.8deg); }
+.vl-clients-card:nth-child(11n+4)  { transform: translateY(5px)   rotate(-1.2deg); }
+.vl-clients-card:nth-child(11n+5)  { transform: translateY(30px)  rotate(-0.6deg); }
+.vl-clients-card:nth-child(11n+6)  { transform: translateY(40px)  rotate(0deg); }
+.vl-clients-card:nth-child(11n+7)  { transform: translateY(30px)  rotate(0.6deg); }
+.vl-clients-card:nth-child(11n+8)  { transform: translateY(5px)   rotate(1.2deg); }
+.vl-clients-card:nth-child(11n+9)  { transform: translateY(-25px) rotate(1.8deg); }
+.vl-clients-card:nth-child(11n+10) { transform: translateY(-50px) rotate(2.4deg); }
+.vl-clients-card:nth-child(11n+11) { transform: translateY(-60px) rotate(3deg); }
 
 .vl-clients-card__frame {
   position: relative;
@@ -2313,11 +2447,11 @@ body {
   margin: 0;
 }
 
-.vl-clients-card__role {
+.vl-clients-card__handle {
   font-size: 1.1rem;
   color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.02em;
   margin: 0;
 }
 
@@ -2377,59 +2511,18 @@ body {
   position: relative;
   z-index: 5;
   padding: clamp(4rem, 8vw, 7rem) 0 clamp(5rem, 10vw, 9rem);
+  /* Hard containment: this section sits at z-index 5, above the slider section
+     that follows it (z-index 3), so anything bleeding past its bottom edge —
+     the bands' bottom-bled feature images, blur spill — paints as a ghost over
+     the next section. `clip` rather than `hidden`: it clips without creating a
+     scroll container, so the sticky bands inside still pin to the viewport. */
+  overflow: clip;
 }
 
 .vl-perks-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(1.25rem, 4vw, 3rem);
-}
-
-.vl-perks-header {
-  margin-top: clamp(2rem, 5vw, 4rem);
-  margin-bottom: clamp(3rem, 5vw, 5rem);
-  text-align: center;
-  position: relative;
-}
-
-.vl-perks-bck {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120%;
-  height: auto;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.vl-perks-eyebrow,
-.vl-perks-heading {
-  position: relative;
-  z-index: 1;
-}
-
-.vl-perks-eyebrow {
-  display: block;
-  margin-bottom: 0.75rem;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-variation-settings: "wdth" 100;
-  font-size: clamp(2.4rem, 5vw, 5rem) !important;
-  text-transform: none !important;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-  background: linear-gradient(110deg, #e64613 0%, #b91616 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.vl-perks-heading {
-  color: #040000;
-  margin: 0;
-  font-size: clamp(5rem, 12vw, 13rem) !important;
 }
 
 .vl-perks-bands {
@@ -2443,18 +2536,83 @@ body {
 
 
 .vl-perk-band {
+  /* Wave depth mirrors the 0.03 objectBoundingBox inset at the top of
+     #perk-wave-clip — i.e. how far below a red band's box edge its paint
+     actually starts. Kept as a variable so the dark bands can cancel it out. */
+  --perk-band-h: 55vh;
+  --perk-wave-depth: calc(var(--perk-band-h) * 0.03);
   position: sticky;
   top: 0;
-  height: 55vh;
+  height: var(--perk-band-h);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 1rem;
-  padding: clamp(2rem, 6vw, 6rem) clamp(2rem, 8vw, 8rem);
+  gap: clamp(2rem, 4vw, 4rem);
+  /* Side padding kept modest so the text column has real room — the vertical
+     value must stay in sync with .vl-perk-img's bottom-bleed margin below. */
+  padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem);
   background: #fff;
   overflow: hidden;
+}
+
+/* Zigzag: image is after the text in the DOM, so row-reverse pulls it to the
+   left on odd bands; even bands keep it on the right. Result down the stack:
+   left / right / left / right. */
+.vl-perk-band:nth-child(odd) {
+  flex-direction: row-reverse;
+}
+
+/* One max-width governs all the text in a band (title + paragraph) */
+.vl-perk-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1.4 1 0;
+  min-width: 0;
+  max-width: 54rem;
+}
+
+.vl-perk-img {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: min(52%, 700px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 14px 14px 0 0;
+  /* Bottom-anchored and pulled past the band's bottom edge so it bleeds off
+     it — the band's overflow:hidden does the clipping. The negative margin
+     cancels the band's bottom padding first, then adds the bleed on top. */
+  align-self: flex-end;
+  margin-bottom: calc(-1 * clamp(2rem, 6vw, 6rem) - clamp(1.5rem, 5vh, 4rem));
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Text treatment for the split (image) rows — desktop/tablet only ──
+   Centered text in a half-width column wraps raggedly; left-aligning it and
+   sizing type for the narrower measure reads like a proper feature row. */
+@media (min-width: 769px) {
+  .vl-perk-band:has(.vl-perk-img) {
+    text-align: center;
+  }
+  .vl-perk-band:has(.vl-perk-img) .vl-perk-text {
+    align-items: center;
+  }
+  .vl-perk-band:has(.vl-perk-img) .vl-perk-title {
+    font-size: clamp(3.4rem, 6.6vw, 7.2rem);
+    text-wrap: balance;
+  }
+  .vl-perk-band:has(.vl-perk-img) .vl-perk-sub {
+    font-size: clamp(1.4rem, 2.3vw, 2.2rem);
+    line-height: 1.5;
+    max-width: 28ch;
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: pretty;
+  }
 }
 
 .vl-perk-band:nth-child(1) { z-index: 1; }
@@ -2462,34 +2620,31 @@ body {
 .vl-perk-band:nth-child(3) { z-index: 3; }
 .vl-perk-band:nth-child(4) { z-index: 4; }
 
+/* Wavy top + bottom edges cut into the red band itself (see #perk-wave-clip):
+   the area beyond the wave is genuinely transparent, so nothing moves over the
+   underlying band except the red wave edge. The clip also trims the
+   bottom-bleeding feature image along the wavy bottom instead of a flat line. */
 .vl-perk-band--dark {
   background: #b91616;
+  clip-path: url(#perk-wave-clip);
+  /* The wave clip starts the red paint up to 3% below the band's box edge, so
+     the band above ends (and clips its bottom-bled image) in a white sliver
+     before the red begins. Pull the band up by that depth so the wave troughs
+     land on the previous band's bottom edge and the image runs straight into
+     the red. The extra 0.6vh is deliberate overlap rather than exact
+     compensation: the depth resolves to a fractional pixel (55vh × 0.03) and
+     the clip-path edge is antialiased, so meeting the edge exactly still
+     leaves a soft hairline. Overlapping buries it — the red simply rides a
+     few px further over the image's bottom, which reads as the same wave. */
+  margin-top: calc(-1 * var(--perk-wave-depth) - 0.6vh);
 }
 
-/* Wavy top + bottom edges on the red bands. The red bands are always flanked
-   by white bands, so a white wavy strip painted onto each edge reads as the
-   red section having a wavy boundary — and it works regardless of the sticky
-   scroll-stacking (unlike clip-path, which depends on what's revealed behind).
-   preserveAspectRatio=none lets the wave stretch to full band width. */
-.vl-perk-band--dark::before,
-.vl-perk-band--dark::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: clamp(18px, 4vw, 42px);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-.vl-perk-band--dark::before {
-  top: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0,0 H1200 V20 C1150,20 1150,36 1100,36 1050,36 1050,20 1000,20 950,20 950,36 900,36 850,36 850,20 800,20 750,20 750,36 700,36 650,36 650,20 600,20 550,20 550,36 500,36 450,36 450,20 400,20 350,20 350,36 300,36 250,36 250,20 200,20 150,20 150,36 100,36 50,36 50,20 0,20 Z'/%3E%3C/svg%3E");
-}
-.vl-perk-band--dark::after {
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0,40 H1200 V20 C1150,20 1150,4 1100,4 1050,4 1050,20 1000,20 950,20 950,4 900,4 850,4 850,20 800,20 750,20 750,4 700,4 650,4 650,20 600,20 550,20 550,4 500,4 450,4 450,20 400,20 350,20 350,4 300,4 250,4 250,20 200,20 150,20 150,4 100,4 50,4 50,20 0,20 Z'/%3E%3C/svg%3E");
+/* A white band sliding up over a red one would cover the red's bottom wave
+   with its straight top edge — so cut a wave into ITS top instead. The red
+   shows through the notches, reading as the red band's wavy bottom, and it
+   stays put while the band is pinned. */
+.vl-perk-band--dark + .vl-perk-band:not(.vl-perk-band--dark) {
+  clip-path: url(#perk-wave-clip-top);
 }
 
 .vl-perk-title,
@@ -2564,7 +2719,9 @@ body {
   color: #7a7575;
   margin: 0;
   line-height: 1.5;
-  max-width: 44ch;
+  /* No cap of its own — the .vl-perk-text column governs, so the paragraph
+     gets the full column width instead of being held to a narrower measure */
+  max-width: 100%;
 }
 
 .vl-perk-band--dark .vl-perk-sub {
@@ -2621,7 +2778,7 @@ body {
 
 /* Override the 600px overflow gap when perks section is present */
 .vl-perks-section + .product-slider__wrap {
-  margin-top: clamp(4rem, 8vh, 7rem) !important;
+  margin-top: clamp(0.5rem, 2vh, 1.5rem) !important;
 }
 
 /* ─── Slider section: clock/fan track background ─── */
@@ -2966,27 +3123,64 @@ html {
 }
 
 
-/* Center-axis column — numbers stacked near centre, tiny alternating nudge */
 .vl-stats__grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
   padding-top: 20px;
   width: 100%;
 }
 
 .vl-stat-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: clamp(3.5rem, 6.5vh, 7rem) 0;
+  background: #b91616;
+  border-radius: clamp(16px, 2vw, 28px);
+  padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  overflow: hidden;
+}
+
+/* All four cards identical in size/structure now — the "fun" part is a
+   brick-style stagger (right column pushed down, like the testimonials
+   left/right offset but as a two-column brick instead of a single column)
+   plus a slight alternating tilt. Desktop/tablet only. */
+@media (min-width: 769px) {
+  .vl-stat-card:nth-child(odd) {
+    transform: rotate(-1.2deg);
+  }
+  .vl-stat-card:nth-child(even) {
+    transform: translateY(clamp(2rem, 5vw, 3.5rem)) rotate(1.2deg);
+  }
+}
+
+/* Same image treatment on every card: contained, on top, never touching
+   the text below it. Drop each PNG in png/numbers images/ using the
+   filenames already wired up in the markup (1b views.png, videos.png,
+   editors.png, network.png). */
+.vl-stat-card__img {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: clamp(10px, 2vw, 16px);
+  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+/* No card splits image/text into a row anymore — keep the wrapper invisible
+   to layout so num/label behave exactly as if they were direct children */
+.vl-stat-card__text {
+  display: contents;
 }
 
 .vl-stat-card__num {
-  font-size: clamp(6rem, 14vw, 16rem) !important;
+  font-size: clamp(3rem, 5.5vw, 6rem) !important;
   font-weight: 900 !important;
-  color: #b91616;
+  color: #fff;
   font-variant-numeric: tabular-nums;
   margin-bottom: 0.04em;
 }
@@ -2995,13 +3189,13 @@ html {
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
   font-variation-settings: "wdth" 100;
-  font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+  font-size: clamp(1rem, 1.3vw, 1.4rem);
   font-weight: 600;
-  color: #040000;
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.3;
   letter-spacing: -0.02em;
   margin: 0;
-  max-width: 26ch;
+  max-width: 24ch;
 }
 
 /* ─── Contact word reveal ─── */
@@ -3044,9 +3238,17 @@ html {
 
 /* ── Global: every section clips its own horizontal overflow ── */
 .under-nav-bar,
-.product-slider__wrap,
 .vl-stats {
   overflow-x: clip;
+}
+
+/* Same horizontal clip, but the fan slider's rotated side cards swing below
+   the centered card's box height — leaving overflow-y unset here would make
+   the browser compute it as auto (per spec, since overflow-x isn't visible),
+   clipping the cards' bottoms. Keep it explicit so they stay visible. */
+.product-slider__wrap {
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 /* Hero clips horizontally on mobile (decorative SVGs are hidden there) */
@@ -3293,8 +3495,13 @@ html {
     padding-left:  clamp(1rem, 5vw, 3rem);
     padding-right: clamp(1rem, 5vw, 3rem);
   }
+  /* One card per row on mobile — the bento spans/rotation are scoped to
+     min-width:769px so they simply never apply here */
+  .vl-stats__grid {
+    grid-template-columns: 1fr;
+  }
   .vl-stat-card {
-    padding: clamp(1.5rem, 4vh, 3.5rem) 0;
+    padding: clamp(2rem, 5vh, 3.5rem) 1.5rem;
   }
   .vl-stat-card__num {
     font-size: clamp(3rem, 13vw, 9rem) !important;
@@ -3371,15 +3578,28 @@ html {
   .vl-perks-section {
     padding-bottom: 30px;
   }
-  .vl-perks-header {
-    margin-top: clamp(4rem, 10vw, 6.5rem);
-    margin-bottom: clamp(3rem, 7vw, 4.5rem);
+  /* Mobile: no room for the side-by-side zigzag — stack text over image.
+     (This also keeps justify-content meaning "vertical" for the
+     :first-child rule below, as it did before the row layout.) */
+  .vl-perk-band,
+  .vl-perk-band:nth-child(odd) {
+    --perk-band-h: 50vh;
+    flex-direction: column;
+    gap: 1rem;
   }
-  .vl-perks-heading {
-    font-size: clamp(4.2rem, 17vw, 7.5rem) !important;
+  .vl-perk-text {
+    flex: 0 0 auto;
+    max-width: 100%;
   }
-  .vl-perk-band {
-    height: 50vh;
+  /* Stacked layout: no bottom-bleed here, and align-self must go back to
+     center — in a column flex container it controls the horizontal axis, so
+     the desktop's flex-end would push the image right instead of down. */
+  .vl-perk-img {
+    flex: 0 1 auto;
+    max-width: min(94%, 460px);
+    max-height: 50%;
+    align-self: center;
+    margin-bottom: 0;
   }
   /* First band sits right under the heading — pull it up to the top of its
      box instead of vertical-centering, so it doesn't read as a big gap */
@@ -3453,23 +3673,37 @@ html {
        375–430px-wide screen — it was tuned for desktop's much larger canvas */
     margin-top: clamp(2rem, 8vw, 4rem) !important;
     min-height: 0 !important;
-    height: 420px !important;
-    max-height: 420px !important;
+    /* Was 420px, before the video strip existed. The strip is bottom-anchored
+       with .container and stacks upward, so the footer needs enough room for
+       wordmark + strip + nav row without the two overlapping. */
+    height: 520px !important;
+    max-height: 520px !important;
   }
   .vlance-footer-wordmark {
     /* 28vw (the desktop size) is wide enough at "VLANCE" + letter-spacing
        that it overflows its own 100vw box horizontally on narrow screens —
-       tighter letter-spacing keeps it fitting even at a bigger size. Top
-       moved down from 20% to 32% so it sits closer to the clouds (anchored
-       to the bottom) instead of leaving a big empty gap between them. */
-    top: 60% !important;
-    font-size: 28.5vw !important;
+       tighter letter-spacing keeps it fitting even at a bigger size.
+       Sits high now (was 60%) because the video strip fills the lower half —
+       the "big empty gap" that 60% was avoiding is now occupied by video. */
+    top: 24% !important;
+    /* Capped as well as vw-scaled: at the 768px end of this range a plain
+       28.5vw is ~219px tall and would reach down into the strip. */
+    font-size: min(28.5vw, 165px) !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
     /* The base -53% X offset was tuned for desktop's font-size/letter-spacing
        combo; at mobile's different values it pushed the text noticeably left
        instead of centering it */
     transform: translate(-50.5%, -50%) !important;
+  }
+  /* Footer is height-capped here (vs. desktop's 1000px+) and .container is
+     bottom-anchored, so every pixel this strip adds pushes toward the
+     wordmark. Smaller cards, tighter margin. */
+  .vlance-footer-videos {
+    margin-bottom: 0.6rem;
+  }
+  .vlance-footer-video {
+    width: 96px;
   }
 }
 
@@ -3504,14 +3738,14 @@ html {
     padding-top: clamp(5rem, 10vh, 8rem) !important;
   }
   .vl-stat-card__num {
-    font-size: clamp(6rem, 26vw, 10rem) !important;
+    font-size: clamp(3.5rem, 15vw, 6rem) !important;
   }
   .vl-stat-card {
-    padding: clamp(2.5rem, 5vh, 4.5rem) 0 !important;
+    padding: clamp(2rem, 6vh, 3rem) 1.5rem !important;
   }
   .vl-stat-card__label {
-    font-size: clamp(1.5rem, 6vw, 2.2rem) !important;
-    max-width: 18ch !important;
+    font-size: clamp(1.1rem, 4.5vw, 1.6rem) !important;
+    max-width: 22ch !important;
   }
 
   /* ── Footer — thicker wordmark (heavier fill weight + wider stroke) ── */
@@ -3543,14 +3777,20 @@ html {
   }
 
   /* Footer capped to a small max-height on tablet, same as mobile — just
-     enough to fit the clouds + wordmark, not desktop's full 1000px+ reveal */
+     enough to fit the clouds + wordmark + video strip, not desktop's full
+     1000px+ reveal. Raised from 520px to make room for the strip. */
   .vlance-footer {
     min-height: 0 !important;
-    height: 520px !important;
-    max-height: 520px !important;
+    height: 640px !important;
+    max-height: 640px !important;
   }
   .vlance-footer-wordmark {
-    top: 32% !important;
+    /* Was 32%; the bottom-anchored video strip now occupies roughly the
+       lower half of this footer, so the wordmark moves up clear of it. */
+    top: 20% !important;
+  }
+  .vlance-footer-video {
+    width: 130px;
   }
 
   /* Stats section: pull top padding back in slightly */
