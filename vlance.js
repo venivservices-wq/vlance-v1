@@ -778,6 +778,61 @@ function initFooterVideoMarquee() {
   });
 }
 
+// ─── Testimonials marquee (mobile): auto-scroll, press-and-hold to slow ───────
+function initTestimonialsMarquee() {
+  // Mobile-only, matching the breakpoint the marquee CSS lives under. Desktop
+  // keeps the static 2-col staggered grid, so the card cloning below must not
+  // run there — it would add 8 extra cards and throw off the :nth-child(4n)
+  // row-stagger rule.
+  if (window.innerWidth > 768) return;
+
+  const viewport = document.querySelector('.vl-testimonials-viewport');
+  const track    = document.querySelector('.vl-testimonials-grid');
+  if (!viewport || !track || typeof gsap === 'undefined') return;
+
+  const cards = Array.from(track.children);
+  if (!cards.length) return;
+
+  // Duplicate the whole set so the track can wrap with no visible seam. The
+  // grid is grid-auto-flow:column over 4 fixed rows, so each run of 4 cards
+  // fills one column — appending the set in order reproduces the original
+  // columns exactly, which is what makes the wrap invisible.
+  cards.forEach(card => {
+    const clone = card.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');   // screen readers read the set once
+    track.appendChild(clone);
+  });
+
+  const SPEED       = 26;    // px/sec
+  const HOLD_FACTOR = 0.12;  // speed multiplier while a finger/mouse is held down
+  let x      = 0;
+  let loopW  = 0;
+  let factor = 1;
+
+  // Two copies of the set, so half the track width is one seamless loop.
+  const measure = () => { loopW = track.scrollWidth / 2; };
+  measure();
+  window.addEventListener('resize', measure);
+
+  gsap.ticker.add((time, deltaTime) => {
+    if (loopW <= 0) return;
+    x -= SPEED * factor * (deltaTime / 1000);
+    x = ((x % loopW) + loopW) % loopW - loopW; // keep in (-loopW, 0]
+    gsap.set(track, { x });
+  });
+
+  // Passive listeners that never preventDefault: holding a finger on the
+  // marquee slows it, but the touch still belongs to the page, so scrolling
+  // down through this section is never blocked.
+  const slow   = () => { factor = HOLD_FACTOR; };
+  const resume = () => { factor = 1; };
+  viewport.addEventListener('touchstart',  slow,   { passive: true });
+  viewport.addEventListener('touchend',    resume, { passive: true });
+  viewport.addEventListener('touchcancel', resume, { passive: true });
+  viewport.addEventListener('mousedown',   slow);
+  window.addEventListener('mouseup',       resume);
+}
+
 // ─── Perks bands scroll reveal ────────────────────────────────────────────────
 function initPerksAnimation() {
   const bands = document.querySelectorAll('.vl-perk-band');
@@ -1515,6 +1570,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initUGCClouds();
     initClientsCarousel();
     initFooterVideoMarquee();
+    initTestimonialsMarquee(); // no-ops above the mobile breakpoint
     if (!isMobile) {
       initServiceAnimations();
       initStatsAnimations();

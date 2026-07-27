@@ -2294,23 +2294,34 @@ body {
      swipe to reach each row's second card. One scroll container for the
      whole grid, so all 4 rows travel together. No row stagger here (that
      rule is desktop-only), so the grid gets its full width back. */
-  .vl-testimonials-grid {
-    grid-template-columns: repeat(2, 78vw);
-    gap: 1rem;
+  /* The clipping window the track slides inside. Only exists as a styled
+     box on mobile — on desktop it's an unstyled block wrapper and the grid
+     behaves exactly as before. */
+  .vl-testimonials-viewport {
     width: 100%;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    overflow: hidden;
   }
-  .vl-testimonials-grid::-webkit-scrollbar {
-    display: none;
+  .vl-testimonials-grid {
+    /* Column flow with 4 fixed rows: each block of 4 cards fills one column,
+       so JS can clone the whole set and get an exact duplicate column pair
+       to loop against (see initTestimonialsMarquee). */
+    grid-template-columns: none;
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    grid-auto-columns: 78vw;
+    gap: 1rem;
+    width: max-content;
+    /* Deliberately NOT overflow-x:auto. A native horizontal scroll container
+       here swallowed vertical swipes that started on a card, which is what
+       made the page feel stuck at this section. JS moves the track by
+       transform instead, and pan-y hands every vertical gesture straight
+       back to the page. */
+    touch-action: pan-y;
+    will-change: transform;
   }
   .vl-testimonial-card {
     width: 100%;
     justify-self: stretch;
-    scroll-snap-align: start;
   }
   .vl-testimonials-eyebrow {
     font-size: clamp(1.4rem, 5vw, 2.4rem) !important;
@@ -3596,14 +3607,20 @@ html {
        overflow between top and bottom and push the title off the top edge;
        here the image is the thing meant to run past the bottom. */
     justify-content: flex-start;
-    gap: 1rem;
+    /* Small now — this is the gap between text and image specifically.
+       The space above the text is separate (.vl-perk-text's margin-top
+       below + the band's own padding-top), so shrinking this doesn't
+       touch that. */
+    gap: 0.25rem;
   }
   .vl-perk-text {
     flex: 0 0 auto;
     max-width: 100%;
     /* Extra breathing room above the title — on top of the band's own
-       top padding (:first-child overrides that separately below). */
-    margin-top: 0.75rem;
+       top padding (:first-child overrides that separately below). Kept
+       independent of .vl-perk-band's gap above, which controls the
+       text-to-image spacing instead. */
+    margin-top: 2.5rem;
   }
   /* Sized down slightly from full 100vw to 92vw. Still centered the same
      way: align-self:center on a flex item wider than its container
