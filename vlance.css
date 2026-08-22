@@ -1,1271 +1,697 @@
-/* ══════════════════════════════════════════════════════════════
-   BASE SYSTEM (formerly osmo-styles.css)
-   CSS custom properties, resets, layout, nav, hero, slider,
-   cursor, button, typography
-   ══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════════
+   VLANCE v2 — bold dark brutalist system
+   Red (#b91616) on near-black, hard edges, huge Bricolage Grotesque display
+   type, JetBrains Mono for labels/eyebrows/UI chrome.
 
-/* ─── CSS custom properties ─── */
+   Section order mirrors index.html exactly:
+   01 Hero · 02 Client carousel · 03 Perks · 04 Featured testimonial ·
+   05 Work (fan slider) · 06 Testimonials · 07 More features · 08 Contact
+   ══════════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
 :root {
-  --cubic-default:              cubic-bezier(0.625, 0.05, 0, 1);
-  --duration-default-double:    1.2s;
-  --duration-default-onehalf:   0.9s;
-  --duration-default:           0.6s;
-  --duration-default-half:      0.3s;
-  --duration-default-quarter:   0.15s;
-  --animation-default-double:   var(--duration-default-double)   var(--cubic-default);
-  --animation-default-onehalf:  var(--duration-default-onehalf)  var(--cubic-default);
-  --animation-default:          var(--duration-default)          var(--cubic-default);
-  --animation-default-half:     var(--duration-default-half)     var(--cubic-default);
-  --animation-default-quarter:  var(--duration-default-quarter)  var(--cubic-default);
-  --animation-ease:             0.2s ease;
-  --animation-ease-double:      0.4s ease;
+  /* Palette */
+  --bg:          #fafaf7;
+  --bg-panel:    #f1efe9;
+  --bg-panel-2:  #e8e5dd;
+  --fg:          #0a0a0a;
+  --fg-dim:      #625f58;
+  --fg-faint:    #a8a49b;
+  --line:        rgba(10, 10, 10, 0.12);
+  --line-strong: rgba(10, 10, 10, 0.28);
+  --red:         #b91616;
+  --red-bright:  #e01c1c;
+  --red-deep:    #7a0d0d;
+  --grad-red:    linear-gradient(110deg, #e64613 0%, #b91616 100%);
 
-  --gap-xxs: 0.5em;
-  --gap-xs:  0.75em;
-  --gap-s:   1em;
-  --gap-sm:  1.25em;
-  --gap-m:   1.5em;
-  --gap-l:   1.875em;
-  --gap-xl:  2em;
-  --gap-xxl: 2.5em;
+  /* Type */
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-mono:    'Bricolage Grotesque', sans-serif;
 
-  --btn-height:        2.5em;
-  --stroke-weight:     1px;
-  --input-height:      3em;
-  --container-padding: 1.875em;
-  --padding-xs:        3.75em;
-  --padding-s:         5em;
-  --padding-m:         7.5em;
-  --padding-l:         10em;
-  --padding-xl:        12.5em;
-
-  --nav-bar-height:          4.625em;
-  --nav-bar-max-width-small: 38em;
-
-  --color-ignore-neutral-100: #ffffff;
-  --color-ignore-neutral-200: #F4F4F4;
-  --color-ignore-neutral-300: #EAEAEA;
-  --color-ignore-neutral-400: #E1E1E1;
-  --color-ignore-neutral-450: #D8D8D8;
-  --color-ignore-neutral-475: #B8B8B8;
-  --color-ignore-neutral-500: #817F7F;
-  --color-ignore-neutral-525: #4F4C4C;
-  --color-ignore-neutral-550: #393636;
-  --color-ignore-neutral-600: #312E2E;
-  --color-ignore-neutral-700: #2A2727;
-  --color-ignore-neutral-800: #201D1D;
-  --color-ignore-neutral-900: #151313;
-  --color-ignore-neutral-950: #000000;
-  --color-ignore-rgb-dark:    32, 29, 29;
-  --color-ignore-rgb-light:   249, 249, 249;
-  --color-ignore-rgb-black:   0, 0, 0;
-  --color-ignore-rgb-white:   255, 255, 255;
-
-  --color-neutral-100: var(--color-ignore-neutral-100);
-  --color-neutral-200: var(--color-ignore-neutral-200);
-  --color-neutral-300: var(--color-ignore-neutral-300);
-  --color-neutral-400: var(--color-ignore-neutral-400);
-  --color-neutral-450: var(--color-ignore-neutral-450);
-  --color-neutral-475: var(--color-ignore-neutral-475);
-  --color-neutral-500: var(--color-ignore-neutral-500);
-  --color-neutral-525: var(--color-ignore-neutral-525);
-  --color-neutral-550: var(--color-ignore-neutral-550);
-  --color-neutral-600: var(--color-ignore-neutral-600);
-  --color-neutral-700: var(--color-ignore-neutral-700);
-  --color-neutral-800: var(--color-ignore-neutral-800);
-  --color-neutral-900: var(--color-ignore-neutral-900);
-  --color-neutral-950: var(--color-ignore-neutral-950);
-  --color-white:  var(--color-ignore-neutral-100);
-  --color-light:  var(--color-ignore-neutral-200);
-  --color-dark:   var(--color-ignore-neutral-800);
-  --color-black:  var(--color-ignore-neutral-950);
-  --color-electric: #a1ff62;
-  --color-coral:    #f84131;
-  --color-purple:   #6840ff;
-  --color-rgb-dark:  var(--color-ignore-rgb-dark);
-  --color-rgb-light: var(--color-ignore-rgb-light);
-  --color-rgb-black: var(--color-ignore-rgb-black);
-  --color-rgb-white: var(--color-ignore-rgb-white);
-  --color-rgb-gray:  129, 127, 127;
-  --color-rgb-tint:  40, 40, 40;
-
-  --size-unit:             16;
-  --size-container-ideal:  1440;
-  --size-container-min:    992px;
-  --size-container-max:    1920px;
-  --size-container:        clamp(var(--size-container-min), 100vw, var(--size-container-max));
-  --size-font:             calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
+  /* Layout */
+  --container: 1400px;
+  --edge:      clamp(1.25rem, 4vw, 3rem);
+  --line-w:    1.5px;
 }
 
-@media screen and (max-width: 991px) {
-  :root {
-    --size-container-ideal: 850;
-    --size-container-min:   768px;
-    --size-container-max:   991px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  :root {
-    --size-container-ideal: 390;
-    --size-container-min:   min(100vw, 480px);
-    --size-container-max:   767px;
-    --btn-height:           3em;
-    --padding-xl:           10em;
-    --padding-l:            7.5em;
-    --padding-m:            5em;
-    --padding-s:            3.75em;
-    --container-padding:    0.625em;
-  }
-}
-
-@media screen and (max-width: 479px) {
-  :root {
-    --size-container-ideal: 390;
-    --size-container-min:   min(100vw, 320px);
-    --size-container-max:   min(100vw, 479px);
-  }
-}
-
-/* ─── Global resets ─── */
 html {
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
-  margin: 0;
-  padding: 0;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  font-size: var(--size-font);
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  overscroll-behavior: none;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-display);
+  overflow-x: clip;
+  position: relative;
 }
 
-.vlance-footer {
-  margin-top: auto;
+/* Fixed film-grain overlay — cheap texture that sells the "expensive design"
+   feel; mix-blend-mode so it reads on both red and black panels alike. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-body::-webkit-scrollbar,
-html::-webkit-scrollbar {
-  display: none;
+::selection { background: var(--red); color: #fff; }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--edge);
 }
 
-::selection {
-  background-color: rgba(var(--color-rgb-gray), 0.2);
-  text-shadow: none;
-}
-::-moz-selection {
-  background-color: rgba(var(--color-rgb-gray), 0.2);
-  text-shadow: none;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button {
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  border: none;
-}
-
-/* ─── Typography ─── */
-.eyebrow {
-  letter-spacing: 0;
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-size: 0.6875em;
-  font-weight: 400;
-  line-height: 1;
-  display: block;
-}
-
-.eyebrow.is--nav-marquee {
-  margin-top: 0.0625em;
-}
-
+/* ── Shared type utilities ── */
 .h-l {
+  font-family: var(--font-display);
+  font-weight: 800;
   letter-spacing: -0.04em;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-size: 5em;
-  font-weight: 400;
-  line-height: 1;
-}
-
-@media screen and (max-width: 767px) {
-  .h-l { font-size: 3em; }
-}
-
-.h-xl {
-  letter-spacing: -0.06em;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-size: 7em;
-  font-weight: 400;
-  line-height: 1;
-}
-
-@media screen and (max-width: 991px) {
-  .h-xl { font-size: 6.25em; }
-}
-
-@media screen and (max-width: 767px) {
-  .h-xl { font-size: 4em; }
+  line-height: 0.9;
+  margin: 0;
+  color: var(--fg);
 }
 
 .p-l {
-  letter-spacing: -0.02em;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-size: 1.1875em;
-  font-weight: 400;
-  line-height: 1.25;
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  color: var(--fg-dim);
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  margin: 0;
 }
 
-@media screen and (max-width: 767px) {
-  .p-l { font-size: 1.125em; }
-}
-
-/* ─── Divider line ─── */
-.line {
-  z-index: 3;
-  width: 100%;
-  height: var(--stroke-weight);
-  background-color: var(--color-neutral-400);
-  position: relative;
-}
-
-.line.is--nav-transparent {
-  background-color: var(--color-neutral-200);
-  opacity: 0.08;
-}
-
-.line.is--dark {
-  background-color: var(--color-neutral-800);
-}
-
-/* ─── Container ─── */
-.container {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-@media screen and (min-width: 992px) {
-  .container {
-    max-width: var(--size-container);
-    padding: 0 var(--container-padding);
-  }
-  .container.is--m {
-    max-width: calc(var(--size-container) * 0.825);
-  }
-  .container.is--sm {
-    max-width: calc(var(--size-container) * 0.65);
-  }
-}
-
-@media screen and (max-width: 991px) {
-  .container {
-    max-width: 100%;
-    padding: 0 var(--container-padding);
-  }
-}
-
-/* ─── Layout ─── */
-.global {
-  z-index: 100;
-}
-
-.main {
-  overflow: clip;
-}
-
-/* ─── Padding hero (nav removed, no top clearance needed) ─── */
-.padding-hero,
-[data-wf--padding-hero--variant="nav-large"] {
-  height: 0;
-}
-
-/* ─── Theme section ─── */
-:where([data-theme-section="dark"]) {
-  background-color: var(--color-dark);
-  color: var(--color-light);
-}
-
-/* ─── Button ─── */
-.button {
-  height: var(--btn-height);
-  gap: 0.625em;
-  color: var(--color-neutral-800);
-  white-space: nowrap;
-  border-radius: 0.125em;
-  justify-content: center;
+.vl-eyebrow {
+  display: inline-flex;
   align-items: center;
-  padding: 0 1.125em 0.0625em;
-  display: flex;
-  position: relative;
-  overflow: hidden;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1vw, 0.82rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
 }
-
-.button[data-shape="round"] {
-  border-radius: 3em;
-}
-
-.button[data-size="full"] {
-  width: 100%;
-}
-
-.button-bg {
-  z-index: 0;
-  background-color: var(--color-electric);
-  pointer-events: none;
-  position: absolute;
-  inset: 0%;
-}
-
-.button-label__wrap {
-  z-index: 1;
-  place-items: center;
-  display: grid;
-  position: relative;
-}
-
-.button-label {
-  font-variation-settings: "wght" 500;
-  letter-spacing: -0.02em;
-  justify-content: flex-start;
-  align-items: center;
-  font-size: 1.125em;
-  line-height: 1;
-  display: flex;
-  position: relative;
-}
-
-.button-label,
-.button-icon {
-  transform-origin: 50% var(--y, 1100%);
-}
-
-.button-label:not(:nth-of-type(1)) {
-  position: absolute;
-}
-
-.button-label:nth-of-type(1) {
-  transform: rotate(calc(var(--r, 20deg) * 0));
-}
-
-.button-label:nth-of-type(2) {
-  transform: rotate(calc(var(--r, 20deg) * -1));
-}
-
-.button-label:nth-of-type(3) {
-  transform: rotate(calc(var(--r, 20deg) * -2));
-}
-
-.button,
-button.tag {
-  --r: 20deg;
-}
-
-.button-bg,
-.button,
-.tag-bg,
-button.tag {
-  transition: all var(--animation-ease);
-}
-
-@media screen and (max-width: 479px) {
-  .button[data-responsive="mobile"] { width: 100%; }
-}
-
-@media screen and (max-width: 767px) {
-  .button[data-responsive="landscape"] { width: 100%; }
-}
-
-@media screen and (max-width: 991px) {
-  .button[data-responsive="tablet"] { width: 100%; }
-}
-
-/* ─── Button theme variants ─── */
-[data-wf--button-theme--variant="coral"]         { background-color: var(--color-coral); }
-[data-wf--button-theme--variant="neutral-800"]   { background-color: var(--color-neutral-800); }
-[data-wf--button-theme--variant="dark-10"]       { background-color: color-mix(in srgb, var(--color-neutral-800) 10%, transparent); }
-[data-wf--button-theme--variant="light-10"]      { background-color: color-mix(in srgb, var(--color-neutral-200) 10%, transparent); }
-[data-wf--button-theme--variant="dark-outline"]  { background-color: transparent; }
-[data-wf--button-theme--variant="light-outline"] { background-color: transparent; }
-
-/* ─── Nav outer wrapper ─── */
-.nav__bg {
-  pointer-events: auto;
-  opacity: 0;
-  visibility: hidden;
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: opacity var(--animation-default), visibility var(--animation-default);
-}
-
-[data-nav-status="active"] .nav__bg {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* ─── Nav bar ─── */
-.nav-bar {
-  width: 100%;
-  max-width: var(--nav-bar-max-width-small);
-  pointer-events: auto;
-  color: var(--color-neutral-200);
-  border-radius: 0.25em;
-  position: relative;
-  transition: max-width var(--animation-default-onehalf) 0.2s;
-}
-
-[data-nav-status="active"] .nav-bar {
-  max-width: 100%;
-  transition: max-width var(--animation-default) 0s;
-}
-
-.nav-bar__wrap {
-  width: 100%;
-  height: var(--nav-bar-height);
-  justify-content: center;
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.nav-bar__width {
-  gap: 0.375em;
-  width: 100%;
-  max-width: var(--size-container);
-  flex-flow: column;
+.vl-eyebrow::before {
+  content: '';
+  width: 0.55em;
+  height: 0.55em;
+  background: var(--red);
   flex: none;
-  align-items: center;
-  padding: 1.25em;
-  display: flex;
 }
 
-@media screen and (max-width: 991px) {
-  .nav-bar__width { padding: 0; }
-}
-
-.nav-bar__top {
-  justify-content: center;
-  align-items: center;
-  height: 3.375em;
-  padding: 0.4375em;
-  display: flex;
+/* ── Buttons ──
+   Creative hover with no shadow / glow / scale: a flat fill sweeps in behind
+   the label (transform-only, GPU-cheap) and the label colour flips a beat
+   later so it reads as the fill "arriving" under it. */
+.btn {
   position: relative;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-bar__top {
-    height: var(--nav-bar-height);
-    padding: 1em;
-  }
-}
-
-.nav-bar__bg {
-  background-color: var(--color-neutral-800);
-  pointer-events: none;
-  border-radius: 0.375em;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: background-color var(--animation-ease);
-}
-
-[data-nav-theme][data-nav-status="active"] .nav-bar__bg,
-[data-nav-theme="dark"] .nav-bar__bg {
-  background-color: var(--color-neutral-800);
-}
-
-[data-nav-theme="dark"] .nav-bar__bg {
-  background-color: var(--color-neutral-600);
-}
-
-.nav-bar__outline {
-  background-color: var(--color-neutral-200);
-  opacity: 0.1;
-  pointer-events: none;
-  inset: calc(var(--stroke-weight) * -1);
-  border-radius: 0.4375em;
-  position: absolute;
-  transition: opacity var(--animation-ease);
-}
-
-[data-nav-theme][data-nav-status="active"] .nav-bar__outline {
-  opacity: 0.08;
-}
-
-[data-nav-theme="dark"] .nav-bar__outline {
-  opacity: 0.32;
-  background-color: var(--color-neutral-900);
-}
-
-.nav-bar__back {
-  position: absolute;
-  inset: 0;
-  transition: all var(--animation-default);
-}
-
-[data-scrolling-started][data-nav-status="active"] .nav-bar__back {
-  inset: 0em;
-}
-
-[data-scrolling-started="true"] .nav-bar__back {
-  inset: 0.1875em;
-}
-
-@media screen and (max-width: 767px) {
-  .nav-bar__back,
-  [data-scrolling-started][data-nav-status] .nav-bar__back {
-    inset: 0.5em;
-  }
-  [data-scrolling-started][data-nav-status="active"] .nav-bar__back {
-    inset: -0.25em 0em;
-  }
-}
-
-.nav-bar__top .button {
-  height: 100%;
-}
-
-.nav-bar__logo {
-  justify-content: center;
-  align-items: center;
-  height: 2.5em;
-  display: flex;
-  position: absolute;
-}
-
-.nav-bar__buttons {
-  height: 2.5em;
-  display: flex;
-}
-
-.nav-bar__menu {
-  height: 2.5em;
-  margin-right: auto;
-}
-
-.nav-bar__login-button {
-  display: none;
-}
-
-.nav-menu {
-  gap: 0.625em;
-  cursor: pointer;
-  border-radius: 0.125em;
-  align-items: center;
-  height: 100%;
-  padding-left: 0.625em;
-  padding-right: 1em;
-  display: flex;
-  background-color: transparent;
-  transition: background-color var(--animation-default-half), gap var(--animation-default);
-}
-
-.nav-menu:hover {
-  background-color: rgba(var(--color-rgb-light), 0.06);
-}
-
-[data-nav-status="active"] .nav-menu {
-  gap: 0.1875em;
-}
-
-.nav-menu__hamburger {
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  width: 1.375em;
-  height: 0.4375em;
-  display: flex;
-  position: relative;
-}
-
-.nav-menu__hamburger > * {
-  transition: transform var(--animation-default);
-  transform: translateY(0.1875em) rotate(0.001deg) scaleX(1);
-}
-
-.nav-menu__hamburger > *:nth-child(2) {
-  transform: translateY(-0.1875em) rotate(0.001deg) scaleX(1);
-}
-
-[data-nav-status="active"] .nav-menu__hamburger > *:nth-child(1) {
-  transform: translateY(0em) rotate(-45deg) scaleX(0.75);
-}
-
-[data-nav-status="active"] .nav-menu__hamburger > *:nth-child(2) {
-  transform: translateY(0em) rotate(45deg) scaleX(0.75);
-}
-
-.nav-menu__hamburger-bar {
-  width: 100%;
-  height: var(--stroke-weight);
-  background-color: currentColor;
-  position: absolute;
-}
-
-.nav-menu__label {
-  font-variation-settings: "wght" 500;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.0625em;
-  font-size: 1.125em;
-  line-height: 1;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-menu__label { margin-bottom: 0; }
-}
-
-.nav-bar__bottom {
-  grid-template-rows: 0fr;
-  width: 100%;
-  display: grid;
-  position: relative;
+  isolation: isolate;
   overflow: hidden;
-  transition: grid-template-rows var(--animation-default) 0s;
-}
-
-[data-nav-status="active"] .nav-bar__bottom {
-  grid-template-rows: 1fr;
-  transition: grid-template-rows var(--animation-default-onehalf) 0.3s;
-}
-
-@media screen and (max-width: 767px) {
-  .nav-bar__bottom {
-    transition: grid-template-rows var(--animation-default) 0s,
-                transform var(--animation-default) 0s;
-    transform: translateY(-0.625em) rotate(0.001deg);
-  }
-  [data-nav-status="active"] .nav-bar__bottom {
-    transition: grid-template-rows var(--animation-default-onehalf) 0.3s,
-                transform var(--animation-default) 0.3s;
-    transform: translateY(0em) rotate(0.001deg);
-  }
-}
-
-.nav-bar__bottom-overflow {
-  flex-flow: column;
+  display: inline-flex;
   align-items: center;
-  height: 10000%;
-  display: flex;
-  position: relative;
-  overflow: hidden;
-}
-
-.nav-bar__bottom-inner {
-  width: calc(var(--size-container) - 2.5em);
-  flex-flow: column;
-  align-items: center;
-  padding: 1.5em;
-  display: flex;
-  position: relative;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-bar__bottom-inner {
-    width: 100vw;
-    max-height: calc(100dvh - var(--nav-bar-height));
-    padding: 1em 1em 1.25em;
-    overflow: scroll;
-  }
-}
-
-.nav-bar__bottom-row {
-  gap: 1.5em;
-  width: 100%;
-  display: flex;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-bar__bottom-row {
-    gap: 0em;
-    flex-flow: column;
-  }
-}
-
-.nav-bar__bottom-col {
-  gap: 1.375em;
-  flex-flow: column;
-  width: 100%;
-  padding: 2.5em;
-  display: flex;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-bar__bottom-col {
-    gap: 1em;
-    padding: 1.25em 2.25em 2em;
-  }
-}
-
-.nav-bar__tag-row {
-  opacity: 0.8;
-  display: flex;
-}
-
-.nav-bar__ul-big {
-  list-style: none;
-}
-
-.nav-bar__big-a {
-  align-items: center;
-  width: 100%;
-  padding-top: 1.0625em;
-  padding-bottom: 1.125em;
-  display: flex;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-bar__big-a {
-    padding-top: 0.8125em;
-    padding-bottom: 0.875em;
-  }
-}
-
-.nav-bar__big-span {
-  font-variation-settings: "wght" 430;
-  font-size: 1.5em;
-  line-height: 1;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-bar__big-span { font-size: 1.25em; }
-}
-
-.nav-bar__line {
-  height: var(--stroke-weight);
-  background-color: var(--color-neutral-600);
-  position: absolute;
-  bottom: 0;
-  left: 0.5em;
-  right: 0.5em;
-  opacity: 0;
-  transition: all var(--animation-default) 0s;
-}
-
-[data-nav-status="active"] .nav-bar__line {
-  opacity: 1;
-  transition: all var(--animation-default) 0.1s;
-}
-
-@media screen and (max-width: 767px) {
-  .nav-bar__line {
-    inset: auto 1em 0em;
-    left: 0;
-    right: 0;
-  }
-  [data-nav-status="active"] .nav-bar__line {
-    transition: all var(--animation-default) 0.2s;
-    inset: auto 0em 0em;
-  }
-}
-
-.nav-bar__bottom-row > * {
-  transform: translateY(2em) rotate(0.001deg);
-  transition: transform var(--animation-default) 0s;
-}
-
-.nav-bar__bottom-row > *:nth-child(2) {
-  transform: translateY(2em) rotate(0.001deg);
-  transition: transform var(--animation-default) 0.075s;
-}
-
-.nav-bar__bottom-row > *:nth-child(3) {
-  transform: translateY(2em) rotate(0.001deg);
-  transition: transform var(--animation-default) 0.15s;
-}
-
-[data-nav-status="active"] .nav-bar__bottom-row > * {
-  transform: translateY(0em) rotate(0.001deg);
-  transition: transform var(--animation-default-onehalf) 0.3s;
-}
-
-[data-nav-status="active"] .nav-bar__bottom-row > *:nth-child(2) {
-  transform: translateY(0em) rotate(0.001deg);
-  transition: transform var(--animation-default-onehalf) 0.375s;
-}
-
-[data-nav-status="active"] .nav-bar__bottom-row > *:nth-child(3) {
-  transform: translateY(0em) rotate(0.001deg);
-  transition: transform var(--animation-default-onehalf) 0.45s;
-}
-
-.nav-bar__mobile-buttons {
+  justify-content: center;
   gap: 0.625em;
-  flex-flow: column;
-  display: none;
-}
-
-@media screen and (max-width: 991px) {
-  .nav-bar__mobile-buttons {
-    width: calc(100% + 4em);
-    margin-bottom: -2em;
-    margin-left: -2em;
-    padding-top: 0.5em;
-    display: flex;
-  }
-}
-
-/* ─── Under-nav marquee strip ─── */
-.under-nav-bar {
-  z-index: 50;
-  width: 100%;
-  padding-top: var(--nav-bar-height);
-  padding-right: var(--gap-l);
-  padding-left: var(--gap-l);
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  flex-flow: column;
-  align-items: center;
-  display: flex;
-  position: fixed;
-  transition: all var(--animation-default);
-  transform: translateY(0em) scale(1) rotate(0.001deg);
-}
-
-body:has([data-nav-status="active"]) .under-nav-bar,
-body:has([data-scrolling-started="true"]) .under-nav-bar {
-  transform: translateY(-2em) scale(0.975) rotate(0.001deg);
-}
-
-.under-nav-bar__inner {
-  width: 100%;
-  max-width: var(--nav-bar-max-width-small);
-  gap: 0.375em;
-  flex-flow: column;
-  padding-top: 0.375em;
-  display: flex;
-  position: relative;
-}
-
-@media screen and (max-width: 991px) {
-  .under-nav-bar__inner {
-    margin-top: -0.125em;
-    padding-top: 0;
-  }
-}
-
-.nav-marquee {
-  background-color: var(--color-electric);
-  pointer-events: auto;
-  width: 100%;
-  height: 1.25em;
-  color: var(--color-neutral-800);
-  border-radius: 0.1875em;
-  flex: none;
+  padding: 1em 2.4em;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: none;
   text-decoration: none;
-  display: flex;
-  position: relative;
-  overflow: hidden;
+  border: none;
+  border-radius: 100em;
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--fg);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
+.btn:hover { background: var(--fg); color: #fff; }
 
-/* ─── CSS marquee data-attribute driver ─── */
-[data-css-marquee-list] {
-  animation: translateX 30s linear infinite;
-  animation-duration: inherit;
+.btn--primary {
+  background: var(--red);
+  color: #fff;
 }
+.btn--primary:hover { background: var(--fg); color: #fff; }
 
-body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
-  animation-play-state: paused;
-}
-
-/* ─── Home hero ─── */
+/* ══════════════════════════ 01 · HERO ══════════════════════════ */
 .home-hero {
-  z-index: 2;
-  flex-flow: column;
-  justify-content: space-between;
-  align-items: stretch;
-  display: flex;
   position: relative;
-  overflow: hidden;
+  min-height: 140svh;
+  display: flex;
+  align-items: flex-start;
+  padding: clamp(9rem, 18vh, 12.5rem) 0 clamp(4rem, 8vh, 6rem);
+  background: var(--bg);
+  overflow: clip;
 }
 
 .vl-hero-bck {
   position: absolute;
   left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
   width: 100%;
+  height: 100%;
+  opacity: 1;
   z-index: 0;
   pointer-events: none;
-  display: block;
+  user-select: none;
 }
-
-/* Oversized + top-aligned: gives the scroll parallax (desktop only) buffer
-   room to drift without ever exposing an edge */
-.vl-hero-bck--desktop {
-  top: -20%;
-  height: 130%;
-}
-
-.vl-hero-bck--mobile {
-  display: none;
-  bottom: 0;
-  height: auto;
-  aspect-ratio: 1080 / 1920;
-}
-
+.vl-hero-bck--mobile { display: none; }
 @media (max-width: 768px) {
   .vl-hero-bck--desktop { display: none; }
-  .vl-hero-bck--mobile  { display: block; }
-}
-
-.home-hero__title-row {
-  gap: var(--gap-l);
-  justify-content: center;
-  align-items: center;
-  margin-top: -0.5em;
-  margin-bottom: -0.5em;
-  padding-left: 0.5em;
-  display: flex;
-  position: relative;
-}
-
-@media screen and (max-width: 991px) {
-  .home-hero__title-row {
-    gap: 0em;
-    flex-flow: column;
-  }
+  .vl-hero-bck--mobile { display: block; }
 }
 
 .home-hero__content {
-  gap: max(1.5em, 4.5svh);
-  flex-flow: column;
-  align-items: center;
-  display: flex;
-}
-
-@media screen and (max-width: 767px) {
-  .home-hero__content { padding-bottom: 0; }
-}
-
-/* ─── UGC text section ─── */
-.vl-ugc-section .home-hero__description-p {
-  color: rgba(255, 255, 255, 0.82) !important;
-}
-.vl-ugc-section .home-hero__description-highlight {
-  color: rgba(255, 255, 255, 0.82) !important;
-  background-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-.vl-ugc-section {
   position: relative;
-  width: 100%;
-  height: auto;
-  padding: clamp(2rem, 4vw, 5rem) 2rem clamp(8rem, 14vw, 16rem);
-  /* Without this, width:100% + padding (no global border-box reset in this
-     codebase) adds the padding on top of 100%, rendering 2x the horizontal
-     padding wider than the viewport — all overflowing off the right edge
-     since the box starts at x:0. That's what read as "off-center". */
-  box-sizing: border-box;
-  overflow: visible;
-  z-index: 4;
+  z-index: 1;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
 }
 
-/* Mobile-only fallback fill: the mobile cloud asset has no red blob of its own,
-   so this stands in behind it, with a wavy bottom edge (see #ugc-mobile-curve)
-   instead of a straight line. Hidden on desktop so the curved blob path shows. */
-.vl-ugc-bg {
-  position: absolute;
-  inset: 0;
-  background: #b91616;
-  z-index: 0;
-  pointer-events: none;
-  display: none;
-  clip-path: url(#ugc-mobile-curve);
+/* Trusted-by avatar badge */
+.vl-trusted {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1rem;
 }
-
-/* Red blob (desktop) + clouds layer — stretched to the section box so the
-   blob's curved edges and the clouds stay pinned to the section's full
-   width/height regardless of aspect ratio */
-.vl-ugc-bck {
-  position: absolute;
-  inset: 0;
+.vl-trusted__avatars {
+  display: flex;
+}
+.vl-trusted__slot {
+  display: block;
+  width: 3.6rem;
+  height: 3.6rem;
+  margin-left: -1.1rem;
+  animation: vl-trusted-bob 3.6s ease-in-out infinite;
+}
+.vl-trusted__slot:first-child { margin-left: 0; }
+.vl-trusted__slot:nth-child(1) { animation-delay: 0s; }
+.vl-trusted__slot:nth-child(2) { animation-delay: 0.5s; }
+.vl-trusted__slot:nth-child(3) { animation-delay: 1s; }
+.vl-trusted__slot:nth-child(4) { animation-delay: 1.5s; }
+/* Radius/border/background live on the image itself (not the wrapper) so the
+   swap animation scales/fades the whole circle — photo, border and backing
+   colour — as one piece instead of leaving a static ring behind. */
+.vl-trusted__avatar {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
-  z-index: 0;
-  pointer-events: none;
-  object-fit: fill;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  background: var(--bg-panel);
 }
 
-/* Positioning wrapper: handles vertical centering (static, untouched by GSAP)
-   so it stays put; the inner .vl-ugc-cloud handles the animated scroll drift.
-   Kept as two separate elements because GSAP's y-tween replaces the whole
-   translate component of whatever element it's applied to — if centering and
-   drift shared one element, animating y would silently wipe out the
-   translateY(-50%) centering. Staggered vertically so one cloud sits higher
-   and one lower instead of both centering on the same line. */
-.vl-ugc-cloud-wrap {
+@keyframes vl-trusted-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-trusted__slot { animation: none; }
+}
+.vl-trusted__label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--fg-dim);
+}
+
+.home-hero__title-row { max-width: 100%; }
+
+.vl-hero-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.88;
+  color: var(--fg);
+  font-size: clamp(4rem, 11vw, 10.5rem);
+  text-transform: uppercase;
+}
+.vl-ht-line { display: block; }
+.vl-ht-line--desktop { white-space: nowrap; }
+.vl-ht-line--mobile { display: none; }
+.vl-ht-accent { color: var(--red); font-style: normal; }
+
+.vl-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 767px) {
+  .vl-ht-line--desktop { display: none; }
+  .vl-ht-line--mobile  { display: block; }
+  .home-hero { min-height: 88svh; align-items: flex-end; }
+}
+
+/* ══════════════════════ 02 · CLIENT CAROUSEL / FACE WALL ══════════════════════ */
+.vl-clients-header {
+  position: relative;
+  padding: clamp(3.5rem, 7vw, 5.5rem) var(--edge) clamp(2rem, 4vw, 3rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background: var(--bg);
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.vl-clients-header .h-l { font-size: clamp(3rem, 7vw, 6rem); }
+.vl-clients-stat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  flex: none;
+}
+.vl-clients-stat__num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 5vw, 4.4rem);
+  line-height: 0.9;
+  color: var(--red-bright);
+  letter-spacing: -0.03em;
+}
+.vl-clients-stat__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.2vw, 2.7rem);
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  max-width: 14ch;
+}
+
+.vl-clients-carousel {
+  position: relative;
+  width: 112%;
+  left: -6%;
+  overflow: hidden;
+  background: var(--bg);
+  padding: clamp(2rem, 4vw, 3rem) 0;
+  transform: rotate(-2.5deg);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+}
+.vl-clients-carousel--inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.15rem, 0.4vw, 0.3rem);
+}
+.vl-clients-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  cursor: grab;
+}
+.vl-clients-track.is-dragging { cursor: grabbing; }
+
+/* Big overlapping poster tiles — the "face wall": photo fills the whole
+   card, grayscale by default and snapping to full colour on hover, name
+   overlaid on a bottom scrim so faces read large from across the room. */
+.vl-clients-card {
+  position: relative;
+  flex: none;
+  width: clamp(13rem, 20vw, 19rem);
+  aspect-ratio: 1 / 1;
+  margin-right: 0.3rem;
+  border: var(--line-w) solid var(--line);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  text-decoration: none;
+  background: var(--bg-panel);
+  transition: border-color 0.25s, z-index 0s;
+}
+.vl-clients-card:hover {
+  border-color: var(--red-bright);
+  z-index: 5;
+}
+.vl-clients-card__frame {
   position: absolute;
-  transform: translateY(-50%);
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
 }
-.vl-ugc-cloud-wrap--right { right: 0; top: 30%; }
-.vl-ugc-cloud-wrap--left  { left: 0;  top: 68%; }
-
-/* Capped width via clamp(), aspect ratio preserved (no distortion). Sized off
-   viewport width only, so it stays a consistent, predictable size no matter
-   how tall the section gets from text wrapping onto more lines on narrow
-   screens. */
-.vl-ugc-cloud {
-  display: block;
-  width: clamp(220px, 68vw, 400px);
-  height: auto;
+.vl-clients-card__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.4s ease;
 }
-/* translateX pushes most of the cloud's width off-screen, so it hugs the edge
-   instead of crowding the text column in the middle and hurting readability */
-.vl-ugc-cloud--right { transform: translateX(42%); }
-.vl-ugc-cloud--left  { transform: translateX(-42%); }
+.vl-clients-card:hover .vl-clients-card__photo {
+  filter: grayscale(0) contrast(1.05);
+}
+.vl-clients-card__body {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 1.6rem 1rem 0.9rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 55%, transparent 100%);
+}
+.vl-clients-card__name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.vl-clients-card__handle {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.65);
+}
 
-.vl-ugc-bck--mobile { display: none; }
+@media (max-width: 767px) {
+  .vl-clients-header { flex-direction: column; align-items: flex-start; }
+  .vl-clients-stat { align-items: flex-start; text-align: left; }
+  .vl-clients-card { width: clamp(10rem, 40vw, 12.5rem); margin-right: 0.2rem; }
+}
+
+.vl-clients-cta {
+  display: flex;
+  justify-content: center;
+  padding: clamp(1.5rem, 3vw, 2.25rem) var(--edge);
+  background: var(--bg);
+}
+.vl-clients-cta__btn {
+  display: inline-block;
+  padding: 1em 2.4em;
+  border: 2px solid var(--fg);
+  border-radius: 100em;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--fg);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.vl-clients-cta__btn:hover {
+  background: var(--fg);
+  color: #fff;
+}
+
+/* ══════════════════════════ 03 · PERKS ══════════════════════════ */
+.vl-perks-section {
+  position: relative;
+  background: var(--bg);
+  padding: clamp(2rem, 5vw, 3rem) 0 clamp(2rem, 5vw, 3rem);
+}
+.vl-perks-container {
+  max-width: none;
+  width: 90vw;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.vl-perks-bands {
+  display: flex;
+  flex-direction: column;
+}
+
+.vl-perk-band {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(3rem, 8vw, 7rem);
+  height: 74vh;
+  padding: clamp(2.5rem, 6vw, 5rem) var(--edge);
+  border-top: var(--line-w) solid var(--line);
+  background: var(--bg);
+  border-radius: 2rem;
+  overflow: hidden;
+}
+.vl-perk-band:first-child { border-top: none; }
+.vl-perk-band:nth-child(1) { z-index: 1; }
+.vl-perk-band:nth-child(2) { z-index: 2; }
+.vl-perk-band:nth-child(3) { z-index: 3; }
+.vl-perk-band:nth-child(4) { z-index: 4; }
+
+.vl-perk-band:nth-child(even) {
+  flex-direction: row-reverse;
+}
 
 @media (max-width: 768px) {
-  .vl-ugc-bck--desktop { display: none; }
-  .vl-ugc-bck--mobile  { display: block; }
-  .vl-ugc-bg           { display: block; }
+  /* Cards fill ~99% of the viewport width; height shrink-wraps the content
+     so there is no dead space above the text. */
+  .vl-perks-container { width: 99vw; }
+  .vl-perk-band { height: auto; }
 
-  /* Same creamy white as desktop — the clouds behind it are darkened to a
-     deep red on mobile (see .vl-ugc-cloud path fills) so the white text
-     stays readable where they overlap */
-  .vl-ugc-section .home-hero__description-p {
-    color: rgba(255, 255, 255, 0.82) !important;
-    font-weight: 700 !important;
-  }
-  .vl-ugc-section .home-hero__description-highlight {
-    color: rgba(255, 255, 255, 0.82) !important;
-    background-color: rgba(255, 255, 255, 0.15) !important;
-  }
+  /* Section backdrop matches the featured-testimonial panel below; the cards
+     themselves stay white (or red) on top of it. */
+  .vl-perks-section { background: var(--bg-panel); }
 }
 
-/* ─── Numbers row: compact 2×2 grid, sitting on the page's own background
-   between the hero and .vl-ugc-section — deliberately NOT a descendant of
-   that section (see the HTML comment at its call site for why). Reuses
-   .vl-stat-card / .vl-stat-count so initStatsAnimations() (keyed off
-   #stats, targeting those classes) keeps working unchanged; this scoped
-   override just replaces the old big red-card look with something small. */
-.vl-ugc-stats-row {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(2, auto);
+.vl-perk-band--dark {
+  background: var(--red);
+  border-top-color: transparent;
+}
+.vl-perk-band--dark + .vl-perk-band { border-top-color: transparent; }
+
+.vl-perk-text {
+  align-self: center;
+  margin-top: 3rem;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 34rem;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 0.6rem clamp(2.5rem, 6vw, 5rem);
-  margin: clamp(1.5rem, 4vh, 3rem) auto;
-  padding: 0 1.25rem;
+  gap: 1.1rem;
+}
+.vl-perk-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  font-size: clamp(3.4rem, 6.6vw, 7.2rem);
+  color: #040000;
+}
+.vl-perk-band--dark .vl-perk-title { color: rgba(255,255,255,0.82); }
+.vl-perk-sub {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 2.3vw, 2.2rem);
+  line-height: 1.5;
+  color: #7a7575;
+}
+.vl-perk-band--dark .vl-perk-sub { color: rgba(255,255,255,0.65); }
+
+.vl-perk-img {
+  align-self: flex-end;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: min(72%, 1040px);
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 1.75rem 1.75rem 0 0;
+  margin-bottom: calc(-1 * clamp(2.5rem, 6vw, 5rem));
 }
 
-.vl-ugc-stats-row .vl-stat-card {
+@media (max-width: 768px) {
+  .vl-perk-band,
+  .vl-perk-band:nth-child(even) {
+    --perk-img-pad: 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Text + image sit as one bottom-anchored group; slack goes above the text. */
+    justify-content: flex-end;
+    text-align: left;
+    gap: 1.5rem;
+    /* No bottom padding: the image runs to the card's bottom edge. */
+    padding: clamp(2.5rem, 9vw, 3.5rem) var(--edge) 0;
+  }
+  .vl-perk-text {
+    margin-top: 0;
+    flex: 0 0 auto;
+  }
+  /* Near-bleed: a small inset on the sides only, flush with the card bottom.
+     aspect-ratio matches the source art so the box has no dead space above it. */
+  .vl-perk-img {
+    flex: 0 0 auto;
+    align-self: stretch;
+    width: calc(100% + (var(--edge) - var(--perk-img-pad)) * 2);
+    max-width: none;
+    height: auto;
+    aspect-ratio: 2710 / 2160;
+    max-height: 100%;
+    min-height: 0;
+    margin: 0 calc(-1 * (var(--edge) - var(--perk-img-pad)));
+    object-fit: contain;
+    object-position: center bottom;
+    border-radius: 0;
+  }
+}
+
+/* ═══════════════════ 04 · FEATURED TESTIMONIAL ═══════════════════ */
+.vl-featured-testimonial {
+  position: relative;
+  background: var(--bg-panel);
+  border-bottom: var(--line-w) solid var(--line);
+  padding: clamp(4rem, 9vw, 7rem) 0;
+}
+.vl-featured-testimonial__grid {
+  max-width: 92rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+@media (max-width: 768px) {
+  .vl-featured-testimonial__grid { grid-template-columns: 1fr; }
+}
+.vl-featured-testimonial__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+  text-align: left;
+  background: var(--bg);
+  border: var(--line-w) solid var(--line);
+  border-radius: 2rem;
+  padding: clamp(2.75rem, 4vw, 3.5rem) clamp(2rem, 4vw, 3rem);
+}
+
+/* Red spiral accent hung off a card corner — sits half on the card, half
+   outside it, above the card content, with a gentle continuous drift. The
+   keyframes repeat the base translate because they drive the same transform
+   property, which would otherwise drop the corner anchoring on frame one. */
+.vl-featured-testimonial__deco {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: clamp(110px, 13vw, 200px);
+  height: auto;
+  z-index: 3;
+  pointer-events: none;
+  /* Pushed as far right as it can go without being cut off: the only room
+     outside the card is the container gutter, which is exactly --edge, so the
+     overhang is that minus a hair. A percentage overhang instead would clip,
+     since the spiral scales with the viewport but the gutter doesn't. */
+  transform: translate(calc(var(--edge) - 0.5rem), 30%) rotate(4deg);
+  animation: vl-featured-deco-drift 9s ease-in-out infinite;
+}
+/* Deliberately tiny travel — a slow breath, not a wobble. */
+@keyframes vl-featured-deco-drift {
+  0%, 100% { transform: translate(calc(var(--edge) - 0.5rem), 30%) rotate(4deg); }
+  50%      { transform: translate(calc(var(--edge) - 0.5rem), 28%) rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-featured-testimonial__deco { animation: none; }
+}
+.vl-featured-testimonial__quote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  line-height: 1.32;
+  color: var(--fg);
+}
+.vl-featured-testimonial__author {
   display: flex;
   flex-direction: row;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.5em;
-  background: none;
-  border-radius: 0;
-  padding: 0;
-  position: relative;
-}
-
-/* Cancel the old grid version's brick-stagger tilt (unscoped rule, targets
-   any .vl-stat-card) via higher specificity rather than !important — a
-   plain override here would otherwise also block the slide-in animation
-   from initStatsAnimations(), which sets transform inline via GSAP. */
-.vl-ugc-stats-row .vl-stat-card:nth-child(odd),
-.vl-ugc-stats-row .vl-stat-card:nth-child(even) {
-  transform: none;
-}
-
-.vl-ugc-stats-row .vl-stat-count {
-  font-size: clamp(1.4rem, 2.4vw, 2rem);
-  font-weight: 800;
-  color: #040000;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
-}
-
-.vl-ugc-stats-row .vl-stat-card__label {
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-size: clamp(0.75rem, 1.1vw, 0.95rem);
-  font-weight: 500;
-  color: rgba(4, 0, 0, 0.6);
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-
-@media (max-width: 480px) {
-  .vl-ugc-stats-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.6rem 1.5rem;
-  }
-}
-
-.home-hero__description-row {
-  background-image: none;
-  text-align: center;
-  width: 90%;
-  max-width: 55rem;
-  position: relative;
-  z-index: 1;
-  margin-top: 0;
-  padding: 0;
-}
-
-.home-hero__description-p {
-  font-size: 1.375em;
-  line-height: 1.2;
-}
-
-@media screen and (max-width: 767px) {
-  .home-hero__description-p { font-size: 1.125em; }
-}
-
-.home-hero__description-highlight {
-  background-color: var(--color-neutral-300);
-  border-radius: 0.1875em;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  padding: 0.125em 0.35em 0.1875em;
-  display: inline-block;
-}
-
-.home-hero__description-highlight.is--round {
-  border-radius: 10em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-
-.home-hero__bg {
-  z-index: -1;
-  justify-content: center;
   align-items: center;
-  display: flex;
-  position: absolute;
-  inset: 0%;
+  gap: 1.1rem;
+}
+.vl-featured-testimonial__avatar {
+  width: 5rem;
+  height: 5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--red);
+  outline: var(--line-w) solid var(--line);
+  outline-offset: 3px;
+}
+.vl-featured-testimonial__name {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.vl-featured-testimonial__role {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--fg-dim);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.vl-featured-testimonial__role:hover {
+  color: var(--red);
 }
 
-.home-hero__bg-line {
-  width: var(--stroke-weight);
-  background-color: var(--color-neutral-400);
-  height: 100%;
-  position: absolute;
-}
-
-/* ─── Product slider ─── */
-.product-slider {
+/* ══════════════════ 05 · SERVICES / WORK SLIDER ══════════════════ */
+.product-slider__wrap {
   position: relative;
+  background: var(--bg);
+  padding: clamp(4rem, 8vw, 6rem) 0 clamp(4rem, 9vw, 7rem);
+  overflow: clip;
 }
 
 .product-slider__text-row {
-  padding-bottom: var(--gap-xxl);
-  gap: var(--gap-xxl);
-  text-align: center;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 0.25em;
   display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
-
-.product-slider__title {
-  width: 100%;
-  max-width: 52em;
+.product-slider__title { position: relative; }
+.product-slider__title .h-l {
+  font-size: clamp(2.6rem, 6.5vw, 5.5rem);
 }
-
-.product-slider__nav {
-  padding-bottom: var(--gap-sm);
-  gap: 0.125em;
-  flex-flow: wrap;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
-.product-slider [data-gsap-slider-init] [data-gsap-slider-control-status],
-.product-slider [data-gsap-slider-init] [data-gsap-slider-control-status] .button-bg {
-  transition: all var(--animation-default);
-}
-
-.product-slider [data-gsap-slider-init] [data-gsap-slider-control-status="active"] {
-  border-radius: 3em;
-  color: var(--color-light);
-}
-
-.product-slider [data-gsap-slider-init] [data-gsap-slider-control-status="active"] .button-bg {
-  background-color: var(--color-dark);
-}
-
-/* ─── GSAP slider ─── */
-[data-gsap-slider-init] {
-  --slider-status: on;
-  --slider-spv: 3.1;
-  --slider-gap: var(--gap-sm);
-}
-
-@media screen and (max-width: 991px) {
-  [data-gsap-slider-init] {
-    --slider-spv: 2.1;
-    --slider-gap: 0.625em;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  [data-gsap-slider-init] {
-    --slider-spv: 1;
-    --slider-gap: 0.625em;
-  }
-}
-
-.product-slider [data-gsap-slider-init] {
-  --slider-spv: 3;
-  --slider-gap: 0em;
-}
-
-.product-slider [data-gsap-slider-rotate] [data-gsap-slider-item] {
-  transform-origin: 50% 375%;
-}
-
-@media screen and (max-width: 767px) {
-  .product-slider [data-gsap-slider-rotate] [data-gsap-slider-item] {
-    transform-origin: 50% 325%;
-  }
-}
+.product-slider__text { max-width: 20rem; }
 
 .gsap-slider {
   gap: 3em;
   flex-flow: column;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--edge);
   display: flex;
   position: relative;
 }
+.gsap-slider__collection { width: 100%; }
+.gsap-slider__collection.is--products { width: 60em; max-width: 100%; }
 
-.gsap-slider__collection {
-  width: 100%;
-}
-
-.gsap-slider__collection.is--products {
-  width: 60em;
-}
-
+/* Drag affordance. initOsmoSlider already maintains data-gsap-drag-status on
+   the wrapper ('grab' / 'grabbing'); nothing was reading it, so the carousel
+   gave no hint it could be dragged. */
+[data-gsap-drag-status] .gsap-slider__list { cursor: grab; }
+[data-gsap-drag-status="grabbing"] .gsap-slider__list { cursor: grabbing; }
 .gsap-slider__list {
   -webkit-user-select: none;
   user-select: none;
@@ -1275,2547 +701,542 @@ body:has([data-scrolling-started="true"]) [data-css-marquee-list="nav"] {
   display: flex;
 }
 
+[data-gsap-slider-init] {
+  --slider-status: on;
+  --slider-spv: 3.1;
+  --slider-gap: 1.25em;
+}
+@media screen and (max-width: 991px) {
+  [data-gsap-slider-init] { --slider-spv: 2.1; --slider-gap: 0.9em; }
+}
+@media screen and (max-width: 767px) {
+  [data-gsap-slider-init] { --slider-spv: 1; --slider-gap: 0.625em; }
+}
+.product-slider [data-gsap-slider-init] { --slider-spv: 3; --slider-gap: 1.5em; }
+
 .gsap-slider__item {
   width: calc(((100% - 1px) - (var(--slider-spv) - 1) * var(--slider-gap)) / var(--slider-spv));
   margin-right: var(--slider-gap);
   flex: none;
 }
-
-[data-gsap-slider-rotate] [data-gsap-slider-item] {
-  transform-origin: 50% 300%;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  margin-right: 0;
+@media screen and (max-width: 767px) {
+  .gsap-slider__item { width: min(78vw, 320px) !important; }
 }
 
-[data-gsap-slider-item]:last-child {
-  margin-right: 0;
+.vl-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-bottom: 1.75rem;
 }
-
-[data-gsap-slider-control="next"][data-gsap-slider-control-status="not-active"],
-[data-gsap-slider-control="prev"][data-gsap-slider-control-status="not-active"] {
-  opacity: 0.2;
-  pointer-events: none;
+.vl-nav-arrow {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: var(--line-w) solid var(--line-strong);
+  background: transparent;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
+.vl-nav-arrow:hover { background: var(--red); border-color: var(--red); color: #fff; }
 
 .product-card {
-  background-color: var(--color-neutral-900);
+  background: var(--bg-panel);
   width: 100%;
-  color: var(--color-neutral-200);
-  border-radius: 1em;
+  color: var(--fg-dim);
   justify-content: center;
   align-items: center;
   text-decoration: none;
   display: flex;
   position: relative;
-  overflow: hidden;
 }
 
-.product-card__before {
-  padding-top: 130%;
+/* Centre card reads full-strength; the ones either side dim back so the active
+   video is the clear focal point. This lives on the slider ITEM, not on
+   .product-card — the reveal timeline writes inline opacity/filter/transform on
+   the card itself, and inline styles would beat these rules. The slider only
+   ever writes `transform` on the item, so opacity/filter here compose cleanly
+   instead of fighting it (which is also why there's no scale below). */
+.gsap-slider__item {
+  transition: opacity 0.4s ease, filter 0.4s ease;
 }
-
-/* ─── Custom cursor ─── */
-.cursor {
-  z-index: 100;
-  pointer-events: none;
-  justify-content: center;
-  align-items: center;
-  width: 0;
-  height: 0;
-  display: flex;
-  position: fixed;
-  top: 0%;
-  left: 0%;
+[data-gsap-slider-item-status="active"] {
+  opacity: 1;
+  filter: grayscale(0%);
 }
-
-.cursor-bubble {
-  background-color: var(--color-neutral-200);
-  width: 4em;
-  height: 4em;
-  color: var(--color-neutral-800);
-  border-radius: 50%;
-  flex: none;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  position: relative;
-  transition: clip-path var(--animation-default) 0s,
-              background-color 0s linear var(--duration-default),
-              color 0s linear var(--duration-default);
-  clip-path: inset(50% round 100em);
+[data-gsap-slider-item-status="inview"],
+[data-gsap-slider-item-status="not-active"] {
+  opacity: 0.45;
+  filter: grayscale(85%);
 }
+.product-card__before { padding-top: 130%; }
 
-.cursor-bubble__arrow {
-  gap: 0.625em;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  width: 0.625em;
-  height: 0.625em;
-  display: flex;
+.vlance-video-card { position: relative; overflow: hidden; }
+.vlance-video-card .product-card__before { padding-top: 177.78%; }
+.vlance-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 0; }
+.vlance-video-overlay {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 42%);
+}
+.vlance-video-info {
   position: absolute;
-  overflow: hidden;
-  transform: rotate(-90deg);
+  left: 1em; right: 1em; bottom: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
 }
-
-.cursor-bubble__drag {
-  position: relative;
-  overflow: hidden;
+.vlance-video-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
 }
-
-.cursor-bubble__drag-span {
-  font-variation-settings: "wght" 550;
+.vlance-video-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
   letter-spacing: -0.02em;
-  font-size: 0.875em;
-  line-height: 1.2em;
-  display: block;
-  position: relative;
-  transition: transform var(--animation-default);
-  transform: translateY(100%) scale(0.5) rotate(0.001deg);
 }
 
-.cursor__drag-dots {
-  border-radius: 50em;
-  justify-content: space-between;
-  width: 0;
+/* ═══════════════════════ 06 · TESTIMONIALS ═══════════════════════ */
+.vl-testimonials-section {
+  position: relative;
+  background: var(--bg-panel);
+  /* Extra bottom padding is headroom for .vl-red-swell, which occupies the
+     foot of this section. No border-bottom: the swell hands off to the red
+     contact block, so a rule there would cut straight through it. */
+  padding: clamp(4rem, 8vw, 6rem) 0 clamp(8rem, 12vw, 10rem);
+  overflow: clip;
+}
+
+/* A wide, shallow dome of brand red anchored to the bottom edge. It is pushed
+   out past both sides so its zero-height points sit off-screen, leaving only
+   the curve visible. Grows on scroll (initContactTransition) and merges
+   seamlessly into .vlance-contact-section, which is the same red. */
+.vl-red-swell {
+  position: absolute;
+  left: -12vw;
+  right: -12vw;
+  bottom: -1px;
+  height: clamp(40px, 5vw, 90px);
+  background: var(--red);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.vl-testimonials-header { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.vl-testimonials-heading { font-size: clamp(2.6rem, 6vw, 5.5rem); }
+
+.vl-testimonials-viewport { width: 100%; }
+.vl-testimonials-grid {
+  --row-stagger: clamp(1.5rem, 4vw, 3.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+.vl-testimonial-card:nth-child(4n+3),
+.vl-testimonial-card:nth-child(4n) {
+  transform: translateX(var(--row-stagger));
+}
+
+.vl-testimonial-card {
+  position: relative;
+  background: var(--bg);
+  border: var(--line-w) solid var(--line);
+  border-radius: 16px;
+  padding: clamp(1.9rem, 3vw, 2.6rem);
   display: flex;
-  position: absolute;
-  overflow: hidden;
-  transition: all var(--animation-default);
-  transform: scale(0) rotate(0.001deg);
+  flex-direction: column;
+  gap: 1.35rem;
 }
-
-.cursor__drag-dot {
-  aspect-ratio: 1;
-  background-color: var(--color-neutral-200);
-  border-radius: 1em;
-  flex: none;
-  width: 0.375em;
-  position: relative;
+.vl-testimonial-quote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--fg);
 }
-
-body:has([data-cursor-zone="neutral-600"]:hover) .cursor-bubble {
-  background-color: var(--color-neutral-600);
-  color: var(--color-light);
+.vl-testimonial-author { display: flex; align-items: center; gap: 1rem; order: -1; }
+.vl-testimonial-avatar {
+  width: 3.2rem; height: 3.2rem; border-radius: 50%; object-fit: cover;
+  border: 1.5px solid var(--line-strong);
 }
+.vl-testimonial-name { display: block; font-weight: 700; font-size: 1.05rem; color: var(--fg); }
 
-body:has([data-gsap-slider-collection]:hover) .cursor-bubble {
-  clip-path: inset(0% round 100em);
-}
-
-body:has([data-gsap-slider-collection]:hover) .cursor-bubble__drag-span {
-  transform: translateY(0%) scale(1) rotate(0.001deg);
-}
-
-body:has([data-gsap-slider-collection]:hover) .cursor__drag-dots {
-  width: 6.5em;
-  transform: scale(1) rotate(0.001deg);
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .cursor { display: none; }
-}
-
-/* ─── Underline link hover animation ─── */
-[data-underline-link] {
-  text-decoration: none;
-  position: relative;
-  cursor: pointer;
-}
-
-[data-underline-link]::before {
-  content: "";
-  position: absolute;
-  bottom: -0.0625em;
-  left: 0;
-  width: 100%;
-  height: 0.0625em;
-  background-color: currentColor;
-  transition: transform var(--duration-default) var(--cubic-default);
-  transform-origin: right;
-  transform: scaleX(0) rotate(0.001deg);
-}
-
-[data-underline-link].nav-bar__big-span::before {
-  bottom: -0.175em;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  [data-underline-link]:hover::before {
-    transform-origin: left;
-    transform: scaleX(1) rotate(0.001deg);
+@media (max-width: 768px) {
+  /* Break the marquee out of .container's gutters so the cards run edge to
+     edge, then tilt the whole band. The extra 4vw of overhang on each side
+     covers the wedges the rotation would otherwise open at the corners, and
+     the section is overflow:clip so none of it can add page scroll.
+     The tilt lives on the viewport, not the track: GSAP writes a transform to
+     the track every frame and would overwrite a rotation there. */
+  .vl-testimonials-viewport {
+    width: 108vw;
+    max-width: none;
+    margin-left: calc(-1 * var(--edge) - 4vw);
+    margin-right: calc(-1 * var(--edge) - 4vw);
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transform: rotate(-2.5deg);
+    transform-origin: 50% 50%;
+  }
+  .vl-testimonials-grid {
+    --col-offset: 1.75rem;
+    grid-template-columns: none;
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    width: max-content;
+    /* Room for the shifted columns, so neither end is clipped by the
+       viewport's overflow:hidden. */
+    padding-block: var(--col-offset);
+  }
+  .vl-testimonial-card {
+    width: 80vw;
+    max-width: 24rem;
+  }
+  /* Column stagger. grid-auto-flow:column over 4 rows means every run of 4
+     children is one column, so an 8-child cycle alternates column up / down.
+     The cycle length divides the 4-column loop the marquee wraps on, so the
+     pattern stays continuous across the seam. These rules sit after the
+     desktop :nth-child(4n) translateX stagger, so they replace it here. */
+  .vl-testimonials-grid > :nth-child(8n+1),
+  .vl-testimonials-grid > :nth-child(8n+2),
+  .vl-testimonials-grid > :nth-child(8n+3),
+  .vl-testimonials-grid > :nth-child(8n+4) {
+    transform: translateY(calc(-1 * var(--col-offset)));
+  }
+  .vl-testimonials-grid > :nth-child(8n+5),
+  .vl-testimonials-grid > :nth-child(8n+6),
+  .vl-testimonials-grid > :nth-child(8n+7),
+  .vl-testimonials-grid > :nth-child(8n) {
+    transform: translateY(var(--col-offset));
   }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   VLANCE OVERRIDES
-   ══════════════════════════════════════════════════════════════ */
-
-/* ─── Vlance brand color overrides ─── */
-:root {
-  --color-electric:    #b91616;
-  --color-neutral-900: #040000;
-  --color-neutral-800: #2a2a2a;
-  --color-neutral-700: #3a3a3a;
-  --color-neutral-600: #4a4a4a;
-  --color-neutral-525: #555555;
-  --color-neutral-500: #888888;
-  --color-neutral-400: #aaaaaa;
-  --color-neutral-300: #cccccc;
-  --color-neutral-200: #fffefe;
-  --color-light:       #fffefe;
-  --color-purple:      #b91616;
+/* ═══════════════════════ 07 · MORE FEATURES ═══════════════════════ */
+.vl-more-features {
+  position: relative;
+  background: var(--bg);
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+  border-bottom: var(--line-w) solid var(--line);
+  /* The flanking stars hang outside the grid; clip so they can never add
+     horizontal page scroll on narrower viewports. */
+  overflow: clip;
 }
 
-/* ─── Utility: Webflow uses .w-inline-block as a display helper ─── */
-.w-inline-block { display: inline-block; }
+/* Stars flanking the card grid, anchored to the grid's own edges (their
+   parent .ai-cards-container is position:relative) so they stay tucked
+   against the cards rather than drifting out with the viewport. Absolutely
+   positioned, so they never become grid items. */
+.vl-bonus-star {
+  position: absolute;
+  top: 50%;
+  width: clamp(140px, 13vw, 280px);
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+/* Staggered vertically - left sits low, right sits high. */
+.vl-bonus-star--left {
+  left: 0;
+  top: 68%;
+  transform: translate(calc(-100% - 1rem), -50%);
+}
+.vl-bonus-star--right {
+  right: 0;
+  top: 32%;
+  transform: translate(calc(100% + 1rem), -50%);
+}
+@media (max-width: 1200px) {
+  .vl-bonus-star { display: none; }
+}
+/* ─── Service cards, copied verbatim from the supplied reference ───
+   Only the card rules are carried over — the reference's title, background
+   image, blob and decorative-image styles are intentionally absent. The one
+   deliberate deviation: the reference styles `wistia-player` globally, which
+   would have leaked an 8px radius onto the work-slider videos, so that rule is
+   scoped to .ai-card here. */
+.ai-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+  gap: 2.5rem;
+  max-width: 1500px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  position: relative;
+  z-index: 3;
+}
 
-/* ─── Webflow button-theme variant colours (needed without Webflow runtime) ─── */
-[data-wf--button-theme--variant="electric"]     { background-color: var(--color-electric, #5a6aff); }
-[data-wf--button-theme--variant="neutral-200"]  { background-color: var(--color-neutral-200, #e8e8e8); }
-[data-wf--button-theme--variant="neutral-300"]  { background-color: var(--color-neutral-300, #d4d4d4); }
-[data-wf--button-theme--variant="neutral-525"]  { background-color: var(--color-neutral-525, #555); }
-[data-wf--button-theme--variant="neutral-600"]  { background-color: var(--color-neutral-600, #444); }
-[data-wf--button-theme--variant="light-10"]     { background-color: rgba(255,255,255,0.10); }
-[data-wf--button-theme--variant="dark-10"]      { background-color: rgba(0,0,0,0.10); }
-[data-wf--button-theme--variant="purple"]       { background-color: var(--color-purple, #8a55ff); }
-
-/* ─── Logo ─── */
-.vlance-logo-link {
+.ai-card {
+  background: var(--red);
+  border-radius: 16px;
+  padding: 0 !important;
   display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-.vlance-logo-img {
-  height: 1.6em;
-  width: auto;
-  display: block;
-  filter: brightness(0) invert(1);
+  flex-direction: column;
+  /* Keeps flush bottom-row media inside the card's rounded corners. */
+  overflow: hidden;
 }
 
-[data-nav-theme="light"] .vlance-logo-img,
-body:not([data-scrolled]) .vlance-logo-img {
-  filter: none;
+/* Checkerboard: cards 2 and 3 (top-right / bottom-left in the 2-col grid). */
+.ai-card--dark {
+  background: var(--fg);
 }
 
-.vlance-logo-text {
-  font-size: 1.25em;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: currentColor;
+.ai-card-top-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 1.25rem;
+  padding: 4.25rem 3rem 0 3rem !important;
+  margin-bottom: 2.75rem !important;
+  position: relative;
 }
 
-/* ─── Radial marquee card visual ─── */
-.vlance-card-visual {
+.ai-card-bottom-row {
+  padding: 0 1rem 1rem 1rem !important;
+  flex-grow: 1;
+  display: flex;
+}
+
+.video-wrapper {
+  position: relative;
   width: 100%;
-  padding-top: 56%;   /* 16:9 */
-  border-radius: 0.1875em;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-/* ─── Product card bg ─── */
-.vlance-card-bg {
+.video-overlay {
   position: absolute;
   inset: 0;
+  z-index: 10;
+  background-color: transparent;
 }
 
-/* ─── Marquee CSS animation ─── */
-@keyframes translateX {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-100%); }
+/* Still-image alternative to the card video (same 16:9 slot). */
+.ai-card-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
 }
 
-.marquee-css {
+/* Flush variant: media bleeds to the card's side and bottom edges. The extra
+   .ai-card qualifier outranks the padding shorthands in the later mobile media
+   queries; the card's own overflow:hidden clips the bottom corners. */
+.ai-card .ai-card-bottom-row--flush {
+  padding: 0 !important;
+  align-items: flex-end;
+}
+
+.ai-card-bottom-row--flush .video-wrapper,
+.ai-card-bottom-row--flush .ai-card-img {
+  border-radius: 0;
+}
+
+.ai-text-wrapper {
+  width: 100%;
+  flex: 1;
+}
+
+.ai-card-title-row {
   display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.5rem !important;
+}
+
+.ai-card-title {
+  font-size: clamp(1.8rem, 2.7vw, 2.5rem);
+  color: #fff !important;
+  font-weight: 600;
+  text-transform: none;
+  margin: 0 !important;
+  font-family: "Bricolage Grotesque", sans-serif !important;
+}
+
+.ai-card-description {
+  /* A step down from .vl-perk-sub in the feature section. */
+  font-size: clamp(1.15rem, 1.8vw, 1.7rem);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+  margin: 0 !important;
+  max-width: 24ch;
+  font-weight: 400;
+}
+
+.ai-card wistia-player {
+  border-radius: 8px;
   overflow: hidden;
-  white-space: nowrap;
-}
-.marquee-css__list {
-  display: flex;
-  flex-shrink: 0;
-  animation: translateX var(--marquee-duration, 30s) linear infinite;
-}
-.marquee-css__item {
-  display: flex;
-  align-items: center;
-  gap: 0.75em;
-  padding-right: 1.5em;
-}
-.marquee-css__item-svg {
-  width: 0.75em;
-  height: 0.75em;
-  flex-shrink: 0;
 }
 
-/* ─── Work section ─── */
-.vlance-work-section {
-  padding: var(--padding-xl, 8em) 0;
-  border-top: 1px solid rgba(var(--color-rgb-dark, 0 0 0), 0.08);
-  border-bottom: 1px solid rgba(var(--color-rgb-dark, 0 0 0), 0.08);
-  background-color: rgba(0,0,0,0.02);
-}
-.vlance-section-header {
-  margin-bottom: var(--gap-xl, 4em);
-}
-.vlance-section-header .p-l {
-  color: var(--color-neutral-500, #888);
-  margin-top: 0.75em;
-}
-.vlance-work-placeholder {
-  height: 20em;
-  border: 2px dashed rgba(var(--color-rgb-dark, 0 0 0), 0.1);
-  border-radius: 1em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-neutral-500, #888);
+.ai-card wistia-player[media-id='hnbgd95jm8']:not(:defined) {
+  background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/hnbgd95jm8/swatch');
+  display: block;
+  filter: blur(5px);
+  padding-top: 56.25%;
 }
 
-/* ─── Contact section ─── */
+@media (max-width: 992px) {
+  .ai-cards-container {
+    gap: 2.5rem;
+  }
+  .ai-card {
+    width: 100%;
+    max-width: 780px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .vl-more-features { padding: clamp(2.5rem, 8vw, 3.5rem) 0; }
+
+  /* One column, tight stack, and the same 99vw gutter as the perk cards. */
+  .ai-cards-container {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0 0.5vw;
+  }
+  .ai-card {
+    max-width: none;
+    border-radius: 0.875rem;
+  }
+  /* The markup's checkerboard (red, black, black, red) reads as a doubled
+     black pair once the grid collapses to one column, so alternate strictly
+     by position here. :nth-of-type counts divs only, skipping the two star
+     <img> siblings. */
+  .ai-cards-container .ai-card:nth-of-type(odd) { background: var(--red); }
+  .ai-cards-container .ai-card:nth-of-type(even) { background: var(--fg); }
+  .ai-card-top-row {
+    gap: 0.5rem;
+    padding: 1.75rem 1.5rem 0 !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .ai-card-title-row {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem !important;
+  }
+  .ai-card-title {
+    font-size: 1.75rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .ai-card-description {
+    font-size: 1.05rem;
+    line-height: 1.45;
+    max-width: 32ch;
+  }
+  /* Media stays flush to the card's side and bottom edges. */
+  .ai-card-bottom-row {
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-card-top-row {
+    padding: 1.5rem 1.25rem 0 !important;
+    margin-bottom: 1rem !important;
+  }
+  .ai-card-bottom-row {
+    padding: 0 !important;
+  }
+}
+
+/* ══════════════════════════ 08 · CONTACT ══════════════════════════ */
 .vlance-contact-section {
   position: relative;
-  padding: clamp(5rem, 9vh, 8rem) 0;
-  background-color: #fffefe;
-  color: #040000;
+  /* Overlaps the testimonials' bottom edge. The swell is a scaleY-animated
+     compositing layer sitting flush on that seam, so fractional device-pixel
+     rounding during scroll would otherwise flash a hairline of the panel
+     background through it. Both sides are the same red, so the overlap is
+     invisible. */
+  margin-top: -2px;
+  background: var(--red);
+  color: #fff;
+  padding: clamp(5rem, 11vw, 9rem) 0 clamp(8rem, 15vw, 13rem);
   text-align: center;
   overflow: clip;
 }
 
-.vlance-contact-section .h-l {
-  font-size: clamp(6rem, 13vw, 14rem) !important;
-  margin-bottom: 0 !important;
-}
-
-
-/* ── Unified display text: all section titles + hero titles + stat numbers ── */
-.h-xl,
-.h-l,
-.vl-stat-card__num {
-  font-family: "Bricolage Grotesque", sans-serif !important;
-  font-optical-sizing: auto !important;
-  font-variation-settings: "wdth" 100 !important;
-  font-size: clamp(4.5rem, 8vw, 8rem) !important;
-  font-weight: 800 !important;
-  text-transform: uppercase !important;
-  letter-spacing: -0.04em !important;
-  line-height: 1.0 !important;
-}
-
-/* ── Hero description text ── */
-.home-hero__description-p {
-  font-size: clamp(2.4rem, 5vw, 5rem) !important;
-  font-weight: 500 !important;
-  line-height: 1.45 !important;
-  letter-spacing: -0.015em !important;
-}
-
-.vl-word {
-  display: inline;
-}
-
-/* ── Services / generic body text ── */
-.p-l {
-  font-size: clamp(1.05rem, 1.8vw, 1.4rem) !important;
-  font-weight: 400 !important;
-  line-height: 1.65 !important;
-  letter-spacing: -0.005em !important;
-}
 .vlance-contact-inner {
   max-width: 44em;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5em;
+  gap: 1.25rem;
 }
-
-.vlance-contact-inner .p-l {
-  color: #888;
+.vlance-contact-section .h-l {
+  color: #fff;
+  font-size: clamp(3.2rem, 9vw, 8rem);
 }
 .vlance-contact-actions {
   display: flex;
   align-items: center;
-  gap: 1.2em;
+  gap: 1rem;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 1.8em;
+  margin-top: 1.5rem;
 }
-
 .vlance-contact-icon-btn {
   width: 5.5em;
   height: 5.5em;
   border-radius: 50%;
-  background-color: rgba(0,0,0,0.07) !important;
+  border: var(--line-w) solid rgba(255,255,255,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #040000 !important;
-  text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease !important;
+  color: #fff;
   flex-shrink: 0;
-  cursor: pointer;
-  transform: none !important;
-  position: relative;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
-.vlance-contact-icon-btn svg {
-  width: 2em;
-  height: 2em;
-  pointer-events: none;
-  display: block;
-}
-.vlance-contact-icon-btn:hover {
-  background-color: #040000 !important;
-  color: #fffefe !important;
-}
+.vlance-contact-icon-btn svg { width: 2em; height: 2em; pointer-events: none; }
+.vlance-contact-icon-btn:hover { background: #fff; color: var(--red); border-color: #fff; }
 
 .vlance-contact-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  font-family: var(--font-mono);
   font-size: 1.125em;
-  padding: 0.875em 2.8em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  /* Fixed height, so the label needs flex centring - as a plain inline box it
+     sat on the baseline instead. text-indent offsets the trailing gap that
+     letter-spacing adds after the last character, which pulls the optical
+     centre left. */
   display: inline-flex;
-  position: relative;
-  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  text-indent: 0.06em;
+  padding: 0 2.8em;
+  border: none;
   border-radius: 100em;
-  overflow: hidden;
   height: 5.5em;
-  align-items: center;
-  transform: none !important;
-}
-.vlance-contact-btn .button-bg {
-  background-color: rgba(0,0,0,0.07) !important;
-  transition: background-color 0.2s ease !important;
-}
-.vlance-contact-btn:hover .button-bg {
-  background-color: #040000 !important;
-}
-.vlance-contact-btn .button-label span {
-  color: #040000;
-  transition: color 0.18s;
-}
-.vlance-contact-btn:hover .button-label span {
-  color: #fffefe;
-}
-
-/* ─── Footer ─── */
-.vlance-footer {
-  position: relative;
-  padding-bottom: 0;
-  /* Every child in here (.vl-footer-bck, .container) is position:absolute,
-     so the footer has zero natural content height of its own — this is the
-     ONLY thing giving it any height at all, not a stylistic minimum. Sized
-     to what the bottom-anchored .container actually needs: 1.5rem bottom
-     offset + nav row (~40px) + gap (1.2rem) + the video strip at its
-     current 200px-wide/9:16 size (~356px), plus a little headroom for the
-     cloud art above it. This used to be clamp(1000px,110vh,1400px), sized
-     for the giant VLANCE wordmark that lived in the empty space above the
-     content — now removed, so that height had no content left to justify
-     it (and 110vh alone could reach ~2000px on a tall/zoomed viewport). */
-  height: 480px;
-  margin-top: 60px;
-  background-color: #fffefe;
-  color: #888;
-  overflow: clip;
-}
-
-.vlance-footer .container {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 0;
-  right: 0;
-  z-index: 5;
-}
-
-/* ─── Footer video marquee: same clips as "Our Work", reordered, on a
-   continuous auto-scroll — see initFooterVideoMarquee. Sits above the
-   logo/nav bar, inside the same bottom-anchored .container, but breaks out
-   to full viewport width (same 100vw/left:50%/translateX trick used by
-   .vl-perks-bands) since .container itself is padded. Track is ×6 the 4
-   clips in the markup; JS measures scrollWidth/6 as one loop width, same
-   technique as the client-logo carousel. */
-.vlance-footer-videos {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  overflow: hidden;
-  margin-bottom: 1.2rem;
-  /* Purely decorative: never take a hover or a click. Without this, hovering
-     a tile wakes Wistia's player chrome and its logo fades in over the clip. */
-  pointer-events: none;
-  user-select: none;
-  /* Soften the hard cut at both viewport edges so the loop reads as
-     continuous rather than as a strip that stops at the window. */
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
-}
-.vlance-footer-videos__track {
-  display: flex;
-  gap: 0.6rem;
-  width: max-content;
-  will-change: transform;
-}
-.vlance-footer-video {
-  position: relative;
-  flex: none;
-  width: 200px;
-  aspect-ratio: 9 / 16;
-  border: none;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.vlance-footer-video wistia-player {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.vlance-footer-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5em;
-  flex-wrap: wrap;
-}
-/* Footer background is light (#fffefe) — text needs to be dark to read,
-   not white-on-near-white */
-.vlance-footer-logo {
-  font-size: 1.1em;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #040000;
-}
-.vlance-footer-copyright {
-  color: #040000;
-  margin-left: auto;
-}
-.vlance-footer-nav {
-  display: flex;
-  gap: 1.5em;
-}
-.vlance-footer-nav a {
-  color: #040000;
-  text-decoration: none;
-  transition: color 0.18s;
-}
-.vlance-footer-nav a:hover {
-  color: rgba(4, 0, 0, 0.6);
-}
-
-/* ─── Prevent nav wrapper from bleeding past viewport width ─── */
-.global {
-  max-width: 100%;
-  overflow-x: clip;
-}
-
-/* ─── Osmo drag cursor — must never intercept pointer events ─── */
-.cursor,
-.cursor * {
-  pointer-events: none !important;
-}
-
-/* ─── Cloud parallax ─── */
-.vl-clouds-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.vl-cloud-1,
-.vl-cloud-2 {
-  position: absolute;
-  width: clamp(420px, 58vw, 940px);
-  height: auto;
-  opacity: 0.5;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.vl-cloud-1 {
-  top: -6%;
-  left: -8%;
-}
-
-.vl-cloud-2 {
-  bottom: 0;
-  right: -12%;
-}
-
-/* ─── Footer background SVG ─── */
-.vl-footer-bck {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  pointer-events: none;
-  z-index: 0;
-}
-
-
-/* ─── Monkey peek ─── */
-.home-hero {
-  position: relative;
-}
-
-.vl-monkey-wrap {
-  position: absolute;
-  top: 14vh;
-  left: 8vw;
-  width: clamp(220px, 22vw, 380px);
-  z-index: 1;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.vl-monkey-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-  overflow: visible;
-}
-
-/* ── Tablet: scale down contact decorations before they crowd text ── */
-@media (max-width: 1024px) {
-  .vl-contact-monkey {
-    width: clamp(160px, 20vw, 280px);
-    right: 1vw;
-  }
-  .vl-contact-flags {
-    width: clamp(160px, 20vw, 260px);
-    left: 2vw;
-  }
-}
-
-/* ── Tablet / small screens: hide decorative characters that overlap content ── */
-@media (max-width: 900px) {
-.vl-stats-monkey   { display: none; }
-  .vl-contact-monkey { display: none; }
-  .vl-contact-flags  { display: none; }
-}
-
-/* ── Mobile: hero monkey top-left, large ── */
-@media (max-width: 768px) {
-  .vl-monkey-wrap {
-    top: -2.5vh;
-    left: -4vw;
-    width: clamp(280px, 80vw, 420px);
-  }
-
-  .home-hero {
-    max-height: 900px;
-  }
-
-  .vl-ugc-section {
-    /* Small negative overlap absorbs sub-pixel rounding between the two
-       sections' box heights so no hairline gap shows at the seam */
-    margin-top: -2px;
-    z-index: 3;
-    padding: 0 1.5rem clamp(8rem, 18vw, 14rem);
-    align-items: flex-start;
-  }
-
-.vl-stats-bck {
-    object-fit: contain;
-    object-position: center 65%;
-  }
-
-  .vl-stats {
-    position: relative;
-    z-index: 4;
-  }
-}
-
-.vl-stats-bck {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 65%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.vl-stats-monkey {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: center;
-  right: -8vw;
-  width: clamp(50px, 6vw, 90px);
-  pointer-events: none;
-  z-index: 2;
-}
-
-.vl-stats-monkey svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ─── Contact section flags ─── */
-.vl-contact-flags {
-  position: absolute;
-  left: 6vw;
-  top: 50%;
-  width: clamp(260px, 32vw, 540px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ─── Contact section monkey ─── */
-.vl-contact-monkey {
-  position: absolute;
-  top: 50%;
-  right: 5vw;
-  width: clamp(280px, 34vw, 520px);
-  transform: rotate(-120deg);
-  transform-origin: center;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.vl-contact-monkey svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-
-/* ─── Hero display title ─── */
-.home-hero__title-row {
-  display: block !important;
-  width: 100% !important;
-  text-align: center;
-  padding-left: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-.vl-hero-heading {
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 800;
-  font-style: normal;
-  font-variation-settings: "wdth" 100;
-  text-transform: uppercase;
-  letter-spacing: -0.04em;
-  line-height: 0.88;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.vl-ht-pre {
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-variation-settings: "wdth" 100;
-  font-size: clamp(1.6rem, 3.2vw, 3rem);
-  text-transform: none;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-  background: linear-gradient(110deg, #e64613 0%, #b91616 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  display: block;
-  margin-bottom: 0.3em;
-}
-
-.vl-ht-line {
-  font-size: clamp(3.5rem, 10vw, 11rem);
-  color: #040000;
-  display: block;
-  text-align: center;
-  width: 100%;
-}
-
-/* Desktop and mobile use different line groupings of the same words, so each
-   set is toggled on at its breakpoint (see the two markup blocks in the H1) */
-.vl-ht-line--mobile { display: none; }
-
-.home-hero__description-row {
-  margin-top: 0 !important;
-  padding-top: clamp(2rem, 4vh, 4rem);
-  padding-bottom: clamp(2rem, 4vh, 4rem);
-  text-align: center;
-}
-
-.home-hero__bg-line {
-  opacity: 0.08 !important;
-}
-
-.home-hero__content {
-  padding-top: clamp(8rem, 20vh, 15rem);
-  padding-bottom: clamp(5rem, 10vh, 9rem);
-}
-
-/* ─── Hero logo ─── */
-.vlance-hero-logo {
-  width: 7em;
-  height: auto;
-  object-fit: contain;
-  flex-shrink: 0;
-  align-self: center;
-}
-
-/* ─── Hero layout ─── */
-.home-hero {
-  overflow: hidden !important;
-  min-height: 100svh !important;
-  justify-content: flex-start !important;
-}
-/* Keep text above wheel cards */
-.home-hero .container {
-  position: relative;
-  z-index: 2;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-
-/* Override osmo's overflow:clip on .main */
-.main {
-  overflow: visible !important;
-}
-
-body {
-  display: block;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  font-family: "Bricolage Grotesque", sans-serif;
-}
-
-/* Ensure enough hero height on all sizes */
-.home-hero {
-  min-height: max(130svh, 750px) !important;
-}
-
-/* Lighter gray pill highlights */
-.home-hero__description-highlight {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* ─── Button ─── */
-.button-label__wrap {
-  overflow: hidden;
-  position: relative;
-}
-
-/* General button hover — color only, no shape/size/position changes */
-.button {
-  transition: opacity 0.18s ease;
-  cursor: pointer;
-}
-.button:hover {
-  opacity: 0.75;
-}
-
-/* ─── Testimonials section ─── */
-.vl-testimonials-section {
-  position: relative;
-  z-index: 5;
   background: #fff;
-  padding: clamp(5rem, 10vw, 9rem) 0;
-  margin-top: clamp(4rem, 8vh, 8rem);
-}
-
-.vl-testimonials-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 3rem);
-}
-
-.vl-testimonials-header {
-  margin-bottom: clamp(3rem, 5vw, 5rem);
-  text-align: center;
-}
-
-.vl-testimonials-eyebrow {
-  display: block;
-  margin-bottom: 0.75rem;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-weight: 500;
-  font-size: clamp(2.4rem, 5vw, 5rem) !important;
-  text-transform: none !important;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-  background: linear-gradient(110deg, #e64613 0%, #b91616 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-}
-
-.vl-testimonials-heading {
-  margin: 0;
-  color: #040000;
-  font-size: clamp(5rem, 12vw, 13rem) !important;
-  white-space: nowrap;
-}
-
-/* 2 cards per row, keeping the old left/right zigzag — it just moved from
-   per-card to per-row. The grid is narrowed by the stagger amount so the
-   shifted rows have somewhere to go without overflowing the container
-   (transform doesn't reserve layout space). */
-.vl-testimonials-grid {
-  --row-stagger: clamp(1.5rem, 4vw, 4rem);
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  width: calc(100% - var(--row-stagger));
-  background: none;
-  border: none;
-}
-
-/* Top row flush left, next row pushed right, repeat. With 2 per row every
-   group of 4 children spans 2 rows, and 4n+3 / 4n are always the second of
-   those — so the alternation holds at 4 testimonials or 40 without ever
-   adding another rule. */
-@media (min-width: 769px) {
-  .vl-testimonial-card:nth-child(4n+3),
-  .vl-testimonial-card:nth-child(4n) {
-    transform: translateX(var(--row-stagger));
-  }
-}
-
-/* Red spiral / star accents overlaid on a card corner — sit half on the card,
-   half outside it, above the card content, with a gentle continuous drift.
-   nested transform: the animation drives the inner one so the base
-   corner-anchoring isn't overwritten. */
-.vl-testimonial-deco {
-  position: absolute;
-  width: clamp(58px, 7vw, 104px);
-  height: auto;
-  z-index: 3;
-  pointer-events: none;
-}
-.vl-testimonial-deco--star {
-  top: 0;
-  right: 0;
-  transform: translate(38%, -45%);
-  animation: vl-deco-star 6s ease-in-out infinite;
-}
-.vl-testimonial-deco--spiral {
-  bottom: 0;
-  left: 0;
-  transform: translate(-40%, 42%);
-  animation: vl-deco-spiral 7.5s ease-in-out infinite;
-}
-@keyframes vl-deco-star {
-  0%, 100% { transform: translate(38%, -45%) rotate(-8deg); }
-  50%      { transform: translate(38%, -52%) rotate(8deg); }
-}
-@keyframes vl-deco-spiral {
-  0%, 100% { transform: translate(-40%, 42%) rotate(5deg); }
-  50%      { transform: translate(-40%, 34%) rotate(-7deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vl-testimonial-deco { animation: none; }
-}
-
-/* Card: subtle blue-toned gray fill so the box is visible, but still no
-   border, no shadow, no quote icon, no stars — just the person (photo + name)
-   on top and the testimonial text below */
-.vl-testimonial-card {
-  background: #f3f5f9;
-  border: none;
-  border-radius: 16px;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: relative;
-}
-
-.vl-testimonial-quote {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: clamp(1rem, 1.4vw, 1.35rem);
-  font-weight: 400;
-  color: #3a3333;
-  line-height: 1.65;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-
-.vl-testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.vl-testimonial-avatar {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  display: block;
-}
-
-.vl-testimonial-name {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #040000;
-  letter-spacing: -0.02em;
-  display: block;
-}
-
-.vl-testimonial-role {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: #9a9494;
-  display: block;
-}
-
-@media (max-width: 768px) {
-  /* Pull the section up closer to the stats/numbers above it on mobile */
-  .vl-testimonials-section {
-    padding-top: clamp(1.5rem, 5vw, 3.5rem) !important;
-    margin-top: clamp(1rem, 3vh, 2.5rem) !important;
-  }
-  /* Keeps the 4 rows rather than collapsing to 8 stacked cards: the 2
-     columns stay, sized past the viewport so the grid scrolls sideways —
-     swipe to reach each row's second card. One scroll container for the
-     whole grid, so all 4 rows travel together. No row stagger here (that
-     rule is desktop-only), so the grid gets its full width back. */
-  /* The clipping window the track slides inside. Only exists as a styled
-     box on mobile — on desktop it's an unstyled block wrapper and the grid
-     behaves exactly as before. */
-  .vl-testimonials-viewport {
-    width: 100%;
-    overflow: hidden;
-  }
-  .vl-testimonials-grid {
-    /* Column flow with 4 fixed rows: each block of 4 cards fills one column,
-       so JS can clone the whole set and get an exact duplicate column pair
-       to loop against (see initTestimonialsMarquee). */
-    grid-template-columns: none;
-    grid-template-rows: repeat(4, auto);
-    grid-auto-flow: column;
-    grid-auto-columns: 78vw;
-    gap: 1rem;
-    width: max-content;
-    /* Deliberately NOT overflow-x:auto. A native horizontal scroll container
-       here swallowed vertical swipes that started on a card, which is what
-       made the page feel stuck at this section. JS moves the track by
-       transform instead, and pan-y hands every vertical gesture straight
-       back to the page. */
-    touch-action: pan-y;
-    will-change: transform;
-  }
-  .vl-testimonial-card {
-    width: 100%;
-    justify-self: stretch;
-  }
-  .vl-testimonials-eyebrow {
-    font-size: clamp(1.4rem, 5vw, 2.4rem) !important;
-    white-space: nowrap;
-  }
-  /* h2. prefix raises specificity above the general `.h-l` mobile rule, which
-     otherwise wins here because it appears later in the file with equal
-     specificity and its own !important (this is why sizes silently diverged) */
-  h2.vl-testimonials-heading {
-    font-size: clamp(4.2rem, 17vw, 7.5rem) !important;
-    line-height: 0.95 !important;
-    white-space: nowrap;
-  }
-}
-
-/* ─── Client carousel ───
-   Auto-scrolls continuously (driven by JS, see initClientsCarousel), and can
-   also be dragged/swiped — dragging just adds to the same position the
-   auto-scroll uses, so it's a way to move through it faster, then it keeps
-   auto-scrolling from wherever you let go. */
-.vl-clients-carousel {
-  width: 100%;
-  overflow-x: clip;
-  overflow-y: visible;
-  padding: 9rem 0;
-  background: transparent;
-  position: relative;
-  z-index: 10;
-  margin-top: clamp(-14rem, -16vw, -8rem);
-  touch-action: pan-y;
-}
-
-.vl-clients-track {
-  display: flex;
-  gap: 0;
-  width: max-content;
-  cursor: grab;
-  will-change: transform;
-}
-.vl-clients-track.is-dragging {
-  cursor: grabbing;
-}
-
-.vl-clients-card {
-  width: 320px;
-  background: #ebebed;
-  border-radius: 24px;
-  flex-shrink: 0;
-  margin-right: 2.8rem;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 16px 26px;
-  /* Cards with a handle are real <a> links now — undo the UA default blue/
-     underline so linked and unlinked (Anna/Dayne) cards look identical. */
-  color: inherit;
+  color: var(--red);
   text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
-
-/* Arc wave — cards follow a U-shaped curve as they scroll.
-   Groups of 11 now (was 5); both ends of the group sit at the same low point
-   so it still tiles seamlessly when the track repeats. */
-.vl-clients-card:nth-child(11n+1)  { transform: translateY(-60px) rotate(-3deg); }
-.vl-clients-card:nth-child(11n+2)  { transform: translateY(-50px) rotate(-2.4deg); }
-.vl-clients-card:nth-child(11n+3)  { transform: translateY(-25px) rotate(-1.8deg); }
-.vl-clients-card:nth-child(11n+4)  { transform: translateY(5px)   rotate(-1.2deg); }
-.vl-clients-card:nth-child(11n+5)  { transform: translateY(30px)  rotate(-0.6deg); }
-.vl-clients-card:nth-child(11n+6)  { transform: translateY(40px)  rotate(0deg); }
-.vl-clients-card:nth-child(11n+7)  { transform: translateY(30px)  rotate(0.6deg); }
-.vl-clients-card:nth-child(11n+8)  { transform: translateY(5px)   rotate(1.2deg); }
-.vl-clients-card:nth-child(11n+9)  { transform: translateY(-25px) rotate(1.8deg); }
-.vl-clients-card:nth-child(11n+10) { transform: translateY(-50px) rotate(2.4deg); }
-.vl-clients-card:nth-child(11n+11) { transform: translateY(-60px) rotate(3deg); }
-
-.vl-clients-card__frame {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 12px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.vl-clients-card__badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  padding: 0.3em 0.8em;
-  border-radius: 100em;
-  font-size: 1.1rem;
-  font-weight: 600;
-  white-space: nowrap;
-  color: #111;
-}
-
-.vl-clients-card__img {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.vl-clients-card__img span {
-  font-size: 3.2rem;
-  font-weight: 800;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.05em;
-  font-family: inherit;
-}
-
-.vl-clients-card__img img,
-.vl-clients-card__photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.vl-clients-card__body {
-  padding: 1.4rem 0.4rem 0.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.vl-clients-card__name {
-  font-size: 1.7rem;
-  font-weight: 700;
-  color: #111;
-  margin: 0;
-}
-
-.vl-clients-card__handle {
-  font-size: 1.1rem;
-  color: #888;
-  text-transform: none;
-  letter-spacing: 0.02em;
-  margin: 0;
-}
-
-.vl-clients-card__btn {
-  margin-top: 1rem;
-  padding: 0.55em 1.1em;
-  background: none;
-  border: 1.5px solid #222;
-  border-radius: 100em;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  align-self: flex-start;
-  color: #111;
-  transition: background 0.2s, color 0.2s;
-}
-
-.vl-clients-card__btn:hover {
-  background: #111;
-  color: #fff;
-}
-
-.vl-clients-cta {
-  display: flex;
-  justify-content: center;
-  padding: 0 0 3rem;
-  margin-top: -3rem;
-  position: relative;
-  z-index: 10;
-}
-
-@media (max-width: 768px) {
-  .vl-clients-cta {
-    margin-top: -4.5rem;
-  }
-}
-
-.vl-clients-cta__btn {
-  display: inline-block;
-  padding: 1em 2.4em;
-  border: 2px solid #111;
-  border-radius: 100em;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #111;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-}
-
-.vl-clients-cta__btn:hover {
-  background: #111;
-  color: #fff;
-}
-
-/* ─── Perks / features section ─── */
-.vl-perks-section {
-  position: relative;
-  z-index: 5;
-  padding: clamp(4rem, 8vw, 7rem) 0 clamp(5rem, 10vw, 9rem);
-  /* Hard containment: this section sits at z-index 5, above the slider section
-     that follows it (z-index 3), so anything bleeding past its bottom edge —
-     the bands' bottom-bled feature images, blur spill — paints as a ghost over
-     the next section. `clip` rather than `hidden`: it clips without creating a
-     scroll container, so the sticky bands inside still pin to the viewport. */
-  overflow: clip;
-}
-
-.vl-perks-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 3rem);
-}
-
-.vl-perks-bands {
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-
-.vl-perk-band {
-  /* Wave depth mirrors the 0.03 objectBoundingBox inset at the top of
-     #perk-wave-clip — i.e. how far below a red band's box edge its paint
-     actually starts. Kept as a variable so the dark bands can cancel it out. */
-  --perk-band-h: 55vh;
-  --perk-wave-depth: calc(var(--perk-band-h) * 0.03);
-  position: sticky;
-  top: 0;
-  height: var(--perk-band-h);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: clamp(2rem, 4vw, 4rem);
-  /* Side padding kept modest so the text column has real room — the vertical
-     value must stay in sync with .vl-perk-img's bottom-bleed margin below. */
-  padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem);
-  background: #fff;
-  overflow: hidden;
-}
-
-/* Zigzag: image is after the text in the DOM, so row-reverse pulls it to the
-   left on odd bands; even bands keep it on the right. Result down the stack:
-   left / right / left / right. */
-.vl-perk-band:nth-child(odd) {
-  flex-direction: row-reverse;
-}
-
-/* One max-width governs all the text in a band (title + paragraph) */
-.vl-perk-text {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  flex: 1.4 1 0;
-  min-width: 0;
-  max-width: 54rem;
-}
-
-.vl-perk-img {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: min(52%, 700px);
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: 14px 14px 0 0;
-  /* Bottom-anchored and pulled past the band's bottom edge so it bleeds off
-     it — the band's overflow:hidden does the clipping. The negative margin
-     cancels the band's bottom padding first, then adds the bleed on top. */
-  align-self: flex-end;
-  margin-bottom: calc(-1 * clamp(2rem, 6vw, 6rem) - clamp(1.5rem, 5vh, 4rem));
-  position: relative;
-  z-index: 1;
-}
-
-/* ── Text treatment for the split (image) rows — desktop/tablet only ──
-   Centered text in a half-width column wraps raggedly; left-aligning it and
-   sizing type for the narrower measure reads like a proper feature row. */
-@media (min-width: 769px) {
-  .vl-perk-band:has(.vl-perk-img) {
-    text-align: center;
-  }
-  .vl-perk-band:has(.vl-perk-img) .vl-perk-text {
-    align-items: center;
-  }
-  .vl-perk-band:has(.vl-perk-img) .vl-perk-title {
-    font-size: clamp(3.4rem, 6.6vw, 7.2rem);
-    text-wrap: balance;
-  }
-  .vl-perk-band:has(.vl-perk-img) .vl-perk-sub {
-    font-size: clamp(1.4rem, 2.3vw, 2.2rem);
-    line-height: 1.5;
-    max-width: 28ch;
-    margin-left: auto;
-    margin-right: auto;
-    text-wrap: pretty;
-  }
-}
-
-.vl-perk-band:nth-child(1) { z-index: 1; }
-.vl-perk-band:nth-child(2) { z-index: 2; }
-.vl-perk-band:nth-child(3) { z-index: 3; }
-.vl-perk-band:nth-child(4) { z-index: 4; }
-
-/* Wavy top + bottom edges cut into the red band itself (see #perk-wave-clip):
-   the area beyond the wave is genuinely transparent, so nothing moves over the
-   underlying band except the red wave edge. The clip also trims the
-   bottom-bleeding feature image along the wavy bottom instead of a flat line. */
-.vl-perk-band--dark {
-  background: #b91616;
-  clip-path: url(#perk-wave-clip);
-  /* The wave clip starts the red paint up to 3% below the band's box edge, so
-     the band above ends (and clips its bottom-bled image) in a white sliver
-     before the red begins. Pull the band up by that depth so the wave troughs
-     land on the previous band's bottom edge and the image runs straight into
-     the red. The extra 0.6vh is deliberate overlap rather than exact
-     compensation: the depth resolves to a fractional pixel (55vh × 0.03) and
-     the clip-path edge is antialiased, so meeting the edge exactly still
-     leaves a soft hairline. Overlapping buries it — the red simply rides a
-     few px further over the image's bottom, which reads as the same wave. */
-  margin-top: calc(-1 * var(--perk-wave-depth) - 0.6vh);
-}
-
-/* A white band sliding up over a red one would cover the red's bottom wave
-   with its straight top edge — so cut a wave into ITS top instead. The red
-   shows through the notches, reading as the red band's wavy bottom, and it
-   stays put while the band is pinned. */
-.vl-perk-band--dark + .vl-perk-band:not(.vl-perk-band--dark) {
-  clip-path: url(#perk-wave-clip-top);
-}
-
-.vl-perk-title,
-.vl-perk-sub {
-  position: relative;
-  z-index: 1;
-}
-
-.vl-perk-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: clamp(3.2rem, 8vw, 8.5rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #040000;
-  margin: 0;
-  line-height: 0.92;
-}
-
-/* Word-split wrappers (injected by JS) */
-.vl-pw {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  padding-bottom: 0.12em;
-}
-.vl-pw-i {
-  display: inline-block;
-}
-
-/* Progress dots */
-.vl-perks-progress {
-  position: fixed;
-  right: clamp(1.2rem, 2.5vw, 2.5rem);
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  z-index: 200;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.vl-perks-progress.is-visible { opacity: 1; }
-.vl-perk-dot {
-  display: block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(4, 0, 0, 0.2);
-  transition: background 0.35s ease, transform 0.35s ease;
-}
-.vl-perk-dot.is-active {
-  background: #b91616;
-  transform: scale(1.55);
-}
-.vl-perks-progress.on-dark .vl-perk-dot:not(.is-active) {
-  background: rgba(255, 255, 255, 0.3);
-}
-@media (max-width: 768px) {
-  .vl-perks-progress { display: none; }
-}
-
-.vl-perk-band--dark .vl-perk-title {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.vl-perk-sub {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.8rem);
-  font-weight: 400;
-  color: #7a7575;
-  margin: 0;
-  line-height: 1.5;
-  /* No cap of its own — the .vl-perk-text column governs, so the paragraph
-     gets the full column width instead of being held to a narrower measure */
-  max-width: 100%;
-}
-
-.vl-perk-band--dark .vl-perk-sub {
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.vl-perk-badge {
-  display: inline-block;
-  background: #b91616;
-  color: #fff;
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.22em 0.7em;
-  border-radius: 99px;
-  vertical-align: middle;
-  margin-left: 0.5em;
-  position: relative;
-  top: -0.2em;
-}
-
-.vl-perk-badge {
-  display: inline-block;
-  background: #b91616;
-  color: #fff;
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.2em 0.7em;
-  border-radius: 99px;
-  align-self: flex-start;
-}
-
-.vl-perk-badge {
-  display: inline-block;
-  background: #b91616;
-  color: #fff;
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.2em 0.65em;
-  border-radius: 99px;
-  vertical-align: middle;
-  margin-left: 0.5em;
-  position: relative;
-  top: -0.15em;
-}
-
-/* Override the 600px overflow gap when perks section is present */
-.vl-perks-section + .product-slider__wrap {
-  margin-top: clamp(0.5rem, 2vh, 1.5rem) !important;
-}
-
-/* ─── Slider section: clock/fan track background ─── */
-.product-slider__wrap { position: relative; z-index: 3; margin-top: calc(clamp(4rem, 8vh, 7rem) + 600px); }
-
-.product-slider__text-row {
-  padding-top: 0;
-  padding-bottom: 1rem;
-  gap: 0;
-}
-
-.product-slider__title .h-l {
-  margin-bottom: 0 !important;
-  font-size: clamp(5rem, 12vw, 13rem) !important;
-}
-
-/* Desktop: bigger bolder subtitle */
-@media (min-width: 769px) {
-  .product-slider__text .p-l {
-    font-size: clamp(1.4rem, 2vw, 2rem) !important;
-    font-weight: 600 !important;
-  }
-}
-
-/* Nav arrows — all screen sizes */
-.vl-nav-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.25rem 0;
-}
-
-.vl-nav-arrow {
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: 50%;
-  border: 2px solid #040000;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #040000;
-  transition: background 0.18s ease, color 0.18s ease;
-  flex-shrink: 0;
-}
-
-.vl-nav-arrow:hover {
-  background: #040000;
-  color: #fff;
-}
-
-/* ─── Work section background — scoped to heading title only ─── */
-.vl-work-section-bck {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 140%;
-  height: 220%;
-  object-fit: contain;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* ─── Magnifying glass on title ─── */
-.vl-glass-svg {
-  position: absolute;
-  top: calc(50% + 30px);
-  left: 0;
-  height: clamp(160px, 18vw, 280px);
-  width: auto;
-  pointer-events: none;
-  z-index: 5;
-  overflow: visible;
-}
-
-.vl-char {
-  display: inline;
-  transition: color 0.12s ease;
-}
-
-.vl-slider-track {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  transform: translateY(220px);
-}
-
-/* Subtle pulse on the centre tick dot */
-.vl-track-center-dot {
-  animation: vl-dot-pulse 3.5s ease-in-out infinite;
-  transform-origin: 720px 260px;
-}
-@keyframes vl-dot-pulse {
-  0%, 100% { opacity: 0.09; r: 3.5; }
-  50%       { opacity: 0.22; r: 5; }
-}
-
-/* Ensure slider content sits above the SVG */
-.product-slider { position: relative; z-index: 1; }
-
-/* ─── Slider nav buttons: lock shape, use color for active/hover ─── */
-.product-slider__nav .button,
-.product-slider__nav .button[data-gsap-slider-control-status="active"],
-.product-slider__nav .button[data-gsap-slider-control-status="not-active"] {
-  opacity: 1 !important;
-  border-radius: 0.5em !important;
-  transform: none !important;
-  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease !important;
-}
-
-/* Inactive state */
-.product-slider__nav .button[data-gsap-slider-control-status="not-active"] .button-bg {
-  background-color: var(--color-neutral-300, #d4d4d4) !important;
-}
-
-/* Active state — brand color, same shape */
-.product-slider__nav .button[data-gsap-slider-control-status="active"] .button-bg {
-  background-color: #040000 !important;
-  border-radius: 0.5em !important;
-}
-.product-slider__nav .button[data-gsap-slider-control-status="active"] .button-label span {
-  color: #fffefe;
-}
-
-/* Hover: tint only */
-.product-slider__nav .button:hover {
-  opacity: 1 !important;
-}
-.product-slider__nav .button[data-gsap-slider-control-status="not-active"]:hover .button-bg {
-  background-color: #bbb !important;
-}
-.product-slider__nav .button[data-gsap-slider-control-status="active"]:hover .button-bg {
-  background-color: #2a2a2a !important;
-}
-
-/* ─── Video cards ─── */
-.vlance-video-card {
-  position: relative;
-  overflow: hidden;
-}
-.vlance-video-card .product-card__before {
-  padding-top: 177.78%; /* 9:16 vertical video */
-}
-.vlance-video-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  z-index: 0;
-}
-
-/* Overlay: bottom-left info + top-right mute btn */
-.vlance-video-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 35%);
-}
-.vlance-video-info {
-  position: absolute;
-  bottom: 1em;
-  left: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2em;
-}
-.vlance-video-tag {
-  font-size: 0.6em;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
-}
-.vlance-video-name {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.02em;
-}
-.vlance-mute-btn {
-  position: absolute;
-  top: 0.85em;
-  right: 0.85em;
-  width: 2em;
-  height: 2em;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(6px);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  pointer-events: all;
-  transition: background 0.18s, transform 0.15s;
-}
-.vlance-mute-btn:hover {
-  background: rgba(0,0,0,0.7);
-  transform: scale(1.1);
-}
-.vlance-mute-btn svg {
-  width: 0.9em;
-  height: 0.9em;
-}
-
-/* ─── Page Loader ─── */
-.vl-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #040000;
-  pointer-events: all;
-  clip-path: inset(0% 0% 0% 0%);
-  will-change: clip-path;
-  overflow: hidden;
-}
-
-/* Primary blob — orange/red core, slow drift */
-.vl-loader::before {
-  content: '';
-  position: absolute;
-  inset: -30%;
-  background:
-    radial-gradient(ellipse at 50% 95%, rgba(255,220,180,0.18) 0%, transparent 10%),
-    radial-gradient(ellipse at 50% 90%, #ff5500 0%, transparent 32%),
-    radial-gradient(ellipse at 50% 78%, #b91616 0%, transparent 52%),
-    radial-gradient(ellipse at 50% 62%, #2a0000 0%, transparent 68%);
-  animation: vl-blob-a 5.5s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-/* Secondary blob — deeper crimson, offset position, different tempo */
-.vl-loader::after {
-  content: '';
-  position: absolute;
-  inset: -30%;
-  background:
-    radial-gradient(ellipse at 40% 85%, #cc1818 0%, transparent 38%),
-    radial-gradient(ellipse at 62% 80%, #b91616 0%, transparent 42%);
-  mix-blend-mode: screen;
-  animation: vl-blob-b 7.5s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes vl-blob-a {
-  0%   { transform: translate(0%,   0%)   scale(1);    opacity: 0.9;  }
-  25%  { transform: translate(-3%, -3%)   scale(1.07); opacity: 1;    }
-  55%  { transform: translate(2%,  -1%)   scale(0.96); opacity: 0.82; }
-  80%  { transform: translate(-1%, -5%)   scale(1.04); opacity: 0.95; }
-  100% { transform: translate(3%,  -2%)   scale(0.93); opacity: 0.78; }
-}
-
-@keyframes vl-blob-b {
-  0%   { transform: translate(0%,   0%)   scale(1);    opacity: 0.65; }
-  30%  { transform: translate(5%,  -4%)   scale(1.12); opacity: 0.8;  }
-  65%  { transform: translate(-4%, -6%)   scale(0.88); opacity: 0.55; }
-  100% { transform: translate(2%,  -3%)   scale(1.05); opacity: 0.72; }
-}
-
-.vl-loader__inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-/* Logo icon — starts hidden; GSAP animates in */
-.vl-loader__icon {
-  width: clamp(52px, 6vw, 80px);
-  height: auto;
-  filter: brightness(0) invert(1);
-  opacity: 0;
-  transform: translateY(-18px) scale(0.88);
-  will-change: transform, opacity;
-}
-
-/* "VLANCE" letters — each clipped upward, GSAP sweeps them into view */
-.vl-loader__word {
-  display: flex;
-  overflow: hidden;
-  line-height: 1;
-  padding: 0.1em 0;
-}
-
-.vl-loader__word span {
-  display: block;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-size: clamp(3.2rem, 9.5vw, 8rem);
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  color: #fffefe;
-  line-height: 1;
-  transform: translateY(110%);
-  will-change: transform;
-}
-
-
-/* ─── Smooth scroll ─── */
-html {
-  scroll-behavior: smooth;
-}
-
-/* ─── Nav scroll anchor offset ─── */
-[id] {
-  scroll-margin-top: 4em;
-}
-
-
-/* ════════════════════════════════════════════════════════════════
-   STATS SECTION
-   ════════════════════════════════════════════════════════════════ */
-.vl-stats {
-  position: relative;
-  background: #fffefe;
-  padding: clamp(5rem, 9vh, 8rem) 0;
-  padding-top: clamp(16rem, 28vh, 24rem);
-  overflow: visible;
-}
-
-
-.vl-stats__inner {
-  position: relative;
-  z-index: 1;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 clamp(1.25rem, 5vw, 4.5rem);
-}
-
-
-.vl-stats__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  padding-top: 20px;
-  width: 100%;
-}
-
-.vl-stat-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: #b91616;
-  border-radius: clamp(16px, 2vw, 28px);
-  padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
-  overflow: hidden;
-}
-
-/* All four cards identical in size/structure now — the "fun" part is a
-   brick-style stagger (right column pushed down, like the testimonials
-   left/right offset but as a two-column brick instead of a single column)
-   plus a slight alternating tilt. Desktop/tablet only. */
-@media (min-width: 769px) {
-  .vl-stat-card:nth-child(odd) {
-    transform: rotate(-1.2deg);
-  }
-  .vl-stat-card:nth-child(even) {
-    transform: translateY(clamp(2rem, 5vw, 3.5rem)) rotate(1.2deg);
-  }
-}
-
-/* Same image treatment on every card: contained, on top, never touching
-   the text below it. Drop each PNG in png/numbers images/ using the
-   filenames already wired up in the markup (1b views.png, videos.png,
-   editors.png, network.png). */
-.vl-stat-card__img {
-  width: 100%;
-  max-width: 320px;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: clamp(10px, 2vw, 16px);
-  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
-}
-
-/* No card splits image/text into a row anymore — keep the wrapper invisible
-   to layout so num/label behave exactly as if they were direct children */
-.vl-stat-card__text {
-  display: contents;
-}
-
-.vl-stat-card__num {
-  font-size: clamp(3rem, 5.5vw, 6rem) !important;
-  font-weight: 900 !important;
-  color: #fff;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 0.04em;
-}
-
-.vl-stat-card__label {
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-optical-sizing: auto;
-  font-variation-settings: "wdth" 100;
-  font-size: clamp(1rem, 1.3vw, 1.4rem);
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-  margin: 0;
-  max-width: 24ch;
-}
-
-/* ─── Contact word reveal ─── */
-.vl-reveal-word {
-  display: inline-block;
-  pointer-events: none;
-}
-
-.vlance-contact-section .h-l {
-  pointer-events: none;
-}
-
-
-/* ─── Decorative star accents ─── */
-.vl-star {
-  position: absolute;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-  width: auto;
-}
-
-/* Named placement classes — replaces per-element inline styles */
-.vl-star--hero-1    { top: 9%;    right: 7%; height: 65px; }
-.vl-star--hero-2    { top: 50%;   right: 3%; height: 38px; }
-.vl-star--stats-1   { top: 16%;   left: 4%;  height: 55px; }
-.vl-star--stats-2   { top: 60%;   right: 5%; height: 40px; }
-.vl-star--contact-1 { top: 18%;   left: 7%;  height: 46px; }
-.vl-star--contact-2 { top: 24%;   right: 9%; height: 62px; }
-.vl-star--footer-1  { bottom: 28%; left: 5%;  height: 58px; }
-.vl-star--footer-2  { bottom: 32%; right: 6%; height: 36px; }
-
-.vlance-footer {
-  position: relative;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ── Global: every section clips its own horizontal overflow ── */
-.under-nav-bar,
-.vl-stats {
-  overflow-x: clip;
-}
-
-/* Same horizontal clip, but the fan slider's rotated side cards swing below
-   the centered card's box height — leaving overflow-y unset here would make
-   the browser compute it as auto (per spec, since overflow-x isn't visible),
-   clipping the cards' bottoms. Keep it explicit so they stay visible. */
-.product-slider__wrap {
-  overflow-x: clip;
-  overflow-y: visible;
-}
-
-/* Hero clips horizontally on mobile (decorative SVGs are hidden there) */
-@media (max-width: 900px) {
-  .home-hero {
-    overflow-x: clip !important;
-  }
-}
-
-/* ── CSS custom property overrides
-   Osmo/Slater define large gap variables — shrink at mobile ── */
-@media (max-width: 768px) {
-  :root {
-    --container-padding: 1.25rem;
-    --gap-s:   0.5rem;
-    --gap-m:   1rem;
-    --gap-l:   1.5rem;
-    --gap-xl:  2.5rem;
-    --gap-xxl: 3.5rem;
-  }
-}
-@media (max-width: 480px) {
-  :root {
-    --container-padding: 1rem;
-    --gap-m: 0.75rem;
-    --gap-l: 1.25rem;
-  }
-}
-
-/* ── Container padding ── */
-@media (max-width: 900px) {
-  .container {
-    padding-left:  clamp(1.25rem, 5vw, 3rem) !important;
-    padding-right: clamp(1.25rem, 5vw, 3rem) !important;
-  }
-}
-
-/* ──────────────────────────────────────────
-   HERO — Clouds & decorative elements
-   ────────────────────────────────────────── */
-
-/* ── Global container viewport lock — prevents containers from exceeding screen width ── */
-@media (max-width: 767px) {
-  .container {
-    width: 100% !important;
-    max-width: 100vw !important;
-    box-sizing: border-box !important;
-  }
-  .product-slider__text-row {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .product-slider__title {
-    max-width: 100%;
-    text-align: center;
-    overflow: visible;
-  }
-  .product-slider__wrap {
-    margin-top: clamp(1.5rem, 4vh, 3rem) !important;
-  }
-  .vl-work-section-bck {
-    width: 120%;
-    height: 180%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    object-fit: contain;
-  }
-  .product-slider__title .h-l {
-    font-size: clamp(3.8rem, 16vw, 6rem) !important;
-    margin-bottom: 0 !important;
-  }
-  .product-slider__text-row {
-    gap: 0.1rem !important;
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-  }
-  .product-slider__text {
-    max-width: 22em !important;
-    text-align: center;
-  }
-  .product-slider__text .p-l {
-    font-size: clamp(1.5rem, 6vw, 2rem) !important;
-    font-weight: 600 !important;
-  }
-}
-
-/* Cloud base has clamp(420px, 58vw, 940px) — min 420px is wider than any phone.
-   Override to scale proportionally at small viewports. */
-@media (max-width: 900px) {
-  .vl-cloud-1, .vl-cloud-2 {
-    width: clamp(200px, 65vw, 500px);
-  }
-}
-@media (max-width: 600px) {
-  .vl-cloud-1, .vl-cloud-2 {
-    width: clamp(300px, 110vw, 500px);
-    opacity: 0.5;
-  }
-}
-
-
-/* ── Hero text — tablet ── */
-@media (max-width: 900px) {
-  .vl-ht-pre {
-    font-size: clamp(1rem, 2.8vw, 2rem) !important;
-  }
-  .vl-ht-line {
-    font-size: clamp(2.4rem, 8vw, 7rem) !important;
-  }
-  .home-hero__description-p {
-    font-size: clamp(1rem, 2.5vw, 1.8rem) !important;
-  }
-  .home-hero__description-row {
-    margin-top:     clamp(1rem, 2.5vh, 2rem) !important;
-    padding-top:    clamp(1rem, 2.5vh, 2rem);
-    padding-bottom: clamp(1rem, 2.5vh, 2rem);
-  }
-}
-
-/* ── Hero text — phone ── */
-@media (max-width: 600px) {
-  /* "Are you" — noticeably bigger */
-  .vl-ht-pre {
-    font-size: clamp(2.2rem, 8.5vw, 3.6rem) !important;
-    margin-bottom: 0.3em;
-  }
-  /* Main title lines */
-  .vl-hero-heading {
-    gap: 0.12em;
-    max-width: 92vw;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .vl-ht-line {
-    font-size: clamp(4.4rem, 17.5vw, 7.8rem) !important;
-    line-height: 1.0 !important;
-  }
-  /* Switch to the mobile line grouping: Looking / to get / your / TikToks / viral */
-  .vl-ht-line--desktop { display: none; }
-  .vl-ht-line--mobile  { display: block; }
-  /* Description — bigger but narrower on mobile */
-  .home-hero__description-p {
-    font-size: clamp(2rem, 8vw, 3rem) !important;
-    line-height: 1.5 !important;
-  }
-  .home-hero__description-row {
-    max-width: 18em !important;
-    background-image: none !important;
-  }
-  .home-hero__description-highlight {
-    display: inline;
-    padding: 0.12em 0.38em;
-    border-radius: 0.35em;
-    background-color: rgba(0,0,0,0.06) !important;
-  }
-  .home-hero__description-highlight.is--round {
-    border-radius: 100em;
-  }
-  .home-hero__description-row {
-    margin-top:     clamp(2rem, 5vh, 3.5rem) !important;
-    padding-top:    clamp(0.75rem, 2vh, 1.5rem);
-    padding-bottom: clamp(0.75rem, 2vh, 1.5rem);
-  }
-  .home-hero__content {
-    /* Reduced from 10.25/24.5vh/13.25 — pulls the "Are you" line and the
-       heading under it up, in step with the monkey moving up too. */
-    padding-top: clamp(8.25rem, 20vh, 11rem) !important;
-    padding-bottom: clamp(2.5rem, 6vh, 6rem);
-  }
-}
-
-/* ──────────────────────────────────────────
-   GENERAL HEADING SCALE (services .h-l etc.)
-   ────────────────────────────────────────── */
-
-@media (max-width: 768px) {
-  .h-l {
-    font-size: clamp(2.4rem, 9vw, 6rem) !important;
-  }
-}
-@media (max-width: 480px) {
-  .h-l {
-    font-size: clamp(2rem, 9.5vw, 5rem) !important;
-  }
-}
-
-/* ──────────────────────────────────────────
-   SERVICES / WORK SLIDER
-   ────────────────────────────────────────── */
-
-@media (max-width: 900px) {
-  .vl-slider-track {
-    display: none;
-  }
-  .product-slider__text-row {
-    padding-top: clamp(2.5rem, 5vh, 5rem);
-  }
-}
-
-@media (max-width: 768px) {
-  .product-slider__wrap {
-    margin-top: clamp(0rem, 1vh, 1rem) !important;
-  }
-  /* Contain the slider so fanned cards never overflow the section */
-  .gsap-slider,
-  .gsap-slider__collection {
-    overflow: hidden;
-    max-width: 100%;
-  }
-  /* Pull the arrow row and the videos closer together on mobile */
-  .gsap-slider {
-    gap: 0.5em;
-  }
-  .vl-nav-row {
-    padding: 0.4rem 0;
-    /* Extra breathing room specifically between the arrows and the video
-       below them, on top of .gsap-slider's shared 0.5em gap. */
-    margin-bottom: 5px;
-  }
-  /* Cards: wider on mobile for better viewing */
-  .gsap-slider__item {
-    width: min(78vw, 320px) !important;
-  }
-  .vlance-video-card .product-card__before {
-    padding-top: 177.78% !important;
-  }
-  .vlance-video-name {
-    font-size: 1.2rem !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.01em !important;
-  }
-  .vl-nav-arrow {
-    width: 3rem;
-    height: 3rem;
-  }
-}
-
-/* ──────────────────────────────────────────
-   STATS
-   ────────────────────────────────────────── */
-
-@media (max-width: 768px) {
-  .vl-stats {
-    padding: clamp(3rem, 6vh, 6rem) 0;
-  }
-  .vl-stats__inner {
-    padding-left:  clamp(1rem, 5vw, 3rem);
-    padding-right: clamp(1rem, 5vw, 3rem);
-  }
-  /* One card per row on mobile — the bento spans/rotation are scoped to
-     min-width:769px so they simply never apply here */
-  .vl-stats__grid {
-    grid-template-columns: 1fr;
-  }
-  .vl-stat-card {
-    padding: clamp(2rem, 5vh, 3.5rem) 1.5rem;
-  }
-  .vl-stat-card__num {
-    font-size: clamp(3rem, 13vw, 9rem) !important;
-  }
-  .vl-stat-card__label {
-    font-size: clamp(0.95rem, 3vw, 1.8rem);
-    max-width: 32ch;
-  }
-}
-
-/* ──────────────────────────────────────────
-   CONTACT
-   ────────────────────────────────────────── */
-
-@media (max-width: 900px) {
-  .vlance-contact-section .h-l {
-    font-size: clamp(3.5rem, 11vw, 12rem) !important;
-  }
-}
+.vlance-contact-btn:hover { background: var(--fg); color: #fff; }
 
 @media (max-width: 600px) {
-  .vlance-contact-section {
-    padding: 2rem 1.5rem 2.5rem !important;
-  }
-  /* Each word ("Ready?", "Set.", "Go!") gets its own line at 22vw */
-  .vlance-contact-section .h-l {
-    font-size: clamp(5rem, 22vw, 7rem) !important;
-    line-height: 1.1 !important;
-    white-space: normal !important;
-    margin-bottom: 0.4em !important;
-  }
-  .vlance-contact-inner {
-    gap: 0;
-    max-width: 100%;
-  }
-  .vlance-contact-actions {
-    gap: 1.1em;
-    margin-top: -0.5em;
-    flex-wrap: wrap;
-  }
-  .vlance-contact-icon-btn {
-    width: 7em;
-    height: 7em;
-  }
-  .vlance-contact-icon-btn svg {
-    width: 2.6em;
-    height: 2.6em;
-  }
-  .vlance-contact-btn {
-    font-size: 1.2em;
-    padding: 0.8em 1.6em;
-    height: 4.5em;
-  }
+  .vlance-contact-section { padding: 4rem 1.25rem 7rem; }
+  .vlance-contact-actions { gap: 0.75rem; }
 }
 
-@media (max-width: 768px) {
-  .vl-reveal-word {
-    display: block;
-  }
-}
-
-/* ──────────────────────────────────────────
-   FOOTER
-   ────────────────────────────────────────── */
-
-
-@keyframes vl-flags-wave {
-  0%, 100% { transform: rotate(-38deg); }
-  50%       { transform: rotate(-8deg);  }
-}
-
-@media (max-width: 768px) {
-  /* Perks: tighten on mobile */
-  .vl-perks-section {
-    padding-bottom: 30px;
-  }
-  /* Mobile: no room for the side-by-side zigzag — stack text over image.
-     (This also keeps justify-content meaning "vertical" for the
-     :first-child rule below, as it did before the row layout.) */
-  .vl-perk-band,
-  .vl-perk-band:nth-child(odd) {
-    /* Taller than the old 50vh: a full-width image is 0.797 x 100vw tall
-       (all four are 2710x2160), so the band needs the extra room or far
-       too much of the image ends up cut off. */
-    --perk-band-h: 60vh;
-    flex-direction: column;
-    /* Top-anchored. The base rule's justify-content:center would split any
-       overflow between top and bottom and push the title off the top edge;
-       here the image is the thing meant to run past the bottom. */
-    justify-content: flex-start;
-    /* Small now — this is the gap between text and image specifically.
-       The space above the text is separate (.vl-perk-text's margin-top
-       below + the band's own padding-top), so shrinking this doesn't
-       touch that. */
-    gap: 0.25rem;
-  }
-  .vl-perk-text {
-    flex: 0 0 auto;
-    max-width: 100%;
-    /* Extra breathing room above the title — on top of the band's own
-       top padding (:first-child overrides that separately below). Kept
-       independent of .vl-perk-band's gap above, which controls the
-       text-to-image spacing instead. */
-    margin-top: 2.5rem;
-  }
-  /* Sized down slightly from full 100vw to 92vw. Still centered the same
-     way: align-self:center on a flex item wider than its container
-     overflows symmetrically either way (the centering math stays
-     center = (container - item) / 2, negative or not) — so this needed no
-     breakout hack before at 100vw and still doesn't at 92vw.
-     Cross axis here is horizontal (column flex container), which is why
-     align-self is what positions it left-to-right — the base rule's
-     `align-self: flex-end` was pushing it to the right edge, which is what
-     read as badly centered before this was overridden.
-     flex-shrink 0 matters: shrinking would squash the box and, with the
-     base rule's object-fit:contain, letterbox the image inside it — it
-     would render smaller than 92vw with transparent gaps.
-     margin-top:auto pins it to the bottom when there's room to spare, and
-     the negative bottom margin cancels the band's bottom padding so it
-     reaches the true bottom edge and bleeds past it. */
-  .vl-perk-img {
-    flex: 0 0 auto;
-    align-self: center;
-    width: 92vw;
-    max-width: 92vw;
-    height: auto;
-    max-height: none;
-    left: auto;
-    transform: none;
-    margin-top: auto;
-    margin-bottom: calc(-1 * clamp(2rem, 6vw, 6rem));
-  }
-  /* First band sits right under the heading — pull it up to the top of its
-     box instead of vertical-centering, so it doesn't read as a big gap */
-  .vl-perk-band:first-child {
-    justify-content: flex-start;
-    padding-top: clamp(1rem, 4vw, 2rem);
-  }
-  .vl-perk-title {
-    font-size: clamp(2.4rem, 10vw, 4rem);
-  }
-
-  /* Contact section: stack flags → text → monkey in a column */
-  .vlance-contact-section {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    padding: 2rem 1.5rem 2.5rem !important;
-  }
-  .vl-contact-flags {
-    display: block !important;
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    width: 65vw !important;
-    max-width: 260px !important;
-    margin-top: 4rem !important;
-    margin-bottom: 0.5rem !important;
-    animation: vl-flags-wave 1.4s ease-in-out infinite !important;
-    order: 1;
-  }
-  .vlance-contact-inner {
-    order: 2;
-  }
-  .vl-contact-monkey {
-    display: block !important;
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    transform: translateX(-30vw) rotate(90deg) !important;
-    transform-origin: center center !important;
-    width: 55vw !important;
-    max-width: 220px !important;
-    margin-top: 2.5rem !important;
-    margin-bottom: 1rem !important;
-    order: 3;
-  }
-
-  /* Same treatment as desktop (wordmark + bg svg + logo/nav/copyright row),
-     just capped to a small max-height that only fits the clouds + wordmark
-     instead of desktop's 1000px+ dramatic reveal. Every child is
-     position:absolute, so the section has no natural content height of its
-     own — max-height (with height matched to it) is what actually controls
-     how tall it renders. */
-  .vlance-footer .container {
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
-  }
-  .vlance-footer-inner {
-    gap: 0.85em;
-  }
-  /* Bigger footer row text (logo + WORK/CONTACT nav + copyright) on mobile */
-  .vlance-footer-logo {
-    font-size: 1.4em !important;
-  }
-  .vlance-footer-nav a,
-  .vlance-footer-copyright {
-    font-size: 0.85rem !important;
-  }
-  .vlance-footer {
-    /* Reduced further to match the smaller desktop gap above */
-    margin-top: clamp(1rem, 4vw, 2rem) !important;
-    min-height: 0 !important;
-    /* Was 420px, before the video strip existed. The strip is bottom-anchored
-       with .container and stacks upward, so the footer needs enough room for
-       wordmark + strip + nav row without the two overlapping. */
-    /* Was 540px — measured out too generous once the wordmark (which this
-       height used to be sized around) was removed. Actual content is just
-       the ~210px video strip (118px wide x 16:9) + its margin + the nav
-       row (~24px bottom offset + up to 2 wrapped lines of text) — roughly
-       300px total, so 400px leaves modest headroom for the background art
-       without the leftover empty gap the old value had. */
-    height: 400px !important;
-    max-height: 400px !important;
-  }
-  /* Footer is height-capped here (vs. desktop's 1000px+) and .container is
-     bottom-anchored, so every pixel this strip adds pushes the videos
-     higher, away from the nav row. Kept modest now that the footer itself
-     is shorter — a bigger margin here would eat back into the room the
-     height reduction just freed up. */
-  .vlance-footer-videos {
-    margin-bottom: 1rem;
-  }
-  .vlance-footer-video {
-    width: 118px;
-  }
-}
-
-@media (max-width: 480px) {
-  .vlance-footer-inner {
-    text-align: center;
-  }
-}
-
-/* ──────────────────────────────────────────
-   STARS — scale down on small phones
-   ────────────────────────────────────────── */
-
-@media (max-width: 480px) {
-  .vl-star--hero-1    { height: 30px; }
-  .vl-star--hero-2    { height: 20px; }
-  .vl-star--stats-1   { display: none; }
-  .vl-star--stats-2   { display: none; }
-  .vl-star--contact-1 { height: 32px; }
-  .vl-star--contact-2 { height: 44px; }
-  .vl-star--footer-1  { display: none; }
-  .vl-star--footer-2  { display: none; }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   PHONE EXTRAS (≤600px) — monkey, stats, footer polish
-   ══════════════════════════════════════════════════════════════ */
-
-@media (max-width: 600px) {
-
-  .vl-stats {
-    padding-top: clamp(5rem, 10vh, 8rem) !important;
-  }
-  .vl-stat-card__num {
-    font-size: clamp(3.5rem, 15vw, 6rem) !important;
-  }
-  .vl-stat-card {
-    padding: clamp(2rem, 6vh, 3rem) 1.5rem !important;
-  }
-  .vl-stat-card__label {
-    font-size: clamp(1.1rem, 4.5vw, 1.6rem) !important;
-    max-width: 22ch !important;
-  }
-
-  .vlance-footer {
-    padding-bottom: 0 !important;
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   TABLET POLISH (769px – 1024px)
-   ══════════════════════════════════════════════════════════════ */
-
-@media (min-width: 769px) and (max-width: 1024px) {
-
-  /* Footer capped to a small max-height on tablet, same as mobile — just
-     enough to fit the clouds + video strip, not desktop's full 1000px+
-     reveal. Raised from 520px to make room for the strip. */
-  .vlance-footer {
-    min-height: 0 !important;
-    height: 640px !important;
-    max-height: 640px !important;
-  }
-  .vlance-footer-video {
-    width: 160px;
-  }
-
-  /* Stats section: pull top padding back in slightly */
-  .vl-stats {
-    padding-top: clamp(8rem, 14vh, 12rem) !important;
-  }
-
-  /* Contact section: tighter padding on tablet */
-  .vlance-contact-section {
-    padding: clamp(4rem, 7vh, 7rem) 0 !important;
-  }
-}

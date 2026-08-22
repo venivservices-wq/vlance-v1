@@ -1,55 +1,5 @@
 /* ─── Vlance — main JS ─── */
 
-// ─── Page loader ──────────────────────────────────────────────────────────────
-(function () {
-  function runLoader() {
-    const loader = document.getElementById('vlance-loader');
-    if (!loader) return;
-
-    // Hard fallback if GSAP somehow unavailable
-    if (typeof gsap === 'undefined') { loader.remove(); return; }
-
-    const icon    = loader.querySelector('.vl-loader__icon');
-    const letters = loader.querySelectorAll('.vl-loader__word span');
-
-    const tl = gsap.timeline({ onComplete: function () { loader.remove(); } });
-
-    // 1. Letters sweep up out of the clip container
-    tl.to(letters, {
-      y: 0,
-      duration: 0.7,
-      ease: 'power4.out',
-      stagger: 0.055
-    });
-
-    // 2. Logo icon falls in from above, overlapping letter entrance
-    tl.to(icon, {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      duration: 0.65,
-      ease: 'power3.out'
-    }, '<0.05');
-
-    // 4. Hold at full composition
-    tl.to({}, { duration: 0.45 });
-
-    // 5. Exit: clip-path collapses the loader upward, site revealed top-to-bottom
-    tl.to(loader, {
-      clipPath: 'inset(0% 0% 100% 0%)',
-      duration: 0.7,
-      ease: 'expo.inOut',
-      onStart: function () { loader.style.pointerEvents = 'none'; }
-    });
-  }
-
-  if (document.readyState === 'complete') {
-    runLoader();
-  } else {
-    window.addEventListener('load', runLoader, { once: true });
-  }
-})();
-
 // ─── Nav toggle ───────────────────────────────────────────────────────────────
 const navEl   = document.getElementById('nav');
 const toggles = document.querySelectorAll('[data-nav-toggle]');
@@ -150,7 +100,15 @@ function horizontalLoop(items, config) {
     const build = () => {
       tl.clear();
       const times = [];
-      let offset0;
+      const spd   = config.speed || 100;
+      // Centring shift, in px: land the target card in the middle of the
+      // viewport rather than flush against its left edge. `centreOffset()` was
+      // only ever assigned to an unused local in refresh(), so `center` did
+      // nothing and the active card always sat in the leftmost slot. Only the
+      // snap targets move — the tween layout below is untouched — and the loop
+      // wraps the preceding card in on the left to fill the freed slot.
+      const totalDur = totalW / spd;
+      const wrapTime = t => ((t % totalDur) + totalDur) % totalDur;
       items.forEach((el, i) => {
         const xPct = xPcts[i];
         const rawX = xPct / 100 * widths[i];
@@ -160,8 +118,10 @@ function horizontalLoop(items, config) {
           .fromTo(el, { xPercent: snap((rawX - right + totalW) / widths[i] * 100) },
             { xPercent: xPct, duration: (rawX - right + totalW - rawX) / (config.speed || 100), immediateRender: false }, right / (config.speed || 100))
           .add('label' + i, left / (config.speed || 100));
-        times[i] = left / (config.speed || 100);
-        if (!i) offset0 = left / (config.speed || 100);
+        // Wrapped here rather than left negative: toIdx() routes out-of-range
+        // targets through gsap.utils.wrap(0, 1), which would collapse a
+        // negative time into 0–1s instead of the end of the timeline.
+        times[i] = wrapTime((left - (center ? parentEl.offsetWidth / 2 - widths[i] / 2 : 0)) / spd);
       });
       tl.times = times;
     };
@@ -178,7 +138,13 @@ function horizontalLoop(items, config) {
     measure();
     build();
 
-    const wrap   = gsap.utils.wrap(0, 1);
+    // Two wrappers, because a single gsap.utils.wrap(0, 1) was being used for
+    // both progress (0–1) and timeline *times* (0–duration). The 0–1 range is
+    // right for progress but quietly collapsed any time past one second into
+    // the first second of the loop — it only ever looked correct because the
+    // first card's snap time happened to land under 1s.
+    const wrapProg = gsap.utils.wrap(0, 1);
+    const wrapTime = t => gsap.utils.wrap(0, tl.duration())(t);
     const toIdx  = (idx, vars) => {
       vars      = vars || {};
       const cur = tl.current();
@@ -187,11 +153,11 @@ function horizontalLoop(items, config) {
       if (t === undefined) return;
       let target = t;
       if (target > tl.time() !== idx > cur && idx !== cur) target += tl.duration() * (idx > cur ? 1 : -1);
-      if (target < 0 || target > tl.duration()) vars.modifiers = { time: wrap };
+      if (target < 0 || target > tl.duration()) vars.modifiers = { time: wrapTime };
       lastIndex  = ((idx % length) + length) % length;
       vars.overwrite = true;
       gsap.killTweensOf(draggable);
-      return vars.duration === 0 ? tl.time(wrap(target)) : tl.tweenTo(target, vars);
+      return vars.duration === 0 ? tl.time(wrapTime(target)) : tl.tweenTo(target, vars);
     };
 
     tl.toIndex    = toIdx;
@@ -210,17 +176,31 @@ function horizontalLoop(items, config) {
     if (config.draggable && typeof Draggable !== 'undefined') {
       const proxy = document.createElement('div');
       let   startProg, startX2, ratio, snap2, throwing;
-      const updateProg = () => tl.progress(wrap(startProg + (startX2 - proxy.x) * ratio));
+      // Drag offset has to come from Draggable's own startX/x pair. This read
+      // (startX2 - proxy.x) instead, mixing in the press-init correction that
+      // belongs to snap() — harmless on the very first press, when Draggable's
+      // x is still 0, but from the second press on it threw the progress off
+      // and every later drag snapped straight back to the current card.
+      const updateProg = () => tl.progress(wrapProg(startProg + (draggable.startX - draggable.x) * ratio));
       const settle     = () => tl.closestIndex(true);
       draggable = Draggable.create(proxy, {
         trigger:          items[0].parentNode,
         type:             'x',
         overshootTolerance: 0,
         inertia:          true,
+        // Cards are video players, and Draggable skips presses that land on
+        // "clickable" elements (<video> among them) unless told otherwise — so
+        // a grab starting on the video itself, i.e. almost anywhere on a card,
+        // would never begin a drag. minimumMovement keeps a stationary tap a
+        // click, so the player's own controls still respond.
+        dragClickables:   true,
+        minimumMovement:  6,
         snap(x) {
-          if (Math.abs(startProg / -ratio - proxy.x) < 10) return snap2 + proxy.x2;
+          // proxy.x2 was undefined on a plain div, so a barely-moved press
+          // returned NaN and killed the snap. startX2 is the press-init offset.
+          if (Math.abs(startProg / -ratio - this.x) < 10) return snap2 + startX2;
           const r = -(x * ratio * tl.duration());
-          const w = wrap(r);
+          const w = wrapTime(r);
           const nearest = tl.times ? tl.times[findNearest(tl.times, w, tl.duration())] : 0;
           const diff = nearest - w;
           snap2 = (r + (Math.abs(diff) > tl.duration() / 2 ? diff < 0 ? tl.duration() : -tl.duration() : diff)) / tl.duration() / -ratio;
@@ -435,6 +415,15 @@ function initOsmoSlider() {
       if (/^\d+$/.test(v)) {
         const idx = Math.max(0, Math.min(slides.length - 1, parseInt(v, 10) - 1));
         btn.onclick = () => loop && loop.toIndex(idx, { duration: DURATION, ease: EASE });
+      } else if (v === 'prev' || v === 'next') {
+        // Only numeric controls were wired here, so the prev/next arrows this
+        // layout actually ships with were inert — the rotate branch above
+        // handles them, this one never did.
+        btn.onclick = () => {
+          if (!loop) return;
+          const opts = { duration: DURATION, ease: EASE };
+          v === 'next' ? loop.next(opts) : loop.previous(opts);
+        };
       }
     });
   });
@@ -567,23 +556,34 @@ function initServiceAnimations() {
   // Nav buttons are excluded from GSAP — always visible (CSS handles them)
 
   // ── Videos — absolute position so they start early, parallel to text ─────
+  // fromTo with immediateRender:false, not from(): a `from` tween records its
+  // end state by reading the element, and ScrollTrigger.refresh() (fired on
+  // window load once the Wistia players size themselves) makes it re-read —
+  // by then the tween's own start values are sitting inline, so it captured
+  // opacity:0 and animated 0 → 0, leaving the whole slider permanently blank.
+  // Spelling both ends out explicitly means there is nothing to misread.
   if (collection) {
-    tl.from(collection, {
-      opacity: 0,
-      y: 60,
-      duration: 0.95,
-      ease: 'power3.out'
-    }, 0.25);   // absolute: starts at t=0.25s regardless of text timing
+    tl.fromTo(collection,
+      { opacity: 0, y: 60 },
+      { opacity: 1, y: 0, duration: 0.95, ease: 'power3.out', immediateRender: false },
+      0.25);  // absolute: starts at t=0.25s regardless of text timing
   }
 
   if (cards.length) {
-    tl.from(cards, {
-      opacity: 0,
-      scale: 0.88,
-      filter: 'blur(10px)',
-      duration: 0.72,
-      ease: 'power3.out'
-    }, 0.45);   // absolute: starts at t=0.45s — cards visible almost immediately
+    tl.fromTo(cards,
+      { opacity: 0, scale: 0.88, filter: 'blur(10px)' },
+      {
+        opacity: 1,
+        scale: 1,
+        filter: 'blur(0px)',
+        duration: 0.72,
+        ease: 'power3.out',
+        immediateRender: false,
+        // Hand opacity/filter back to the stylesheet so the active/inview
+        // dimming rules aren't outranked by leftover inline values.
+        clearProps: 'opacity,filter'
+      },
+      0.45);  // absolute: starts at t=0.45s — cards visible almost immediately
   }
 }
 
@@ -681,11 +681,77 @@ function initUGCClouds() {
   gsap.fromTo(cloudLeft,  { y: leftFrom },  { y: leftTo,  ease: 'none', scrollTrigger: trig });
 }
 
+// ─── Trusted-by badge: cycle the avatars through a larger pool ────────────────
+// Only 4 faces are on screen at once, but the pool (declared in the JSON block
+// next to the badge markup) is bigger, so one slot at a time swaps to a face
+// that isn't currently showing.
+function initTrustedAvatars() {
+  const badge = document.querySelector('.vl-trusted');
+  if (!badge || typeof gsap === 'undefined') return;
+
+  const slots  = Array.from(badge.querySelectorAll('.vl-trusted__slot img'));
+  const poolEl = badge.querySelector('.vl-trusted__pool');
+  if (!slots.length || !poolEl) return;
+
+  let pool;
+  try { pool = JSON.parse(poolEl.textContent); } catch (e) { return; }
+  // Nothing to rotate through if the pool can't beat what's already shown
+  if (!Array.isArray(pool) || pool.length <= slots.length) return;
+
+  // Someone who's asked for less motion gets the static badge
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Preload the off-screen faces so a swapped-in avatar never flashes blank
+  pool.forEach(p => { const img = new Image(); img.src = p.src; });
+
+  // Pool index currently displayed in each slot
+  const shown = slots.map(img => {
+    const i = pool.findIndex(p => img.getAttribute('src') === p.src);
+    return i === -1 ? 0 : i;
+  });
+
+  const SWAP_EVERY  = 1100; // ms between swaps
+  const FIRST_SWAP  = 400;  // ms — starts almost immediately, so it's caught before scrolling away
+  let turn = 0;             // round-robin, so every slot gets its turn
+
+  const swap = () => {
+    const slot = turn++ % slots.length;
+
+    // Only faces that aren't on screen, so the same creator never shows twice
+    const candidates = pool.map((_, i) => i).filter(i => shown.indexOf(i) === -1);
+    if (!candidates.length) return;
+
+    const pick  = candidates[Math.floor(Math.random() * candidates.length)];
+    const img   = slots[slot];
+    const entry = pool[pick];
+
+    gsap.timeline()
+      .to(img, { scale: 0.4, opacity: 0, duration: 0.28, ease: 'power2.in' })
+      .add(() => {
+        img.src = entry.src;
+        img.alt = entry.alt || '';
+        shown[slot] = pick;
+      })
+      .to(img, { scale: 1, opacity: 1, duration: 0.42, ease: 'back.out(1.7)' });
+  };
+
+  setTimeout(() => {
+    swap();
+    setInterval(swap, SWAP_EVERY);
+  }, FIRST_SWAP);
+}
+
 // ─── Client carousel: auto-scroll + drag to go faster ─────────────────────────
+// Two rows, each running independently in its own direction (data-dir="-1"
+// scrolls left, "1" scrolls right). Each row drags on its own.
 function initClientsCarousel() {
   const carousel = document.querySelector('.vl-clients-carousel');
-  const track    = document.querySelector('.vl-clients-track');
-  if (!carousel || !track || typeof gsap === 'undefined') return;
+  if (!carousel || typeof gsap === 'undefined') return;
+  carousel.querySelectorAll('.vl-clients-track').forEach(initClientsRow);
+}
+
+function initClientsRow(track) {
+  const dir = Number(track.dataset.dir) || -1;
 
   const SPEED = 40; // px/sec auto-scroll
   let x        = 0;
@@ -704,9 +770,18 @@ function initClientsCarousel() {
     x = ((x % loopW) + loopW) % loopW - loopW; // keep in (-loopW, 0]
   };
 
+  // Stagger the rows by half a card so the two rows sit in a brick pattern
+  // instead of sharing columns — cards are then never exactly stacked on one
+  // another, which is what would make a repeated client obvious.
+  if (track.dataset.stagger === 'half') {
+    const card = track.querySelector('.vl-clients-card');
+    if (card) x -= card.offsetWidth / 2;
+    wrap();
+  }
+
   gsap.ticker.add((time, deltaTime) => {
     if (!dragging) {
-      x -= SPEED * (deltaTime / 1000);
+      x += dir * SPEED * (deltaTime / 1000);
       wrap();
       gsap.set(track, { x });
     }
@@ -834,6 +909,8 @@ function initTestimonialsMarquee() {
 }
 
 // ─── Perks bands scroll reveal ────────────────────────────────────────────────
+const PERKS_STACK_EFFECT_ENABLED = true;
+
 function initPerksAnimation() {
   const bands = document.querySelectorAll('.vl-perk-band');
   if (!bands.length || typeof ScrollTrigger === 'undefined') return;
@@ -885,7 +962,7 @@ function initPerksAnimation() {
 
     // Blur-out + scale-up as next band slides over this one — the feature
     // image blurs along with the text.
-    if (i < bands.length - 1) {
+    if (PERKS_STACK_EFFECT_ENABLED && i < bands.length - 1) {
       const st = () => ({ trigger: bands[i + 1], start: blurStart, end: 'top top', scrub: 0.8 });
 
       const text = [title, sub].filter(Boolean);
@@ -954,6 +1031,40 @@ function initContactFooterAnimations() {
 }
 
 
+// ─── Testimonials → contact colour hand-off ──────────────────────────────
+// Scrubs the red dome at the foot of the testimonials up out of the contact
+// section, so the panel colour gives way to brand red as the section arrives
+// rather than meeting it at a hard edge. Scaled on the Y axis only, from a
+// bottom origin, so it reads as the red rising rather than sliding in.
+function initContactTransition() {
+  if (typeof ScrollTrigger === 'undefined') return;
+
+  const swell   = document.querySelector('.vl-red-swell');
+  const contact = document.querySelector('.vlance-contact-section');
+  if (!swell || !contact) return;
+
+  // Reduced motion still needs the colour hand-off, just not the movement.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    gsap.set(swell, { scaleY: 1 });
+    return;
+  }
+
+  gsap.fromTo(swell,
+    { scaleY: 0.05 },
+    {
+      scaleY: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: contact,
+        start: 'top bottom',   // contact section first touches the viewport
+        end:   'top 62%',      // fully risen before it settles
+        scrub: 1
+      }
+    }
+  );
+}
+
+
 // ─── Hero description word-by-word reveal ─────────────────────────────────────
 function initHeroDesc() {
   const desc = document.querySelector('.home-hero__description-p');
@@ -1010,25 +1121,6 @@ function initHeroDesc() {
 // ─── SVG background parallax ──────────────────────────────────────────────────
 function initSvgParallax() {
   if (typeof ScrollTrigger === 'undefined') return;
-
-  // Hero background — drifts up slowly as you scroll through hero.
-  // Skipped on mobile: the mobile layout bottom-anchors this image (bottom:0)
-  // so it sits flush against the UGC section below it; shifting it up on scroll
-  // pulls its bottom edge away from that seam and opens a gap that grows and
-  // shrinks with scroll position.
-  const heroBck = document.querySelector('.vl-hero-bck');
-  if (heroBck && window.innerWidth > 768) {
-    gsap.to(heroBck, {
-      yPercent: -8,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1.2
-      }
-    });
-  }
 
 
 
@@ -1545,6 +1637,91 @@ function initNavScroll() {
   });
 }
 
+// ─── Hero entrance: headline stagger + floating face cluster settle ───────────
+// ─── Hero background: clouds + stars drift independently on scroll ────────────
+function initHeroBckParallax() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  const hero = document.querySelector('#hero');
+  if (!hero) return;
+
+  const suffix = window.innerWidth <= 768 ? '-m' : '-d';
+  const cloudLeft  = hero.querySelector('#cloud_left' + suffix);
+  const cloudRight = hero.querySelector('#cloud_right' + suffix);
+  const star1      = hero.querySelector('#red_star_1' + suffix);
+  const star2      = hero.querySelector('#red_star_1_copy' + suffix);
+  const arrow      = hero.querySelector(suffix === '-d' ? '#hero-arrow-d' : '#main_bck-m');
+
+  const trig = { trigger: '#hero', start: 'top top', end: 'bottom top' };
+
+  // The red foreground shape — closest layer, so it moves the most.
+  if (arrow) {
+    gsap.to(arrow, { y: -35, ease: 'none', scrollTrigger: { ...trig, scrub: 0.6 } });
+  }
+
+  // Clouds drift slowly sideways + up (further away, so they move less);
+  // stars travel further and spin a little (closer / lighter, more motion).
+  if (cloudLeft) {
+    gsap.to(cloudLeft, { x: -70, y: -40, ease: 'none', scrollTrigger: { ...trig, scrub: 1.6 } });
+  }
+  if (cloudRight) {
+    gsap.to(cloudRight, { x: 70, y: -55, ease: 'none', scrollTrigger: { ...trig, scrub: 2 } });
+  }
+  if (star1) {
+    gsap.to(star1, { y: -150, rotate: 35, transformOrigin: '50% 50%', ease: 'none', scrollTrigger: { ...trig, scrub: 0.8 } });
+  }
+  if (star2) {
+    gsap.to(star2, { y: -110, rotate: -30, transformOrigin: '50% 50%', ease: 'none', scrollTrigger: { ...trig, scrub: 1.1 } });
+  }
+}
+
+function initHeroEntrance() {
+  if (typeof gsap === 'undefined') return;
+  const hero = document.querySelector('.home-hero');
+  if (!hero) return;
+
+  const trust  = hero.querySelector('.vl-trusted');
+  const lines  = Array.from(hero.querySelectorAll('.vl-ht-line--desktop, .vl-ht-line--mobile'));
+  const cta    = hero.querySelector('.vl-hero-cta');
+
+  const visibleLines = lines.filter(l => getComputedStyle(l).display !== 'none');
+
+  gsap.set([trust, cta].filter(Boolean), { opacity: 0, y: 18 });
+  gsap.set(visibleLines, { opacity: 0, y: 46 });
+
+  const tl = gsap.timeline({ delay: 0.15 });
+  tl.to(visibleLines, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out', stagger: 0.09 }, 0);
+  if (cta) tl.to(cta, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4');
+  if (trust) tl.to(trust, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.45');
+}
+
+// ─── Generic scroll reveal: [data-reveal] fades/slides up, [data-reveal-group]
+//     staggers its direct children — one mechanism reused across sections ─────
+function initScrollReveal() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+  document.querySelectorAll('[data-reveal]').forEach(el => {
+    gsap.set(el, { opacity: 0, y: 36 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 88%',
+      onEnter:     () => gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }),
+      onEnterBack: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }),
+    });
+  });
+
+  document.querySelectorAll('[data-reveal-group]').forEach(group => {
+    const items = Array.from(group.children);
+    if (!items.length) return;
+    gsap.set(items, { opacity: 0, y: 30 });
+    ScrollTrigger.create({
+      trigger: group,
+      start: 'top 85%',
+      onEnter:     () => gsap.to(items, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08 }),
+      onEnterBack: () => gsap.to(items, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08 }),
+    });
+  });
+}
+
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const isMobile = window.innerWidth <= 768;
@@ -1566,11 +1743,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initContactFlags();
     initStarParallax();
     initContactFooterAnimations();
+    initContactTransition();
+    initContactReveal();
     initPerksAnimation();
     initUGCClouds();
+    initTrustedAvatars();
     initClientsCarousel();
     initFooterVideoMarquee();
     initTestimonialsMarquee(); // no-ops above the mobile breakpoint
+    initHeroEntrance();
+    initScrollReveal();
     if (!isMobile) {
       initServiceAnimations();
       initStatsAnimations();
