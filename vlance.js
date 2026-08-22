@@ -1009,6 +1009,45 @@ function initPerksAnimation() {
 
 }
 
+// ─── Bonus cards: same stack blur-out as the perk bands (mobile only) ────────
+// The CSS sticky stack does the movement; this is the other half of the perk
+// treatment — each card's contents blur, fade and swell as the next card
+// slides up over it. Values deliberately mirror initPerksAnimation, including
+// the image going to opacity 0 rather than resting at 0.18 (a blurred 18%
+// photo reads as a grey smudge rather than as faded back).
+function initBonusCardsStack() {
+  if (window.innerWidth > 768 || typeof ScrollTrigger === 'undefined') return;
+
+  const cards = document.querySelectorAll('.ai-card');
+  if (cards.length < 2) return;
+
+  cards.forEach((card, i) => {
+    if (i === cards.length - 1) return;   // nothing slides over the last one
+
+    const text = [
+      card.querySelector('.ai-card-title'),
+      card.querySelector('.ai-card-description'),
+    ].filter(Boolean);
+    const img = card.querySelector('.ai-card-img');
+
+    const st = () => ({ trigger: cards[i + 1], start: 'bottom bottom', end: 'top top', scrub: 0.8 });
+
+    if (text.length) {
+      gsap.to(text, {
+        filter: 'blur(16px)', opacity: 0.18, scale: 1.06, ease: 'power1.in',
+        scrollTrigger: st()
+      });
+    }
+    if (img) {
+      gsap.to(img, {
+        filter: 'blur(16px)', opacity: 0, scale: 1.06, ease: 'power1.in',
+        scrollTrigger: st()
+      });
+    }
+  });
+}
+
+
 // ─── Contact + Footer scroll animations ───────────────────────────────────────
 function initContactFooterAnimations() {
   if (typeof ScrollTrigger === 'undefined') return;
@@ -1818,6 +1857,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initFooterVideoMarquee();
     initTestimonialsMarquee(); // no-ops above the mobile breakpoint
     initSquareVideoCorners();  // ditto
+    initBonusCardsStack();     // ditto
     initHeroEntrance();
     initScrollReveal();
     if (!isMobile) {

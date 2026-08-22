@@ -1125,16 +1125,29 @@ a { color: inherit; }
   .vl-more-features { padding: clamp(2.5rem, 8vw, 3.5rem) 0; }
 
   /* Matched to the perk cards above: same 99vw width, same 5px stack gap,
-     same rounded-top / near-square-bottom silhouette. */
+     same rounded-top / near-square-bottom silhouette, and the same sticky
+     stack — each card pins to the top while the next one slides over it.
+     Flex column rather than grid on purpose: a sticky grid item is confined
+     to its own row's grid area, so it would never travel far enough to stack.
+     .vl-perks-bands is a flex column for exactly this reason. */
   .ai-cards-container {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 5px;
     padding: 0 0.5vw;
   }
   .ai-card {
+    position: sticky;
+    top: 0;
     max-width: none;
     border-radius: 2rem 2rem 0.3rem 0.3rem;
   }
+  /* Later cards paint over earlier ones as they slide up. :nth-of-type skips
+     the two decorative star <img> siblings, same as the colour rules below. */
+  .ai-cards-container .ai-card:nth-of-type(1) { z-index: 1; }
+  .ai-cards-container .ai-card:nth-of-type(2) { z-index: 2; }
+  .ai-cards-container .ai-card:nth-of-type(3) { z-index: 3; }
+  .ai-cards-container .ai-card:nth-of-type(4) { z-index: 4; }
   /* The markup's checkerboard (red, black, black, red) reads as a doubled
      black pair once the grid collapses to one column, so alternate strictly
      by position here. :nth-of-type counts divs only, skipping the two star
