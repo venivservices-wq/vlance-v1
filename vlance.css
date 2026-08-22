@@ -892,6 +892,11 @@ a { color: inherit; }
 .vl-testimonial-name { display: block; font-weight: 700; font-size: 1.05rem; color: var(--fg); }
 
 @media (max-width: 768px) {
+  /* Bigger heading, in line with the other mobile section titles. It breaks
+     on the markup's own <br>, so this only has to stay narrow enough that
+     "They said it," doesn't wrap a second time. */
+  .vl-testimonials-heading { font-size: clamp(2.6rem, 15vw, 3.5rem); }
+
   /* Break the marquee out of .container's gutters so the cards run edge to
      edge, then tilt the whole band. The extra 4vw of overhang on each side
      covers the wedges the rotation would otherwise open at the corners, and
