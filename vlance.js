@@ -195,6 +195,13 @@ function horizontalLoop(items, config) {
         // click, so the player's own controls still respond.
         dragClickables:   true,
         minimumMovement:  6,
+        // Only applied when the caller asks, so desktop keeps Draggable's
+        // defaults. These have to be passed at creation: Draggable reads them
+        // once in its constructor, which is why the Object.assign onto
+        // .vars afterwards never actually took effect.
+        ...(config.dragResistance  != null ? { dragResistance:  config.dragResistance  } : {}),
+        ...(config.throwResistance != null ? { throwResistance: config.throwResistance } : {}),
+        ...(config.maxDuration     != null ? { maxDuration:     config.maxDuration     } : {}),
         snap(x) {
           // proxy.x2 was undefined on a plain div, so a barely-moved press
           // returned NaN and killed the snap. startX2 is the press-init offset.
@@ -390,21 +397,33 @@ function initOsmoSlider() {
     }
 
     // ── Horizontal loop layout ──
+    // Touch dragging ran 1:1 with the finger and flung a long way on release,
+    // which reads as far too fast on a phone. Mobile gets real drag resistance
+    // and a much shorter throw; desktop is untouched.
+    const isTouch = window.innerWidth <= 768;
     const loop = horizontalLoop(slides, {
       draggable:    true,
       snap:         1,
       paused:       true,
       center:       centered ? collection : false,
       paddingRight: gap,
+      dragResistance:  isTouch ? 0.55  : null,
+      throwResistance: isTouch ? 6000  : null,
+      maxDuration:     isTouch ? 0.7   : null,
       onChange(el, idx) { setActive(idx, slides.length); },
     });
     if (loop && loop.draggable) {
-      Object.assign(loop.draggable.vars, {
-        maxDuration:     1,
-        minDuration:     0.5,
-        dragResistance:  0.025,
-        throwResistance: 2000,
-      });
+      // Desktop only: on mobile these are passed at creation (above), where
+      // Draggable actually reads them, and re-assigning here would put the
+      // old fast values back on .vars.
+      if (!isTouch) {
+        Object.assign(loop.draggable.vars, {
+          maxDuration:     1,
+          minDuration:     0.5,
+          dragResistance:  0.025,
+          throwResistance: 2000,
+        });
+      }
     }
     loop && loop.toIndex(0, { duration: 0 });
     setActive(0, slides.length);
@@ -1511,10 +1530,49 @@ function initContactMonkey() {
 
 
 
+// ─── Work slider: square video corners on mobile ─────────────────────────────
+// <wistia-player> rounds its own chrome by 12px inside a shadow root, so no
+// page-level rule can reach it — the only way in is a <style> appended to that
+// shadow root once the element has upgraded.
+function initSquareVideoCorners() {
+  if (window.innerWidth > 768) return;
+
+  const players = document.querySelectorAll('.product-slider wistia-player');
+  if (!players.length) return;
+
+  const CSS = '.w-chrome,.w-video-wrapper,.w-bottom-bar{border-radius:0 !important}';
+  const inject = player => {
+    const root = player.shadowRoot;
+    if (!root) return false;                                  // not upgraded yet
+    if (root.querySelector('style[data-vl-square]')) return true;
+    const style = document.createElement('style');
+    style.setAttribute('data-vl-square', '');
+    style.textContent = CSS;
+    root.appendChild(style);
+    return true;
+  };
+
+  players.forEach(player => {
+    if (inject(player)) return;
+    // The player attaches its shadow root asynchronously once Wistia's script
+    // has loaded, so poll for a short window rather than giving up here.
+    let tries = 0;
+    const id = setInterval(() => {
+      if (inject(player) || ++tries > 40) clearInterval(id);
+    }, 250);
+  });
+}
+
+
 // ─── Contact: word-by-word entrance (no pin — plays once on scroll-in) ───────
 function initContactReveal() {
   const contact = document.querySelector('.vlance-contact-section');
   if (!contact || typeof ScrollTrigger === 'undefined') return;
+
+  // Mobile shows the heading and buttons outright — no fade-in on scroll. This
+  // also preserves the heading's <br>: the reveal below rebuilds the markup
+  // from textContent, which drops the break and collapses it to one line.
+  if (window.innerWidth <= 768) return;
 
   const heading = contact.querySelector('.h-l');
   if (!heading) return;
@@ -1751,6 +1809,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initClientsCarousel();
     initFooterVideoMarquee();
     initTestimonialsMarquee(); // no-ops above the mobile breakpoint
+    initSquareVideoCorners();  // ditto
     initHeroEntrance();
     initScrollReveal();
     if (!isMobile) {

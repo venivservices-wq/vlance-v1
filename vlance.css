@@ -38,6 +38,10 @@
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  /* Backstop against sideways page scroll. `clip` rather than `hidden`: it
+     creates no scroll container, so the perk bands' position:sticky still
+     resolves against the viewport. */
+  overflow-x: clip;
 }
 
 body {
@@ -303,21 +307,30 @@ a { color: inherit; }
   max-width: 14ch;
 }
 
+/* The outer wrapper stays screen-aligned at exactly 100% width and does the
+   clipping; the oversized, rotated strip lives on --inner. Previously the
+   width:112% / left:-6% / rotate() all sat here, on an element that is a
+   direct child of <body> with nothing above it to clip — so the strip stuck
+   ~32px past the right edge of the viewport and gave the whole page a
+   horizontal scroll. Keeping the bleed on the child means the overflow is
+   clipped locally and can never reach the document. */
 .vl-clients-carousel {
   position: relative;
-  width: 112%;
-  left: -6%;
+  width: 100%;
   overflow: hidden;
   background: var(--bg);
   padding: clamp(2rem, 4vw, 3rem) 0;
-  transform: rotate(-2.5deg);
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
 }
 .vl-clients-carousel--inner {
+  position: relative;
+  width: 112%;
+  left: -6%;
   display: flex;
   flex-direction: column;
   gap: clamp(0.15rem, 0.4vw, 0.3rem);
+  transform: rotate(-2.5deg);
 }
 .vl-clients-track {
   display: flex;
@@ -459,7 +472,13 @@ a { color: inherit; }
   /* Cards fill ~99% of the viewport width; height shrink-wraps the content
      so there is no dead space above the text. */
   .vl-perks-container { width: 99vw; }
-  .vl-perk-band { height: auto; }
+  .vl-perks-bands { gap: 5px; }
+  .vl-perk-band {
+    height: auto;
+    /* Round top, near-square bottom, so the flush image reads as sitting on
+       the card's floor rather than in a pill. */
+    border-radius: 2rem 2rem 0.3rem 0.3rem;
+  }
 
   /* Section backdrop matches the featured-testimonial panel below; the cards
      themselves stay white (or red) on top of it. */
@@ -892,6 +911,7 @@ a { color: inherit; }
   }
   .vl-testimonials-grid {
     --col-offset: 1.75rem;
+    gap: 0.5rem;
     grid-template-columns: none;
     grid-template-rows: repeat(4, auto);
     grid-auto-flow: column;
@@ -1234,6 +1254,17 @@ a { color: inherit; }
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 .vlance-contact-btn:hover { background: var(--fg); color: #fff; }
+
+@media (max-width: 768px) {
+  /* Bigger, and left to break on the markup's own <br> so it lands as two
+     lines. initContactReveal is skipped on mobile, which is what keeps that
+     <br> alive — the word-split reveal rebuilds the heading from textContent
+     and would drop it. */
+  .vlance-contact-section .h-l {
+    font-size: 3.9rem;
+    line-height: 0.92;
+  }
+}
 
 @media (max-width: 600px) {
   .vlance-contact-section { padding: 4rem 1.25rem 7rem; }
