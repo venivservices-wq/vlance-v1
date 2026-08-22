@@ -1169,14 +1169,19 @@ a { color: inherit; }
      dark bands exactly — pulled back off pure white. !important on the title
      because the base rule sets its colour that way. */
   .ai-card-title {
+    font-family: var(--font-display) !important;
+    font-weight: 800;
     font-size: clamp(3.4rem, 6.6vw, 7.2rem);
     line-height: 0.92;
     letter-spacing: -0.04em;
     color: rgba(255, 255, 255, 0.82) !important;
   }
   .ai-card-description {
+    font-family: var(--font-mono);
+    font-weight: 400;
     font-size: clamp(1.4rem, 2.3vw, 2.2rem);
     line-height: 1.5;
+    letter-spacing: normal;
     max-width: 34ch;
     color: rgba(255, 255, 255, 0.65);
   }
