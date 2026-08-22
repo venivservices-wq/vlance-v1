@@ -202,6 +202,7 @@ function horizontalLoop(items, config) {
         ...(config.dragResistance  != null ? { dragResistance:  config.dragResistance  } : {}),
         ...(config.throwResistance != null ? { throwResistance: config.throwResistance } : {}),
         ...(config.maxDuration     != null ? { maxDuration:     config.maxDuration     } : {}),
+        ...(config.minDuration     != null ? { minDuration:     config.minDuration     } : {}),
         snap(x) {
           // proxy.x2 was undefined on a plain div, so a barely-moved press
           // returned NaN and killed the snap. startX2 is the press-init offset.
@@ -407,9 +408,10 @@ function initOsmoSlider() {
       paused:       true,
       center:       centered ? collection : false,
       paddingRight: gap,
-      dragResistance:  isTouch ? 0.55  : null,
-      throwResistance: isTouch ? 6000  : null,
-      maxDuration:     isTouch ? 0.7   : null,
+      dragResistance:  isTouch ? 0.78  : null,
+      throwResistance: isTouch ? 20000 : null,
+      maxDuration:     isTouch ? 1.2   : null,
+      minDuration:     isTouch ? 0.85  : null,
       onChange(el, idx) { setActive(idx, slides.length); },
     });
     if (loop && loop.draggable) {
@@ -1540,7 +1542,13 @@ function initSquareVideoCorners() {
   const players = document.querySelectorAll('.product-slider wistia-player');
   if (!players.length) return;
 
-  const CSS = '.w-chrome,.w-video-wrapper,.w-bottom-bar{border-radius:0 !important}';
+  // .w-vulcan-v2 is the full-size player surface and carries an INLINE 9px
+  // radius, which is what stayed visible at the top of each card after the
+  // first pass — the bottom corners were simply hidden under the dark
+  // .vlance-video-overlay gradient. !important in a shadow-root stylesheet
+  // still outranks an inline style, so this reaches it.
+  const CSS = '.w-chrome,.w-video-wrapper,.w-bottom-bar,.w-vulcan-v2,' +
+              'video,img,canvas{border-radius:0 !important}';
   const inject = player => {
     const root = player.shadowRoot;
     if (!root) return false;                                  // not upgraded yet

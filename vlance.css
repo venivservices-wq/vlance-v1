@@ -1124,15 +1124,16 @@ a { color: inherit; }
 @media (max-width: 768px) {
   .vl-more-features { padding: clamp(2.5rem, 8vw, 3.5rem) 0; }
 
-  /* One column, tight stack, and the same 99vw gutter as the perk cards. */
+  /* Matched to the perk cards above: same 99vw width, same 5px stack gap,
+     same rounded-top / near-square-bottom silhouette. */
   .ai-cards-container {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 5px;
     padding: 0 0.5vw;
   }
   .ai-card {
     max-width: none;
-    border-radius: 0.875rem;
+    border-radius: 2rem 2rem 0.3rem 0.3rem;
   }
   /* The markup's checkerboard (red, black, black, red) reads as a doubled
      black pair once the grid collapses to one column, so alternate strictly
@@ -1140,25 +1141,27 @@ a { color: inherit; }
      <img> siblings. */
   .ai-cards-container .ai-card:nth-of-type(odd) { background: var(--red); }
   .ai-cards-container .ai-card:nth-of-type(even) { background: var(--fg); }
+  /* Same padding rhythm as .vl-perk-band's text block. */
   .ai-card-top-row {
     gap: 0.5rem;
-    padding: 1.75rem 1.5rem 0 !important;
-    margin-bottom: 1.25rem !important;
+    padding: clamp(2.5rem, 9vw, 3.5rem) var(--edge) 0 !important;
+    margin-bottom: 1.5rem !important;
   }
   .ai-card-title-row {
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 0.35rem !important;
+    margin-bottom: 1.1rem !important;
   }
+  /* Type sized to match .vl-perk-title / .vl-perk-sub exactly. */
   .ai-card-title {
-    font-size: 1.75rem;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    font-size: clamp(3.4rem, 6.6vw, 7.2rem);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
   }
   .ai-card-description {
-    font-size: 1.05rem;
-    line-height: 1.45;
-    max-width: 32ch;
+    font-size: clamp(1.4rem, 2.3vw, 2.2rem);
+    line-height: 1.5;
+    max-width: 34ch;
   }
   /* Media stays flush to the card's side and bottom edges. */
   .ai-card-bottom-row {
@@ -1166,15 +1169,7 @@ a { color: inherit; }
   }
 }
 
-@media (max-width: 480px) {
-  .ai-card-top-row {
-    padding: 1.5rem 1.25rem 0 !important;
-    margin-bottom: 1rem !important;
-  }
-  .ai-card-bottom-row {
-    padding: 0 !important;
-  }
-}
+
 
 /* ══════════════════════════ 08 · CONTACT ══════════════════════════ */
 .vlance-contact-section {
