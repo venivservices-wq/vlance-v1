@@ -398,37 +398,77 @@ function initOsmoSlider() {
     }
 
     // ── Horizontal loop layout ──
-    // Touch dragging ran 1:1 with the finger and flung a long way on release,
-    // which reads as far too fast on a phone. Mobile gets real drag resistance
-    // and a much shorter throw; desktop is untouched.
+    // Touch used to go through GSAP's Draggable + InertiaPlugin, same as
+    // desktop, just with heavier resistance dialed in. Two problems with
+    // that in practice: (1) InertiaPlugin estimates release velocity from
+    // recent pointer samples, and the very first drag of a page load has
+    // too few of them — an erratic estimate could fling the loop all the
+    // way around before settling back near card 1, which is exactly the
+    // "goes fast and janky, scrolls through everything, lands back on 1"
+    // bug. (2) updateProg() maps drag distance to progress using a ratio
+    // over the FULL loop width (every card, not just one), so with heavy
+    // resistance on top, a whole screen-width swipe barely dented the
+    // progress needed to reach the next card.
+    // Mobile now skips Draggable entirely and instead treats a swipe as a
+    // simple, discrete "go to next/previous card" gesture — the same
+    // toIndex() the arrow buttons already use, so it's exactly one card
+    // per swipe no matter how far or fast you drag. Desktop keeps the
+    // free-drag behavior, untouched.
     const isTouch = window.innerWidth <= 768;
     const loop = horizontalLoop(slides, {
-      draggable:    true,
+      draggable:    !isTouch,
       snap:         1,
       paused:       true,
       center:       centered ? collection : false,
       paddingRight: gap,
-      dragResistance:  isTouch ? 0.78  : null,
-      throwResistance: isTouch ? 20000 : null,
-      maxDuration:     isTouch ? 1.2   : null,
-      minDuration:     isTouch ? 0.85  : null,
       onChange(el, idx) { setActive(idx, slides.length); },
     });
-    if (loop && loop.draggable) {
-      // Desktop only: on mobile these are passed at creation (above), where
-      // Draggable actually reads them, and re-assigning here would put the
-      // old fast values back on .vars.
-      if (!isTouch) {
-        Object.assign(loop.draggable.vars, {
-          maxDuration:     1,
-          minDuration:     0.5,
-          dragResistance:  0.025,
-          throwResistance: 2000,
-        });
-      }
+    if (!isTouch && loop && loop.draggable) {
+      Object.assign(loop.draggable.vars, {
+        maxDuration:     1,
+        minDuration:     0.5,
+        dragResistance:  0.025,
+        throwResistance: 2000,
+      });
     }
     loop && loop.toIndex(0, { duration: 0 });
     setActive(0, slides.length);
+
+    if (isTouch && loop && collection) {
+      const SWIPE_PX = 30; // minimum horizontal travel to count as an intentional swipe
+      let startX = 0, startY = 0, axis = null;
+
+      const touchStart = e => {
+        const t = e.touches[0];
+        startX = t.clientX;
+        startY = t.clientY;
+        axis = null;
+      };
+      const touchMove = e => {
+        const t = e.touches[0];
+        if (axis === null) {
+          const dx = t.clientX - startX;
+          const dy = t.clientY - startY;
+          if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return; // ignore jitter
+          axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        }
+        // Horizontal gesture: own it so the page doesn't scroll along with it.
+        // Vertical: do nothing and let the page scroll normally (touch-action:
+        // pan-y on .gsap-slider__list handles the rest).
+        if (axis === 'x') e.preventDefault();
+      };
+      const touchEnd = e => {
+        if (axis !== 'x') return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) < SWIPE_PX) return; // too small to count as a swipe
+        const opts = { duration: DURATION, ease: EASE };
+        dx < 0 ? loop.next(opts) : loop.previous(opts);
+      };
+
+      collection.addEventListener('touchstart', touchStart, { passive: true });
+      collection.addEventListener('touchmove',  touchMove,  { passive: false });
+      collection.addEventListener('touchend',   touchEnd,   { passive: true });
+    }
 
     controls.forEach(btn => {
       btn.disabled = false;
@@ -702,22 +742,153 @@ function initUGCClouds() {
   gsap.fromTo(cloudLeft,  { y: leftFrom },  { y: leftTo,  ease: 'none', scrollTrigger: trig });
 }
 
+// ─── Client roster helpers (clients.js) ────────────────────────────────────
+// Everything below that needs client photos/names/handles reads them from
+// window.VLANCE_CLIENTS (see clients.js) instead of hand-written markup —
+// the hero badge pool, the carousel cards and the "Trusted by N+" count all
+// come from that one list.
+
+// Paths in clients.js are plain, human-editable strings (e.g. "png/clients/
+// chico pfp.png"); encode them for use in a src/href attribute.
+function encodeClientPhoto(path) {
+  return path.split('/').map(encodeURIComponent).join('/');
+}
+
+// One <a> (clickable, has a profile url) or <div> (no url yet) client card,
+// used by buildClientsCarousel().
+function buildClientCard(client) {
+  const el = document.createElement(client.url ? 'a' : 'div');
+  el.className = 'vl-clients-card';
+  if (client.url) {
+    el.href = client.url;
+    el.target = '_blank';
+    el.rel = 'noopener noreferrer';
+  }
+
+  const frame = document.createElement('div');
+  frame.className = 'vl-clients-card__frame';
+  const img = document.createElement('img');
+  img.className = 'vl-clients-card__photo';
+  img.src = encodeClientPhoto(client.photo);
+  img.alt = client.name;
+  img.loading = 'lazy';
+  frame.appendChild(img);
+
+  const body = document.createElement('div');
+  body.className = 'vl-clients-card__body';
+  const name = document.createElement('p');
+  name.className = 'vl-clients-card__name';
+  name.textContent = client.name;
+  body.appendChild(name);
+  if (client.handle) {
+    const handle = document.createElement('p');
+    handle.className = 'vl-clients-card__handle';
+    handle.textContent = client.handle;
+    body.appendChild(handle);
+  }
+
+  el.appendChild(frame);
+  el.appendChild(body);
+  return el;
+}
+
+// How many copies of the client list each carousel row repeats to fill a
+// seamless loop (see the "Row is N duplicated sets" comment in
+// initClientsRow below — both need to agree on this number).
+const CLIENTS_CAROUSEL_REPEATS = 3;
+
+// Builds the two carousel rows from clients.js. Deliberately has no GSAP
+// dependency and runs unconditionally in the boot sequence, so the wall of
+// faces still renders even if the GSAP CDN fails to load; initClientsCarousel()
+// below layers the auto-scroll/drag motion on top once GSAP is ready.
+function buildClientsCarousel() {
+  const carousel = document.querySelector('.vl-clients-carousel');
+  const clients  = window.VLANCE_CLIENTS;
+  if (!carousel || !Array.isArray(clients) || !clients.length) return;
+
+  const topTrack    = carousel.querySelector('.vl-clients-track--top');
+  const bottomTrack = carousel.querySelector('.vl-clients-track--bottom');
+  if (!topTrack || !bottomTrack) return;
+
+  // Row 2 gets the same clients, rotated so the two rows never line up as
+  // identical columns (a shared order would repeat every client in the same
+  // position in both rows).
+  const rotate = (arr, by) => arr.slice(by).concat(arr.slice(0, by));
+  const rowOrders = [clients, rotate(clients, Math.floor(clients.length / 2) + 1)];
+
+  [topTrack, bottomTrack].forEach((track, i) => {
+    track.innerHTML = '';
+    for (let r = 0; r < CLIENTS_CAROUSEL_REPEATS; r++) {
+      rowOrders[i].forEach(client => track.appendChild(buildClientCard(client)));
+    }
+  });
+}
+
+// ─── Contact-section client circles ────────────────────────────────────────
+// A curated set of round avatars in the contact CTA, between the heading and
+// the action buttons — same clients.js data as the carousel. Capped well
+// under the full roster (this is a quiet decorative row, not another wall of
+// faces) and alternates a slight vertical stagger + rotation per slot (CSS
+// nth-child, see .vlance-contact-avatar) for a loose "scattered" arrangement
+// instead of a flat, rigid line.
+function buildContactClientCircles() {
+  const wrap    = document.querySelector('.vlance-contact-clients');
+  const clients = window.VLANCE_CLIENTS;
+  if (!wrap || !Array.isArray(clients) || !clients.length) return;
+
+  const CONTACT_AVATAR_COUNT = 12;
+  // Evenly sampled across the whole list (not just the first 12), so the mix
+  // of longtime clients and newest additions both show up here.
+  const step = Math.max(1, Math.floor(clients.length / CONTACT_AVATAR_COUNT));
+  const picks = [];
+  for (let i = 0; i < clients.length && picks.length < CONTACT_AVATAR_COUNT; i += step) {
+    picks.push(clients[i]);
+  }
+
+  wrap.innerHTML = '';
+  picks.forEach(client => {
+    const img = document.createElement('img');
+    img.className = 'vlance-contact-avatar';
+    img.src = encodeClientPhoto(client.photo);
+    img.alt = '';
+    img.loading = 'lazy';
+    wrap.appendChild(img);
+  });
+
+  // "Trusted by N+ other creators" — N is the full roster, not just the circles shown above.
+  const label = document.querySelector('.vlance-contact-clients-label');
+  if (label) label.textContent = `Trusted by ${clients.length}+ other creators`;
+}
+
+// ─── "Trusted by N+ creators" — count comes straight from clients.js ──────
+function initCreatorCount() {
+  const clients = window.VLANCE_CLIENTS;
+  if (!Array.isArray(clients) || !clients.length) return;
+  const count = clients.length;
+
+  // Hero badge: compact single-line pill, plain text.
+  const badgeLabel = document.querySelector('.vl-trusted__label');
+  if (badgeLabel) badgeLabel.textContent = `Trusted by ${count}+ creators`;
+
+  // Header stat (next to "Built Around TikTok Shop Creators."): two lines,
+  // right-aligned, matching the layout the heading also breaks onto.
+  const statLabel = document.querySelector('.vl-clients-stat__label');
+  if (statLabel) statLabel.innerHTML = `Trusted by<br>${count}+ creators`;
+}
+
 // ─── Trusted-by badge: cycle the avatars through a larger pool ────────────────
-// Only 4 faces are on screen at once, but the pool (declared in the JSON block
-// next to the badge markup) is bigger, so one slot at a time swaps to a face
-// that isn't currently showing.
+// Only 4 faces are on screen at once, but the pool (clients.js) is bigger, so
+// one slot at a time swaps to a face that isn't currently showing.
 function initTrustedAvatars() {
   const badge = document.querySelector('.vl-trusted');
   if (!badge || typeof gsap === 'undefined') return;
 
-  const slots  = Array.from(badge.querySelectorAll('.vl-trusted__slot img'));
-  const poolEl = badge.querySelector('.vl-trusted__pool');
-  if (!slots.length || !poolEl) return;
+  const slots = Array.from(badge.querySelectorAll('.vl-trusted__slot img'));
+  if (!slots.length) return;
 
-  let pool;
-  try { pool = JSON.parse(poolEl.textContent); } catch (e) { return; }
+  const pool = (window.VLANCE_CLIENTS || []).map(c => ({ src: encodeClientPhoto(c.photo), alt: c.name }));
   // Nothing to rotate through if the pool can't beat what's already shown
-  if (!Array.isArray(pool) || pool.length <= slots.length) return;
+  if (pool.length <= slots.length) return;
 
   // Someone who's asked for less motion gets the static badge
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -780,9 +951,9 @@ function initClientsRow(track) {
   let dragging = false;
   let lastX    = 0;
 
-  // Track is 4 duplicated sets of cards laid end to end (see markup comment);
-  // one set's width is exactly one seamless loop.
-  const measure = () => { loopW = track.scrollWidth / 4; };
+  // Track is CLIENTS_CAROUSEL_REPEATS duplicated sets of cards, built by
+  // buildClientsCarousel(); one set's width is exactly one seamless loop.
+  const measure = () => { loopW = track.scrollWidth / CLIENTS_CAROUSEL_REPEATS; };
   measure();
   window.addEventListener('resize', measure);
 
@@ -834,8 +1005,39 @@ function initClientsRow(track) {
     track.classList.remove('is-dragging');
   };
 
-  track.addEventListener('touchstart', e => start(e.touches[0].clientX), { passive: true });
-  track.addEventListener('touchmove',  e => move(e.touches[0].clientX),  { passive: true });
+  // Touch: axis-locked, so a single gesture commits to EITHER dragging the
+  // carousel OR scrolling the page, never both at once. Previously every
+  // touch dragged the track sideways AND scrolled the page vertically at
+  // the same time — that's what made it feel laggy/fighting-you on mobile.
+  // touch-action: pan-y on .vl-clients-track (vlance.css) keeps the browser
+  // from also trying to handle either axis natively while this decides.
+  let axis   = null; // null until the gesture commits: 'x' (carousel) or 'y' (page)
+  let startX = 0;
+  let startY = 0;
+
+  const touchStart = e => {
+    const t = e.touches[0];
+    start(t.clientX);
+    startX = t.clientX;
+    startY = t.clientY;
+    axis = null;
+  };
+  const touchMove = e => {
+    const t = e.touches[0];
+    if (axis === null) {
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return; // ignore jitter
+      axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (axis === 'y') { end(); return; } // hand this gesture to the page entirely
+    }
+    if (axis !== 'x') return;
+    e.preventDefault(); // own the gesture now — stop the page moving with it
+    move(t.clientX);
+  };
+
+  track.addEventListener('touchstart', touchStart, { passive: true });
+  track.addEventListener('touchmove',  touchMove,  { passive: false });
   track.addEventListener('touchend',    end);
   track.addEventListener('touchcancel', end);
 
@@ -874,59 +1076,39 @@ function initFooterVideoMarquee() {
   });
 }
 
-// ─── Testimonials marquee (mobile): auto-scroll, press-and-hold to slow ───────
-function initTestimonialsMarquee() {
-  // Mobile-only, matching the breakpoint the marquee CSS lives under. Desktop
-  // keeps the static 2-col staggered grid, so the card cloning below must not
-  // run there — it would add 8 extra cards and throw off the :nth-child(4n)
-  // row-stagger rule.
-  if (window.innerWidth > 768) return;
+// ─── FAQ accordion ──────────────────────────────────────────────────────────
+// Interaction modeled on the Evander Media reference: click a question,
+// its answer expands and every other open answer closes. Rebuilt cleanly
+// here rather than ported as-is — the reference mixed an inline `.style.
+// height` write with a CSS `max-height` transition, which only "worked" by
+// coincidence (a fixed max-height guess big enough for its own short
+// answers). This drives max-height from the real scrollHeight instead, so
+// it animates correctly no matter how long an answer is.
+function initFaqAccordion() {
+  const items = document.querySelectorAll('.vl-faq-item');
+  if (!items.length) return;
 
-  const viewport = document.querySelector('.vl-testimonials-viewport');
-  const track    = document.querySelector('.vl-testimonials-grid');
-  if (!viewport || !track || typeof gsap === 'undefined') return;
+  items.forEach(item => {
+    const toggle = item.querySelector('.vl-faq-toggle');
+    const answer = item.querySelector('.vl-faq-answer');
+    if (!toggle || !answer) return;
 
-  const cards = Array.from(track.children);
-  if (!cards.length) return;
+    toggle.addEventListener('click', () => {
+      const opening = !item.classList.contains('is-open');
 
-  // Duplicate the whole set so the track can wrap with no visible seam. The
-  // grid is grid-auto-flow:column over 4 fixed rows, so each run of 4 cards
-  // fills one column — appending the set in order reproduces the original
-  // columns exactly, which is what makes the wrap invisible.
-  cards.forEach(card => {
-    const clone = card.cloneNode(true);
-    clone.setAttribute('aria-hidden', 'true');   // screen readers read the set once
-    track.appendChild(clone);
+      items.forEach(other => {
+        if (other === item) return;
+        other.classList.remove('is-open');
+        other.querySelector('.vl-faq-toggle')?.setAttribute('aria-expanded', 'false');
+        const otherAnswer = other.querySelector('.vl-faq-answer');
+        if (otherAnswer) otherAnswer.style.maxHeight = '';
+      });
+
+      item.classList.toggle('is-open', opening);
+      toggle.setAttribute('aria-expanded', String(opening));
+      answer.style.maxHeight = opening ? answer.scrollHeight + 'px' : '';
+    });
   });
-
-  const SPEED       = 26;    // px/sec
-  const HOLD_FACTOR = 0.12;  // speed multiplier while a finger/mouse is held down
-  let x      = 0;
-  let loopW  = 0;
-  let factor = 1;
-
-  // Two copies of the set, so half the track width is one seamless loop.
-  const measure = () => { loopW = track.scrollWidth / 2; };
-  measure();
-  window.addEventListener('resize', measure);
-
-  gsap.ticker.add((time, deltaTime) => {
-    if (loopW <= 0) return;
-    x -= SPEED * factor * (deltaTime / 1000);
-    x = ((x % loopW) + loopW) % loopW - loopW; // keep in (-loopW, 0]
-    gsap.set(track, { x });
-  });
-
-  // Passive listeners that never preventDefault: holding a finger on the
-  // marquee slows it, but the touch still belongs to the page, so scrolling
-  // down through this section is never blocked.
-  const slow   = () => { factor = HOLD_FACTOR; };
-  const resume = () => { factor = 1; };
-  viewport.addEventListener('touchstart',  slow,   { passive: true });
-  viewport.addEventListener('touchend',    resume, { passive: true });
-  viewport.addEventListener('touchcancel', resume, { passive: true });
-  viewport.addEventListener('mousedown',   slow);
-  window.addEventListener('mouseup',       resume);
 }
 
 // ─── Perks bands scroll reveal ────────────────────────────────────────────────
@@ -1009,45 +1191,6 @@ function initPerksAnimation() {
 
 }
 
-// ─── Bonus cards: same stack blur-out as the perk bands (mobile only) ────────
-// The CSS sticky stack does the movement; this is the other half of the perk
-// treatment — each card's contents blur, fade and swell as the next card
-// slides up over it. Values deliberately mirror initPerksAnimation, including
-// the image going to opacity 0 rather than resting at 0.18 (a blurred 18%
-// photo reads as a grey smudge rather than as faded back).
-function initBonusCardsStack() {
-  if (window.innerWidth > 768 || typeof ScrollTrigger === 'undefined') return;
-
-  const cards = document.querySelectorAll('.ai-card');
-  if (cards.length < 2) return;
-
-  cards.forEach((card, i) => {
-    if (i === cards.length - 1) return;   // nothing slides over the last one
-
-    const text = [
-      card.querySelector('.ai-card-title'),
-      card.querySelector('.ai-card-description'),
-    ].filter(Boolean);
-    const img = card.querySelector('.ai-card-img');
-
-    const st = () => ({ trigger: cards[i + 1], start: 'bottom bottom', end: 'top top', scrub: 0.8 });
-
-    if (text.length) {
-      gsap.to(text, {
-        filter: 'blur(16px)', opacity: 0.18, scale: 1.06, ease: 'power1.in',
-        scrollTrigger: st()
-      });
-    }
-    if (img) {
-      gsap.to(img, {
-        filter: 'blur(16px)', opacity: 0, scale: 1.06, ease: 'power1.in',
-        scrollTrigger: st()
-      });
-    }
-  });
-}
-
-
 // ─── Contact + Footer scroll animations ───────────────────────────────────────
 function initContactFooterAnimations() {
   if (typeof ScrollTrigger === 'undefined') return;
@@ -1091,8 +1234,8 @@ function initContactFooterAnimations() {
 }
 
 
-// ─── Testimonials → contact colour hand-off ──────────────────────────────
-// Scrubs the red dome at the foot of the testimonials up out of the contact
+// ─── FAQ → contact colour hand-off ──────────────────────────────────────
+// Scrubs the red dome at the foot of the FAQ section up out of the contact
 // section, so the panel colour gives way to brand red as the section arrives
 // rather than meeting it at a hard edge. Scaled on the Y axis only, from a
 // bottom origin, so it reads as the red rising rather than sliding in.
@@ -1616,22 +1759,28 @@ function initContactReveal() {
   const contact = document.querySelector('.vlance-contact-section');
   if (!contact || typeof ScrollTrigger === 'undefined') return;
 
-  // Mobile shows the heading and buttons outright — no fade-in on scroll. This
-  // also preserves the heading's <br>: the reveal below rebuilds the markup
-  // from textContent, which drops the break and collapses it to one line.
+  // Mobile shows the heading and buttons outright — no fade-in on scroll.
   if (window.innerWidth <= 768) return;
 
-  const heading = contact.querySelector('.h-l');
-  if (!heading) return;
+  // Two separate <h2> lines ("Stop editing." / "Start posting."), not one
+  // <br>-joined heading — querySelectorAll so both get word-split and both
+  // take part in the same staggered reveal.
+  const headings = Array.from(contact.querySelectorAll('.h-l'));
+  if (!headings.length) return;
 
-  const words = heading.textContent.trim().split(/\s+/);
-  heading.innerHTML = words
-    .map(w => `<span class="vl-reveal-word">${w}</span>`)
-    .join(' ');
-  const wordEls = Array.from(heading.querySelectorAll('.vl-reveal-word'));
+  const wordEls = [];
+  headings.forEach(heading => {
+    const words = heading.textContent.trim().split(/\s+/);
+    heading.innerHTML = words
+      .map(w => `<span class="vl-reveal-word">${w}</span>`)
+      .join(' ');
+    wordEls.push(...heading.querySelectorAll('.vl-reveal-word'));
+  });
   const buttons = Array.from(contact.querySelectorAll('.vlance-contact-icon-btn, .vlance-contact-btn'));
+  const clients = contact.querySelector('.vlance-contact-clients-wrap');
 
   gsap.set(wordEls, { opacity: 0, y: 60 });
+  if (clients) gsap.set(clients, { opacity: 0, y: 14 });
   gsap.set(buttons, { opacity: 0 });
 
   const tl = gsap.timeline({
@@ -1646,7 +1795,8 @@ function initContactReveal() {
     tl.to(word, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, i * 0.35);
   });
 
-  tl.to(buttons, { opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.1 }, '>-0.15');
+  tl.to(buttons, { opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.1 }, '>-0.1');
+  if (clients) tl.to(clients, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '>-0.15');
 }
 
 
@@ -1831,6 +1981,14 @@ function initScrollReveal() {
 document.addEventListener('DOMContentLoaded', () => {
   const isMobile = window.innerWidth <= 768;
 
+  // No GSAP dependency, so these run regardless of whether the CDN below
+  // loads — the client wall, its live count, the contact-section avatars,
+  // and the FAQ accordion shouldn't depend on it.
+  buildClientsCarousel();
+  buildContactClientCircles();
+  initCreatorCount();
+  initFaqAccordion();
+
   initCSSMarquee();
   initMuteButtons();
   initAutoMute();
@@ -1855,9 +2013,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTrustedAvatars();
     initClientsCarousel();
     initFooterVideoMarquee();
-    initTestimonialsMarquee(); // no-ops above the mobile breakpoint
-    initSquareVideoCorners();  // ditto
-    initBonusCardsStack();     // ditto
+    initSquareVideoCorners();  // no-ops above the mobile breakpoint
     initHeroEntrance();
     initScrollReveal();
     if (!isMobile) {

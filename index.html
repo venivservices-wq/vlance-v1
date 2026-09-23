@@ -135,9 +135,9 @@
 
         <!-- Trusted-by badge: overlapping circular creator avatars + label.
              The 4 slots below are what's visible; initTrustedAvatars cycles
-             them through the larger pool in the JSON block so the same 4
-             faces aren't always showing. The markup keeps 4 real <img>s so
-             the badge still looks right with JS off. -->
+             them through the full clients.js list so the same 4 faces aren't
+             always showing. The markup keeps 4 real <img>s so the badge
+             still looks right with JS off. -->
         <div class="vl-trusted">
           <div class="vl-trusted__avatars">
             <span class="vl-trusted__slot"><img src="png/clients/chico%20pfp.png" class="vl-trusted__avatar" alt="Chico"></span>
@@ -145,21 +145,9 @@
             <span class="vl-trusted__slot"><img src="png/clients/dayne%20pfp.png" class="vl-trusted__avatar" alt="Dayne"></span>
             <span class="vl-trusted__slot"><img src="png/clients/Maddie%20M.png" class="vl-trusted__avatar" alt="Maddie"></span>
           </div>
-          <span class="vl-trusted__label">Trusted by creators</span>
-          <!-- Rotation pool — add/remove creators here, no JS change needed -->
-          <script class="vl-trusted__pool" type="application/json">
-            [
-              {"src": "png/clients/chico%20pfp.png",   "alt": "Chico"},
-              {"src": "png/clients/anna%20pfp.png",    "alt": "Anna"},
-              {"src": "png/clients/dayne%20pfp.png",   "alt": "Dayne"},
-              {"src": "png/clients/Maddie%20M.png",    "alt": "Maddie"},
-              {"src": "png/clients/Susan%20L.png",     "alt": "Susan"},
-              {"src": "png/clients/Cari%20C.png",      "alt": "Cari"},
-              {"src": "png/clients/Steffany%20B.png",  "alt": "Steffany"},
-              {"src": "png/clients/Taylor%20G%20png.png", "alt": "Taylor"},
-              {"src": "png/clients/Savannah%20Irwin.png", "alt": "Savannah"}
-            ]
-          </script>
+          <!-- Static fallback text for no-JS; initCreatorCount() overwrites
+               this with the live count from clients.js on load. -->
+          <span class="vl-trusted__label">Trusted by 25+ creators</span>
         </div>
 
         <!-- Title -->
@@ -190,10 +178,12 @@
   <!-- ═══════════════ 02 · CLIENT CAROUSEL / FACE WALL ═══════════════ -->
   <div class="vl-clients-header" data-reveal-group>
     <div>
-      <h2 class="h-l">Faces behind<br>the numbers.</h2>
+      <h2 class="h-l">Built Around<br>TikTok Shop</h2>
     </div>
     <div class="vl-clients-stat">
-      <span class="vl-clients-stat__label">Trusted by creators</span>
+      <!-- Static fallback text for no-JS; initCreatorCount() (vlance.js)
+           overwrites this with the live count from clients.js on load. -->
+      <span class="vl-clients-stat__label">Trusted by<br>25+ creators</span>
     </div>
   </div>
 
@@ -201,131 +191,20 @@
        off a clean vertical line at the true edge of the screen. The rotation
        lives on .vl-clients-carousel--inner instead — rotating the same
        element that clips would tilt the clip line too, cutting cards at an
-       angle instead of a straight edge. -->
+       angle instead of a straight edge.
+
+       Both tracks below start empty — buildClientsCarousel() (vlance.js)
+       fills them from clients.js on load, repeating that list a few times
+       for a seamless loop. Edit clients.js to add/remove creators; nothing
+       here needs to change. -->
   <div class="vl-clients-carousel">
    <div class="vl-clients-carousel--inner">
-
-    <!-- Row 1 (scrolls left). 4 sets of 12 = seamless loop; one set is measured
-         as the loop width in initClientsCarousel. -->
-    <div class="vl-clients-track vl-clients-track--top" data-dir="-1">
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-    </div>
-
-    <!-- Row 2 (scrolls right). Same clients, reordered so the two rows never
-         line up as identical columns — a plain rotation would make every
-         column a duplicate pair once per cycle; this caps it at one. -->
-    <div class="vl-clients-track vl-clients-track--bottom" data-dir="1" data-stagger="half">
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-      <a class="vl-clients-card" href="https://www.tiktok.com/@cari_chapman?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Cari%20C.png" class="vl-clients-card__photo" alt="Cari"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Cari</p><p class="vl-clients-card__handle">@cari_chapman</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Amanda%20R.png" class="vl-clients-card__photo" alt="Amanda"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Amanda</p><p class="vl-clients-card__handle">@BusyboymomAmanda</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@norman_stevens?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Andrew%20K.png" class="vl-clients-card__photo" alt="Andrew"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Andrew</p><p class="vl-clients-card__handle">@Norman_Stevens</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/chico%20pfp.png" class="vl-clients-card__photo" alt="Chico"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Chico</p><p class="vl-clients-card__handle">@chicoguerraa</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/dayne%20pfp.png" class="vl-clients-card__photo" alt="Dayne"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Dayne</p><p class="vl-clients-card__handle">@trendyshopdealz</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Maddie%20M.png" class="vl-clients-card__photo" alt="Maddie"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Maddie</p><p class="vl-clients-card__handle">@maddieshomefinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@steff__bell?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Steffany%20B.png" class="vl-clients-card__photo" alt="Steffany"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Steffany</p><p class="vl-clients-card__handle">@Steff__bell</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Leah%20M.png" class="vl-clients-card__photo" alt="Leah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Leah</p><p class="vl-clients-card__handle">@Leah_runhideandread</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Taylor%20G%20png.png" class="vl-clients-card__photo" alt="Taylor"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Taylor</p><p class="vl-clients-card__handle">@Taylorgfinds</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@daynes_wife?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/anna%20pfp.png" class="vl-clients-card__photo" alt="Anna"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Anna</p><p class="vl-clients-card__handle">@daynes_wife</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Susan%20L.png" class="vl-clients-card__photo" alt="Susan"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Susan</p><p class="vl-clients-card__handle">@susanluckhardt</p></div></a>
-      <a class="vl-clients-card" href="https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer"><div class="vl-clients-card__frame"><img src="png/clients/Savannah%20Irwin.png" class="vl-clients-card__photo" alt="Savannah"></div><div class="vl-clients-card__body"><p class="vl-clients-card__name">Savannah</p><p class="vl-clients-card__handle">@savannahxraeee</p></div></a>
-
-    </div>
-
+    <div class="vl-clients-track vl-clients-track--top" data-dir="-1"></div>
+    <div class="vl-clients-track vl-clients-track--bottom" data-dir="1" data-stagger="half"></div>
    </div>
   </div>
   <div class="vl-clients-cta">
-    <a href="#testimonials" class="vl-clients-cta__btn">Read testimonials</a>
+    <a href="#services" class="vl-clients-cta__btn">View Our Work</a>
   </div>
 
   <!-- ═══════════════ 03 · PERKS ═══════════════ -->
@@ -337,32 +216,38 @@
         <!-- Zigzag: even bands flip via CSS. -->
         <div class="vl-perk-band">
           <div class="vl-perk-text">
-            <h3 class="vl-perk-title">A system that works</h3>
-            <p class="vl-perk-sub">Built and tested with 50+ creators into a process that gets results</p>
+            <h3 class="vl-perk-title">TikTok doesn't wait</h3>
+            <p class="vl-perk-sub">TikTok Shop moves fast. Waiting 3–5 days for edits can put you behind.</p>
+            <p class="vl-perk-sub">That's why we edit your videos within the first <strong>24 hours</strong> or 48h for bigger batches.</p>
           </div>
           <img class="vl-perk-img" src="png/feature%20images/proven%20system.png" alt="" aria-hidden="true">
         </div>
 
         <div class="vl-perk-band vl-perk-band--dark">
           <div class="vl-perk-text">
-            <h3 class="vl-perk-title">24 – 48hr delivery</h3>
-            <p class="vl-perk-sub">Built for creators who want their videos back quickly.</p>
+            <h3 class="vl-perk-title">No complex system</h3>
+            <p class="vl-perk-sub">TikTok Shop is already a lot to keep up with. Your editing system shouldn't be.</p>
+            <p class="vl-perk-sub">Just upload your videos to Drive, get the finished edits and stay updated with us on Discord.</p>
+            <p class="vl-perk-sub">That's it. Super simple.</p>
           </div>
           <img class="vl-perk-img" src="png/feature%20images/48h%20delivery.png" alt="" aria-hidden="true">
         </div>
 
         <div class="vl-perk-band">
           <div class="vl-perk-text">
-            <h3 class="vl-perk-title">Revisions, no drama</h3>
-            <p class="vl-perk-sub">Just let us know what needs changing, and we'll fix it.</p>
+            <h3 class="vl-perk-title">Brand revisions<br>made simple</h3>
+            <p class="vl-perk-sub">Just let us know what needs changing.</p>
+            <p class="vl-perk-sub">You have 5 days to send revisions after your video is edited, giving you time to review it and make changes. If you work with a brand, they have time to chime in as well.</p>
           </div>
           <img class="vl-perk-img" src="png/feature%20images/easy%20revisions.png" alt="" aria-hidden="true">
         </div>
 
         <div class="vl-perk-band vl-perk-band--dark">
           <div class="vl-perk-text">
-            <h3 class="vl-perk-title">The viral playbooks</h3>
-            <p class="vl-perk-sub">Tips pulled from years of experience in content creation.</p>
+            <h3 class="vl-perk-title">Made for TikTok Shop</h3>
+            <p class="vl-perk-sub">Skip explaining the basics to your editor.</p>
+            <p class="vl-perk-sub">Our editors have worked with tons of TikTok Shop creators, so they already know how this type of content works.</p>
+            <p class="vl-perk-sub">You can focus on filming and posting.<br>We'll handle the editing.</p>
           </div>
           <img class="vl-perk-img" src="png/feature%20images/pdf%20guides.png" alt="" aria-hidden="true">
         </div>
@@ -373,10 +258,7 @@
   </section>
 
   <!-- ═══════════════ 04 · FEATURED TESTIMONIAL ═══════════════
-       Two big testimonials side by side, right under the 4 feature bands —
-       meant to carry more visual weight than the small cards in the
-       testimonials grid further down the page. Swap the quotes/names/roles
-       for real ones whenever ready; placeholders like the rest of the grid. -->
+       Two big testimonials side by side, right under the 4 feature bands. -->
   <section class="vl-featured-testimonial">
     <div class="container vl-featured-testimonial__grid" data-reveal>
 
@@ -396,7 +278,7 @@
       <div class="vl-featured-testimonial__card">
         <img class="vl-featured-testimonial__deco" src="svg/red%20spiral%201%20svg.svg" alt="" aria-hidden="true">
         <p class="vl-featured-testimonial__quote">
-          I stopped guessing which hook would work. Vlance's team already knows — it shows in the watch time every single time.
+          Love the new process, already better than our old ones! Thank you guys!
         </p>
         <div class="vl-featured-testimonial__author">
           <img class="vl-featured-testimonial__avatar" src="png/clients/Susan%20L.png" alt="Susan Luckhardt">
@@ -425,7 +307,7 @@
       <!-- GSAP Slider -->
       <div data-gsap-slider-init=""
            data-gsap-slider-loop="true"
-           data-gsap-slider-center="true"
+           data-gsap-slider-center="false"
            class="gsap-slider">
 
         <!-- Navigation arrows -->
@@ -561,186 +443,102 @@
     </div><!-- /.product-slider -->
   </section>
 
-  <!-- ═══════════════ 06 · SERVICE CARDS ═══════════════
-       Cards copied verbatim from the supplied reference (markup, icon images,
-       copy, prices, Wistia media). The reference's title block, background
-       image, cursor blob and floating decoration were deliberately left out —
-       cards only. -->
-  <section class="vl-more-features">
-    <div class="ai-cards-container">
+  <!-- ═══════════════ 06 · COMPARISON TABLE ═══════════════
+       Why Vlance over DIY / a random editor. Flat, no boxes/shadows — the
+       "Hire Vlance" column is called out with red label text only, nothing
+       else. Fits any width by wrapping, never scrolls. -->
+  <section class="vl-compare-section">
+    <div class="container">
+      <h2 class="h-l vl-compare-heading">Why creators<br>choose Vlance</h2>
 
-      <!-- Decorative stars flanking the grid. Inside the container so they
-           anchor to the cards themselves, not the viewport. -->
-      <img class="vl-bonus-star vl-bonus-star--left" src="png/bonuses%20star%20left.png" alt="" aria-hidden="true">
-      <img class="vl-bonus-star vl-bonus-star--right" src="png/bonuses%20star%20right.png" alt="" aria-hidden="true">
+      <div class="vl-compare-table" data-reveal>
+        <div class="vl-compare-cell vl-compare-cell--label"></div>
+        <div class="vl-compare-cell vl-compare-cell--head">Edit it yourself</div>
+        <div class="vl-compare-cell vl-compare-cell--head">Hire an ordinary editor</div>
+        <div class="vl-compare-cell vl-compare-cell--head vl-compare-cell--highlight">Hire Vlance</div>
 
+        <div class="vl-compare-cell vl-compare-cell--label">Turnaround</div>
+        <div class="vl-compare-cell">Takes at least an hour</div>
+        <div class="vl-compare-cell">Takes days and can miss deadlines</div>
+        <div class="vl-compare-cell">24–48hr delivery.</div>
 
-      <!-- AI Card 1 -->
-      <div class="ai-card">
-        <div class="ai-card-top-row">
-          <div class="ai-text-wrapper">
-            <div class="ai-card-title-row">
-              <h3 class="ai-card-title">Everyday Updates</h3>
-            </div>
-            <p class="ai-card-description">Updates at every step. Editing, revisions, delivery and a lot more.</p>
-          </div>
-        </div>
-        <div class="ai-card-bottom-row ai-card-bottom-row--flush">
-          <div class="video-wrapper">
-            <img class="ai-card-img" src="png/Bonuses%20img/regular%20updates.png" alt="Vlance bot posting a daily completion update in Discord">
-          </div>
-        </div>
+        <div class="vl-compare-cell vl-compare-cell--label">Finding an editor</div>
+        <div class="vl-compare-cell">You are the editor</div>
+        <div class="vl-compare-cell">Find an editor, test them, and hope they're a good fit</div>
+        <div class="vl-compare-cell">No need to find anyone. Your videos go to our editing team.</div>
+
+        <div class="vl-compare-cell vl-compare-cell--label">Managing editors</div>
+        <div class="vl-compare-cell">You have to hope you'll have enough time to edit.</div>
+        <div class="vl-compare-cell">Follow-ups and missed deadlines</div>
+        <div class="vl-compare-cell">No editor management, we handle the editors and stress for you.</div>
+
+        <div class="vl-compare-cell vl-compare-cell--label">Consistency</div>
+        <div class="vl-compare-cell">Depends on how much time you have</div>
+        <div class="vl-compare-cell">Depends on one editor's schedule</div>
+        <div class="vl-compare-cell">A full team means your work doesn't depend on one person.</div>
+
+        <div class="vl-compare-cell vl-compare-cell--label">Scaling</div>
+        <div class="vl-compare-cell">More videos = more of your time</div>
+        <div class="vl-compare-cell">More videos = one editor can't handle the workload.</div>
+        <div class="vl-compare-cell">More videos = nothing changes, our team handles it for you.</div>
+
+        <div class="vl-compare-cell vl-compare-cell--label vl-compare-cell--last">TikTok Shop experience</div>
+        <div class="vl-compare-cell vl-compare-cell--last">You have to learn what works</div>
+        <div class="vl-compare-cell vl-compare-cell--last">Depends on luck with your editor</div>
+        <div class="vl-compare-cell vl-compare-cell--last">Editors who already work with TikTok Shop creators.</div>
       </div>
-
-      <!-- AI Card 2 -->
-      <div class="ai-card ai-card--dark">
-        <div class="ai-card-top-row">
-          <div class="ai-text-wrapper">
-            <div class="ai-card-title-row">
-              <h3 class="ai-card-title">Adjustable Pricing</h3>
-            </div>
-            <p class="ai-card-description">Plans, per-video rates and more. Find the one that fits you best.</p>
-          </div>
-        </div>
-        <div class="ai-card-bottom-row ai-card-bottom-row--flush">
-          <div class="video-wrapper">
-            <img class="ai-card-img" src="png/Bonuses%20img/adjustable%20pricing.png" alt="Vlance bot showing a client's remaining plan credits in Discord">
-          </div>
-        </div>
-      </div>
-
-      <!-- AI Card 3 -->
-      <div class="ai-card ai-card--dark">
-        <div class="ai-card-top-row">
-          <div class="ai-text-wrapper">
-            <div class="ai-card-title-row">
-              <h3 class="ai-card-title">A Dedicated Manager</h3>
-            </div>
-            <p class="ai-card-description">Get quick support whenever you need it.</p>
-          </div>
-        </div>
-        <div class="ai-card-bottom-row ai-card-bottom-row--flush">
-          <div class="video-wrapper">
-            <img class="ai-card-img" src="png/Bonuses%20img/dedicated%20manager.png" alt="A Vlance manager answering a client's question in Discord within minutes">
-          </div>
-        </div>
-      </div>
-
-      <!-- AI Card 4 -->
-      <div class="ai-card">
-        <div class="ai-card-top-row">
-          <div class="ai-text-wrapper">
-            <div class="ai-card-title-row">
-              <h3 class="ai-card-title">A Decade of Experience</h3>
-            </div>
-            <p class="ai-card-description">Led by an editing team with over a decade of experience.</p>
-          </div>
-        </div>
-        <div class="ai-card-bottom-row ai-card-bottom-row--flush">
-          <div class="video-wrapper">
-            <img class="ai-card-img" src="png/Bonuses%20img/decade%20of%20experience.png" alt="A tunnel of client videos made over ten years">
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- ═══════════════ 07 · TESTIMONIALS ═══════════════ -->
-  <section class="vl-testimonials-section" id="testimonials">
-    <div class="container vl-testimonials-container">
+  <!-- ═══════════════ 07 · FAQ ═══════════════
+       Accordion interaction (single item open at a time, smooth height
+       animation, rotating icon) modeled on the accordion from the Evander
+       Media site reference; restyled to Vlance's own type/colour system
+       rather than its blue/dark theme. Single stacked column, each item its
+       own card, "{ n }" numbering auto-generated by CSS counter (see
+       .vl-faq-item in vlance.css) — add/remove/reorder items here and the
+       numbers stay correct with no HTML change. Logic lives in
+       initFaqAccordion() (vlance.js). -->
+  <section class="vl-faq-section" id="faq">
+    <div class="container">
+      <h2 class="h-l vl-faq-heading">Questions,<br>answered.</h2>
 
-      <div class="vl-testimonials-header" data-reveal>
-        <h2 class="h-l vl-testimonials-heading">They said it,<br>not us.</h2>
+      <div class="vl-faq-list" data-reveal>
+
+        <div class="vl-faq-item">
+          <button class="vl-faq-toggle" aria-expanded="false">
+            <h3 class="vl-faq-question">How fast do I get my videos back?</h3>
+            <span class="vl-faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="vl-faq-answer">
+            <p>Most videos are delivered within 24 hours. Larger batches can take up to 48 hours, but you're never stuck waiting the 3–5 days that can happen with a typical editor.</p>
+          </div>
+        </div>
+
+        <div class="vl-faq-item">
+          <button class="vl-faq-toggle" aria-expanded="false">
+            <h3 class="vl-faq-question">How does the process work?</h3>
+            <span class="vl-faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="vl-faq-answer">
+            <p>You upload your videos to Google Drive along with any instructions or examples.</p>
+            <p>We edit them and upload the finished videos back to Drive.</p>
+            <p>If you need changes, just add your revisions to the revisions file and we'll take care of them. You'll also get updates on Discord as your videos move through each step.</p>
+            <p>If you ever have any problems or questions just ask your personal Manager on Discord.</p>
+          </div>
+        </div>
+
+        <div class="vl-faq-item">
+          <button class="vl-faq-toggle" aria-expanded="false">
+            <h3 class="vl-faq-question">What if I work with brands?</h3>
+            <span class="vl-faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="vl-faq-answer">
+            <p>You can send brand instructions, examples, or feedback along with your videos. If a brand needs to review the content, you also have time to send their feedback during the revision window.</p>
+          </div>
+        </div>
+
       </div>
-
-      <!-- Viewport wrapper: clipping window for the mobile auto-scroll
-           marquee (see initTestimonialsMarquee). Unstyled on desktop. -->
-      <div class="vl-testimonials-viewport">
-      <div class="vl-testimonials-grid">
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/dayne%20pfp.png" alt="Dayne">
-            <div>
-              <span class="vl-testimonial-name">Dayne</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">Vlance turned "post and pray" into an actual system. Every video comes back sharper than what I could cut myself.</p>
-        </div>
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/fern%20pfp.png" alt="Maze">
-            <div>
-              <span class="vl-testimonial-name">Maze</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">24 hours from raw footage to a finished, on-brand cut. I've never worked with an editor this fast without losing quality.</p>
-        </div>
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/chico%20pfp.png" alt="Chico">
-            <div>
-              <span class="vl-testimonial-name">Chico</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">Our TikTok Shop conversion rate jumped the month we switched to Vlance. Same products, completely different results.</p>
-        </div>
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/anna%20pfp.png" alt="Anna">
-            <div>
-              <span class="vl-testimonial-name">Anna</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">The Discord access alone is worth it. I send a clip, get notes back in minutes, and the revision is done same day.</p>
-        </div>
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/Susan%20L.png" alt="Susan">
-            <div>
-              <span class="vl-testimonial-name">Susan</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">I stopped guessing which hook would work. Vlance's team already knows — it shows in the watch time every single time.</p>
-        </div>
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/Maddie%20M.png" alt="Maddie">
-            <div>
-              <span class="vl-testimonial-name">Maddie</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">The viral guide PDFs changed how I even film. My raw footage is better now, which makes the final edit even stronger.</p>
-        </div>
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/Cari%20C.png" alt="Cari">
-            <div>
-              <span class="vl-testimonial-name">Cari</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">One dedicated editor who actually gets my voice beats a rotating team every time. It just sounds like me.</p>
-        </div>
-
-        <div class="vl-testimonial-card">
-          <div class="vl-testimonial-author">
-            <img class="vl-testimonial-avatar" src="png/clients/Steffany%20B.png" alt="Steffany">
-            <div>
-              <span class="vl-testimonial-name">Steffany</span>
-            </div>
-          </div>
-          <p class="vl-testimonial-quote">Best money I spend in my business, full stop. The edits pay for themselves within the first few sales every time.</p>
-        </div>
-
-      </div><!-- /.vl-testimonials-grid -->
-      </div><!-- /.vl-testimonials-viewport -->
     </div>
 
     <!-- Red swell that rises out of this section into the contact block below,
@@ -753,7 +551,11 @@
   <section class="vlance-contact-section" id="contact">
 
     <div class="vlance-contact-inner">
-      <h2 class="h-l">Ready. Set.<br>Go!</h2>
+      <div class="vlance-contact-heading">
+        <h2 class="h-l">Stop editing.</h2>
+        <h2 class="h-l">Start posting.</h2>
+      </div>
+
       <div class="vlance-contact-actions">
         <!-- Email -->
         <a href="mailto:venivservices@gmail.com" class="vlance-contact-icon-btn" aria-label="Email us">
@@ -766,6 +568,15 @@
         <!-- Contact form button -->
         <a href="https://tally.so/r/vGpe1D" target="_blank" rel="noopener" class="vlance-contact-btn">Contact us via form</a>
       </div>
+
+      <!-- Built from clients.js by buildContactClientCircles() (vlance.js) —
+           same single source of truth as the carousel. Label's count is
+           filled in from clients.js too, "25+" here is just the no-JS
+           fallback. -->
+      <div class="vlance-contact-clients-wrap">
+        <p class="vlance-contact-clients-label">Trusted by 25+ other creators</p>
+        <div class="vlance-contact-clients" aria-hidden="true"></div>
+      </div>
     </div>
 
   </section>
@@ -777,6 +588,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/Draggable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/InertiaPlugin.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+<script src="clients.js"></script>
 <script src="vlance.js"></script>
 </body>
 </html>
