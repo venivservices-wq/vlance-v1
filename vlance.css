@@ -151,31 +151,195 @@ a { color: inherit; }
 /* ══════════════════════════ 01 · HERO ══════════════════════════ */
 .home-hero {
   position: relative;
-  min-height: 140svh;
+  min-height: 100svh;
   display: flex;
-  align-items: flex-start;
-  padding: clamp(9rem, 18vh, 12.5rem) 0 clamp(4rem, 8vh, 6rem);
+  align-items: center;
+  padding: clamp(6rem, 12vh, 8rem) 0 clamp(10rem, 18vw, 13rem); /* bottom: room for the timeline strip */
   background: var(--bg);
   overflow: clip;
 }
 
-.vl-hero-bck {
+/* Faint "+" marks on a 56px grid. A radial mask (not a background gradient —
+   the marks themselves stay flat) fades them out toward the screen edges. */
+.vl-hero-pattern {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  opacity: 1;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
-  user-select: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 23v10M23 28h10' stroke='%230a0a0a' stroke-opacity='0.05' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center top / 56px 56px repeat;
+  -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 30%, transparent 100%);
+          mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 30%, transparent 100%);
 }
-.vl-hero-bck--mobile { display: none; }
-@media (max-width: 768px) {
-  .vl-hero-bck--desktop { display: none; }
-  .vl-hero-bck--mobile { display: block; }
+
+/* Editing-timeline panel near the bottom of the hero. A 2-column grid: track
+   icons on the left, lanes on the right (ruler, video, text, audio). Each
+   lane's track holds its clips twice back-to-back, all padded to the same
+   loop length in buildHeroTimeline(), so every lane scrolls at the same
+   speed and the -50% loop is seamless. Flat fills only, no gradients. */
+.vl-hero-timeline {
+  --tl-head: 2.6rem;
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.25rem, 3vw, 2.25rem);
+  translate: -50% 0;
+  width: min(68rem, calc(100% - 2 * var(--edge)));
+  z-index: 0;
+  display: grid;
+  grid-template-columns: var(--tl-head) 1fr;
+  grid-template-rows: 1rem 2.8rem 1.3rem 1.9rem;
+  gap: 0.35rem 0;
+  padding: 0.6rem 0.6rem 0.75rem 0;
+  background: #fff;
+  border: var(--line-w) solid var(--line);
+  border-radius: 1.1rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+.vl-tl-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-faint);
+}
+.vl-tl-head svg { width: 1rem; height: 1rem; }
+.vl-tl-lane {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.45rem;
+}
+.vl-tl-track {
+  display: flex;
+  height: 100%;
+  width: max-content;
+  animation: vl-tl-scroll 60s linear infinite;
+}
+.vl-tl-ruler {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='16'%3E%3Cpath d='M0.5 16V6M16.5 16v-4M32.5 16V9M48.5 16v-4' stroke='%230a0a0a' stroke-opacity='0.28'/%3E%3C/svg%3E") left bottom / 4rem 100% repeat-x;
+}
+.vl-tl-clip {
+  flex: none;
+  height: 100%;
+  border-radius: 0.45rem;
+}
+.vl-tl-gap { flex: none; }
+
+/* Video: film-strip of a creator photo, repeated frame after frame. */
+.vl-tl-track[data-kind="video"] .vl-tl-clip {
+  position: relative;
+  background-color: var(--bg-panel-2);
+  background-size: auto 100%;
+  background-repeat: repeat-x;
+  box-shadow: inset 0 0 0 1px rgba(10, 10, 10, 0.12);
+}
+/* "Selected" clip, like clicking one in an editor: red outline + handles. */
+.vl-tl-track[data-kind="video"] .vl-tl-clip.is-selected {
+  box-shadow: inset 0 0 0 2px var(--red);
+}
+.vl-tl-clip.is-selected::before,
+.vl-tl-clip.is-selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0.45rem;
+  background: var(--red);
+}
+.vl-tl-clip.is-selected::before { left: 0;  border-radius: 0.45rem 0 0 0.45rem; }
+.vl-tl-clip.is-selected::after  { right: 0; border-radius: 0 0.45rem 0.45rem 0; }
+
+/* Text overlays: dark pills with a short white "line of text" mark. */
+.vl-tl-track[data-kind="text"] .vl-tl-clip {
+  position: relative;
+  background: var(--fg);
+  border-radius: 100em;
+}
+.vl-tl-track[data-kind="text"] .vl-tl-clip::after {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  top: 50%;
+  width: 45%;
+  max-width: 3rem;
+  height: 2px;
+  translate: 0 -50%;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.vl-tl-track[data-kind="text"] .vl-tl-clip.is-red { background: var(--red); }
+
+/* Audio: light red clip with a waveform. */
+.vl-tl-track[data-kind="audio"] .vl-tl-clip {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='20'%3E%3Cg fill='%23b91616' fill-opacity='0.55'%3E%3Crect x='1' y='7.0' width='2' height='6' rx='1'/%3E%3Crect x='5' y='4.0' width='2' height='12' rx='1'/%3E%3Crect x='9' y='6.0' width='2' height='8' rx='1'/%3E%3Crect x='13' y='2.0' width='2' height='16' rx='1'/%3E%3Crect x='17' y='5.0' width='2' height='10' rx='1'/%3E%3Crect x='21' y='3.0' width='2' height='14' rx='1'/%3E%3Crect x='25' y='7.5' width='2' height='5' rx='1'/%3E%3Crect x='29' y='4.5' width='2' height='11' rx='1'/%3E%3Crect x='33' y='1.5' width='2' height='17' rx='1'/%3E%3Crect x='37' y='5.5' width='2' height='9' rx='1'/%3E%3Crect x='41' y='3.5' width='2' height='13' rx='1'/%3E%3Crect x='45' y='6.5' width='2' height='7' rx='1'/%3E%3C/g%3E%3C/svg%3E") left center / auto 80% repeat-x, rgba(185, 22, 22, 0.1);
+}
+
+/* Fixed playhead — red line across the lanes with a handle in the ruler. */
+.vl-tl-playhead {
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0;
+  left: calc(var(--tl-head) + (100% - var(--tl-head)) * 0.42);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--red);
+  z-index: 2;
+}
+.vl-tl-playhead::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.75rem;
+  height: 0.9rem;
+  translate: -50% 0;
+  border-radius: 0.2rem 0.2rem 0.4rem 0.4rem;
+  background: var(--red);
+}
+
+@keyframes vl-tl-scroll {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-tl-track { animation: none; }
+}
+
+/* Floating creator cards around the edges. Rotation sits on the figure,
+   the bob animation on an inner transform via the `translate` property, so
+   GSAP's entrance (which animates `transform`) and the CSS float never fight. */
+.vl-hero-cards {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.vl-hero-card {
+  position: absolute;
+  margin: 0;
+  width: clamp(8rem, 11vw, 11.5rem);
+  aspect-ratio: 4 / 5;
+  padding: 0.45rem;
+  background: #fff;
+  border: var(--line-w) solid var(--line);
+  border-radius: 1.25rem;
+  rotate: var(--rot, 0deg);
+  animation: vl-hero-float 6s ease-in-out infinite;
+}
+.vl-hero-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.85rem;
+}
+.vl-hero-card--1 { --rot: -8deg; top: 12%;    left: 6%;  }
+.vl-hero-card--2 { --rot:  7deg; top: 10%;    right: 7%; animation-delay: -1.5s; }
+.vl-hero-card--3 { --rot:  6deg; bottom: 30%; left: 11%; animation-delay: -3s; }
+.vl-hero-card--4 { --rot: -6deg; bottom: 28%; right: 10%; animation-delay: -4.5s; }
+
+@keyframes vl-hero-float {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-hero-card { animation: none; }
 }
 
 .home-hero__content {
@@ -185,49 +349,70 @@ a { color: inherit; }
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: clamp(1.5rem, 3vw, 2.25rem);
+  gap: clamp(1.25rem, 2.4vw, 1.75rem);
 }
+
+.vl-hero-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  color: var(--fg);
+  font-size: clamp(3rem, 6.4vw, 6.25rem);
+}
+.vl-ht-line { display: block; }
+.vl-ht-accent { color: var(--red); font-style: normal; }
+
+.vl-hero-sub {
+  margin: 0;
+  max-width: 30ch;
+  text-wrap: balance;
+  font-family: var(--font-mono);
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+
+.vl-hero-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+.vl-hero-cta .btn { font-size: 1.15rem; padding: 1em 2.6em; }
 
 /* Trusted-by avatar badge */
 .vl-trusted {
   display: inline-flex;
   align-items: center;
   gap: 1.1rem;
+  margin-top: 0.6rem;
 }
 .vl-trusted__avatars {
   display: flex;
 }
+/* The slot is the circle (ring + clip); the photo inside slides through it
+   when initTrustedAvatars swaps faces, so the ring itself never moves. */
 .vl-trusted__slot {
+  position: relative;
   display: block;
   width: 3.6rem;
   height: 3.6rem;
   margin-left: -1.1rem;
-  animation: vl-trusted-bob 3.6s ease-in-out infinite;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  background: var(--bg-panel);
+  overflow: hidden;
+  isolation: isolate; /* keeps the clip clean in Safari while children transform */
 }
 .vl-trusted__slot:first-child { margin-left: 0; }
-.vl-trusted__slot:nth-child(1) { animation-delay: 0s; }
-.vl-trusted__slot:nth-child(2) { animation-delay: 0.5s; }
-.vl-trusted__slot:nth-child(3) { animation-delay: 1s; }
-.vl-trusted__slot:nth-child(4) { animation-delay: 1.5s; }
-/* Radius/border/background live on the image itself (not the wrapper) so the
-   swap animation scales/fades the whole circle — photo, border and backing
-   colour — as one piece instead of leaving a static ring behind. */
 .vl-trusted__avatar {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid var(--bg);
-  background: var(--bg-panel);
-}
-
-@keyframes vl-trusted-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-4px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vl-trusted__slot { animation: none; }
 }
 .vl-trusted__label {
   font-family: var(--font-display);
@@ -237,35 +422,34 @@ a { color: inherit; }
   color: var(--fg-dim);
 }
 
-.home-hero__title-row { max-width: 100%; }
-
-.vl-hero-heading {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 0.88;
-  color: var(--fg);
-  font-size: clamp(4rem, 11vw, 10.5rem);
-  text-transform: uppercase;
+/* Tablet: pull the cards further into the corners and shrink them so they
+   frame the headline instead of crowding it. */
+@media (max-width: 1100px) {
+  .vl-hero-card { width: 7.5rem; }
+  .vl-hero-card--1 { top: 9%;  left: 3%; }
+  .vl-hero-card--2 { top: 8%;  right: 3%; }
+  .vl-hero-card--3 { bottom: 28%; left: 4%; }
+  .vl-hero-card--4 { bottom: 27%; right: 4%; }
 }
-.vl-ht-line { display: block; }
-.vl-ht-line--desktop { white-space: nowrap; }
-.vl-ht-line--mobile { display: none; }
-.vl-ht-accent { color: var(--red); font-style: normal; }
-
-.vl-hero-cta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.25rem;
-}
-
+/* Phones: only the two top cards, small, tucked into the corners. */
 @media (max-width: 767px) {
-  .vl-ht-line--desktop { display: none; }
-  .vl-ht-line--mobile  { display: block; }
-  .home-hero { min-height: 88svh; align-items: flex-end; }
+  .home-hero { min-height: 92svh; padding-top: 9rem; padding-bottom: 10rem; }
+  .vl-hero-timeline {
+    --tl-head: 2rem;
+    grid-template-rows: 0.8rem 2.1rem 1rem 1.4rem;
+    gap: 0.25rem 0;
+    padding: 0.45rem 0.45rem 0.55rem 0;
+    border-radius: 0.9rem;
+  }
+  .vl-tl-head svg { width: 0.85rem; height: 0.85rem; }
+  .vl-hero-card { width: 5.6rem; padding: 0.3rem; border-radius: 0.9rem; }
+  .vl-hero-card img { border-radius: 0.6rem; }
+  .vl-hero-card--1 { top: 3.5rem; left: -0.6rem; }
+  .vl-hero-card--2 { top: 3rem;   right: -0.6rem; }
+  .vl-hero-card--3, .vl-hero-card--4 { display: none; }
+  .vl-hero-heading { font-size: clamp(2.3rem, 10.5vw, 3.6rem); }
+  .vl-trusted__slot { width: 2.8rem; height: 2.8rem; margin-left: -0.9rem; }
+  .vl-trusted__label { font-size: 0.95rem; }
 }
 
 /* ══════════════════════ 02 · CLIENT CAROUSEL / FACE WALL ══════════════════════ */
@@ -284,7 +468,6 @@ a { color: inherit; }
 .vl-clients-header .h-l {
   font-size: clamp(2.6rem, 6vw, 5.2rem);
   letter-spacing: -0.01em;
-  margin-left: -0.35em;
 }
 .vl-clients-stat {
   position: relative;
@@ -956,11 +1139,17 @@ a { color: inherit; }
 .vl-faq-answer p {
   margin: 0;
   padding: 0 1.9rem 1.7rem calc(1.9rem + 0.9rem + 1.6em); /* lines up under the question text, past the { n } */
-  max-width: 48ch;
+  max-width: 60ch;
   font-family: var(--font-mono);
   font-size: clamp(1rem, 1.4vw, 1.1rem);
   line-height: 1.65;
   color: var(--fg-dim);
+}
+/* Each typed line of an answer is its own block, balanced so a line that has
+   to wrap splits into two even halves instead of leaving one word alone. */
+.vl-faq-line {
+  display: block;
+  text-wrap: balance;
 }
 .vl-faq-link {
   color: var(--red);
@@ -1052,6 +1241,216 @@ a { color: inherit; }
 }
 
 
+/* ═══════════════════════ 07b · PRICING ═══════════════════════
+   Two flat cards, same radius/border language as the FAQ cards. The credit
+   plan card is solid red (same red as the "Hire Vlance" column above) — no
+   gradients, no shadows. */
+.vl-pricing-section {
+  background: var(--bg);
+  padding: clamp(3.5rem, 7vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
+  border-bottom: var(--line-w) solid var(--line);
+}
+.vl-pricing-heading {
+  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+  margin-bottom: clamp(2rem, 5vw, 3.5rem) !important;
+}
+
+.vl-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 60rem;
+  gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  align-items: stretch;
+}
+
+.vl-price-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: clamp(1.6rem, 2.5vw, 2.2rem);
+  background: var(--bg-panel);
+  border: var(--line-w) solid var(--line);
+  border-radius: 1.25rem;
+  color: var(--fg);
+}
+.vl-price-card--featured {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.vl-price-name {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.vl-price-card--featured .vl-price-name { color: rgba(255, 255, 255, 0.8); }
+
+.vl-price-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.vl-price-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 5vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.vl-price-unit {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--fg-dim);
+}
+.vl-price-card--featured .vl-price-unit { color: rgba(255, 255, 255, 0.8); }
+
+.vl-price-sub {
+  margin: 0;
+  max-width: 30ch;
+  text-wrap: balance; /* evens out the lines so no single word is left alone */
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+.vl-price-card--featured .vl-price-sub { color: rgba(255, 255, 255, 0.85); }
+
+.vl-price-list {
+  list-style: none;
+  margin: 0;
+  padding: 1.1rem 0 0;
+  border-top: var(--line-w) solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+}
+.vl-price-card--featured .vl-price-list { border-top-color: rgba(255, 255, 255, 0.25); }
+.vl-price-list li {
+  position: relative;
+  padding-left: 1.4em;
+  font-family: var(--font-mono);
+  font-size: clamp(0.92rem, 1.15vw, 1rem);
+  line-height: 1.45;
+}
+.vl-price-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--red);
+}
+.vl-price-card--featured .vl-price-list li::before { background: #fff; }
+
+.vl-price-btn {
+  width: 100%;
+  font-size: 1.05rem;
+  padding: 0.95em 1.5em;
+  margin-top: 0.4rem;
+}
+.vl-price-card--featured .vl-price-btn { background: #fff; color: var(--red); }
+.vl-price-card--featured .vl-price-btn:hover { background: var(--fg); color: #fff; }
+
+/* 20 / 50 / 100 / 150 credit switch — pill segmented control, 2×2 on
+   narrow phones so "150 credits" never gets squeezed. */
+.vl-price-switch {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 1.4rem;
+  background: rgba(0, 0, 0, 0.18);
+}
+.vl-price-opt {
+  padding: 0.6em 0.4em;
+  border: 0;
+  border-radius: 100em;
+  background: none;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.vl-price-opt.is-active { background: #fff; color: var(--red); }
+@media (max-width: 1100px) and (min-width: 901px), (max-width: 480px) {
+  .vl-price-switch { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Card body: one block per video type (Normal / Harder), each with
+   its own name + price row acting as the divider above its list. */
+.vl-price-type {
+  padding-top: 1.1rem;
+  border-top: var(--line-w) solid var(--line);
+}
+.vl-price-type:last-of-type { flex: 1; }
+.vl-price-type-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.vl-price-card--featured .vl-price-type { border-top-color: rgba(255, 255, 255, 0.25); }
+.vl-price-type .vl-price-list {
+  padding-top: 0;
+  border-top: none;
+}
+
+@media (max-width: 900px) {
+  .vl-pricing-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .vl-pricing-heading { font-size: clamp(2.6rem, 15vw, 3.5rem); }
+}
+
+@media (max-width: 640px) {
+  .vl-compare-table {
+    grid-template-columns: 1fr;
+    row-gap: 0.45rem;
+  }
+  .vl-compare-table > :nth-child(-n+4) { display: none; } /* header row */
+  .vl-compare-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    padding: 0.9rem 1rem;
+    border-bottom: none;
+    border-radius: 0.8rem !important;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  .vl-compare-cell--label {
+    padding: 1.6rem 0 0.15rem;
+    font-size: 0.8rem;
+  }
+  .vl-compare-table > :nth-child(5) { padding-top: 0; }
+  .vl-compare-table > :nth-child(4n+2) { border: var(--line-w) solid var(--line); }
+  .vl-compare-table > :nth-child(4n+2)::before,
+  .vl-compare-table > :nth-child(4n+3)::before,
+  .vl-compare-table > :nth-child(4n)::before {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+  }
+  .vl-compare-table > :nth-child(4n+2)::before { content: 'Edit it yourself'; }
+  .vl-compare-table > :nth-child(4n+3)::before { content: 'Ordinary editor'; }
+  .vl-compare-table > :nth-child(4n)::before   { content: 'Vlance'; color: rgba(255, 255, 255, 0.75); }
+}
 
 /* ══════════════════════════ 08 · CONTACT ══════════════════════════ */
 .vlance-contact-section {
@@ -1183,13 +1582,6 @@ a { color: inherit; }
   object-fit: cover;
   border: 2px solid var(--red-bright); /* brighter than the section's own red, so the ring still reads against it */
   margin: 0 -0.45rem; /* slight overlap */
-  transition: transform 0.25s ease, border-color 0.25s ease, z-index 0s;
-  cursor: default;
-}
-.vlance-contact-avatar:hover {
-  transform: translateY(-0.3rem) scale(1.08);
-  border-color: #fff;
-  z-index: 2;
 }
 
 @media (max-width: 600px) {
@@ -1199,10 +1591,11 @@ a { color: inherit; }
      the screen. Sized and overlapped explicitly here instead of relying on
      the vw term to shrink it further. */
   .vlance-contact-avatar {
-    width: 2rem;
-    height: 2rem;
-    margin: 0 -0.5rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    margin: 0 -0.3rem;
   }
+  .vlance-contact-avatar:nth-child(n+9) { display: none; }
 }
 
 @media (max-width: 360px) {

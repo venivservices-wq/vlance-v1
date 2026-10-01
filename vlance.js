@@ -878,17 +878,20 @@ function initCreatorCount() {
 
 // ─── Trusted-by badge: cycle the avatars through a larger pool ────────────────
 // Only 4 faces are on screen at once, but the pool (clients.js) is bigger, so
-// one slot at a time swaps to a face that isn't currently showing.
+// one slot at a time swaps to a face that isn't currently showing. Each swap
+// is a vertical slide inside the slot's circle (old face slides up and out,
+// new one slides in from below), and it pauses while the badge is off-screen.
 function initTrustedAvatars() {
   const badge = document.querySelector('.vl-trusted');
   if (!badge || typeof gsap === 'undefined') return;
 
-  const slots = Array.from(badge.querySelectorAll('.vl-trusted__slot img'));
-  if (!slots.length) return;
+  const slotEls = Array.from(badge.querySelectorAll('.vl-trusted__slot'));
+  const current = slotEls.map(el => el.querySelector('img'));
+  if (!current.length || current.some(img => !img)) return;
 
   const pool = (window.VLANCE_CLIENTS || []).map(c => ({ src: encodeClientPhoto(c.photo), alt: c.name }));
   // Nothing to rotate through if the pool can't beat what's already shown
-  if (pool.length <= slots.length) return;
+  if (pool.length <= slotEls.length) return;
 
   // Someone who's asked for less motion gets the static badge
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -897,35 +900,48 @@ function initTrustedAvatars() {
   pool.forEach(p => { const img = new Image(); img.src = p.src; });
 
   // Pool index currently displayed in each slot
-  const shown = slots.map(img => {
+  const shown = current.map(img => {
     const i = pool.findIndex(p => img.getAttribute('src') === p.src);
     return i === -1 ? 0 : i;
   });
 
-  const SWAP_EVERY  = 1100; // ms between swaps
-  const FIRST_SWAP  = 400;  // ms — starts almost immediately, so it's caught before scrolling away
-  let turn = 0;             // round-robin, so every slot gets its turn
+  const SWAP_EVERY = 2200; // ms between swaps
+  const FIRST_SWAP = 900;  // ms — after the hero entrance has settled
+  let turn = 0;            // round-robin, so every slot gets its turn
+  let visible = true;
 
   const swap = () => {
-    const slot = turn++ % slots.length;
+    if (!visible || document.hidden) return;
+    const slot = turn++ % slotEls.length;
 
     // Only faces that aren't on screen, so the same creator never shows twice
     const candidates = pool.map((_, i) => i).filter(i => shown.indexOf(i) === -1);
     if (!candidates.length) return;
 
-    const pick  = candidates[Math.floor(Math.random() * candidates.length)];
-    const img   = slots[slot];
-    const entry = pool[pick];
+    const pick = candidates[Math.floor(Math.random() * candidates.length)];
+    const old  = current[slot];
+    const next = old.cloneNode();
+    next.alt = pool[pick].alt || '';
+    current[slot] = next;
+    shown[slot] = pick;
 
-    gsap.timeline()
-      .to(img, { scale: 0.4, opacity: 0, duration: 0.28, ease: 'power2.in' })
-      .add(() => {
-        img.src = entry.src;
-        img.alt = entry.alt || '';
-        shown[slot] = pick;
-      })
-      .to(img, { scale: 1, opacity: 1, duration: 0.42, ease: 'back.out(1.7)' });
+    // Parked fully below the circle (yPercent > 100 covers the scale-up too)
+    // before it's in the DOM, and only slid up once the photo has decoded —
+    // so it never appears half-loaded at the bottom of the circle.
+    gsap.set(next, { yPercent: 120, scale: 1.1 });
+    next.src = pool[pick].src;
+    const play = () => {
+      slotEls[slot].appendChild(next);
+      gsap.timeline({ onComplete: () => old.remove() })
+        .to(old,  { yPercent: -120, scale: 0.9, duration: 0.8, ease: 'expo.inOut' }, 0)
+        .to(next, { yPercent: 0,    scale: 1,   duration: 0.8, ease: 'expo.inOut' }, 0);
+    };
+    (next.decode ? next.decode() : Promise.resolve()).then(play, play);
   };
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(badge);
+  }
 
   setTimeout(() => {
     swap();
@@ -1107,6 +1123,28 @@ function initFaqAccordion() {
       item.classList.toggle('is-open', opening);
       toggle.setAttribute('aria-expanded', String(opening));
       answer.style.maxHeight = opening ? answer.scrollHeight + 'px' : '';
+    });
+  });
+}
+
+// ─── Pricing: 20 / 50 / 100 / 150 credit switch ──────────────────────────────
+// Each option button holds its own data-credits / data-price; this just
+// copies them into the card.
+function initPricingPlans() {
+  document.querySelectorAll('[data-pricing-plans]').forEach(card => {
+    const opts = card.querySelectorAll('.vl-price-opt');
+    const price = card.querySelector('[data-plan-price]');
+    const credits = card.querySelector('[data-plan-credits]');
+
+    opts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        opts.forEach(o => {
+          o.classList.toggle('is-active', o === opt);
+          o.setAttribute('aria-selected', String(o === opt));
+        });
+        if (price) price.textContent = opt.dataset.price;
+        if (credits) credits.textContent = opt.dataset.credits;
+      });
     });
   });
 }
@@ -1892,61 +1930,88 @@ function initNavScroll() {
   });
 }
 
-// ─── Hero entrance: headline stagger + floating face cluster settle ───────────
-// ─── Hero background: clouds + stars drift independently on scroll ────────────
-function initHeroBckParallax() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  const hero = document.querySelector('#hero');
-  if (!hero) return;
+// ─── Hero timeline panel: fill each lane with clips ──────────────────────────
+// Fixed, hand-tuned widths (in rem) rather than random, so the panel looks the
+// same on every load. A negative number is an empty gap. Every lane is padded
+// to the same LOOP length (a multiple of the 4rem ruler tile) and written
+// twice, so all lanes scroll at one speed and the CSS -50% loop is seamless.
+function buildHeroTimeline() {
+  const timeline = document.querySelector('.vl-hero-timeline');
+  if (!timeline) return;
 
-  const suffix = window.innerWidth <= 768 ? '-m' : '-d';
-  const cloudLeft  = hero.querySelector('#cloud_left' + suffix);
-  const cloudRight = hero.querySelector('#cloud_right' + suffix);
-  const star1      = hero.querySelector('#red_star_1' + suffix);
-  const star2      = hero.querySelector('#red_star_1_copy' + suffix);
-  const arrow      = hero.querySelector(suffix === '-d' ? '#hero-arrow-d' : '#main_bck-m');
+  const CLIP_GAP = 0.3; // rem between neighbouring clips
+  const PATTERNS = {
+    video: [9, 5.5, 12, 7, 4.5, 10, 6.5, 14, 8, 5, 11],
+    text:  [-3, 5, -7, 7.5, -4, 4, -9, 6, -6, 5, -8],
+    audio: [24, 13, -2, 19, 27, -3, 17],
+  };
+  const SELECTED = 2;   // video clip shown "selected"
+  const RED_TEXT = [3]; // text clips filled red
 
-  const trig = { trigger: '#hero', start: 'top top', end: 'bottom top' };
+  const photos = (window.VLANCE_CLIENTS || []).map(c => encodeClientPhoto(c.photo));
 
-  // The red foreground shape — closest layer, so it moves the most.
-  if (arrow) {
-    gsap.to(arrow, { y: -35, ease: 'none', scrollTrigger: { ...trig, scrub: 0.6 } });
-  }
+  const lengthOf = p => p.reduce((sum, w) => sum + Math.abs(w) + (w > 0 ? CLIP_GAP : 0), 0);
+  const longest = Math.max(...Object.values(PATTERNS).map(lengthOf));
+  const LOOP = Math.ceil(longest / 4) * 4;
 
-  // Clouds drift slowly sideways + up (further away, so they move less);
-  // stars travel further and spin a little (closer / lighter, more motion).
-  if (cloudLeft) {
-    gsap.to(cloudLeft, { x: -70, y: -40, ease: 'none', scrollTrigger: { ...trig, scrub: 1.6 } });
-  }
-  if (cloudRight) {
-    gsap.to(cloudRight, { x: 70, y: -55, ease: 'none', scrollTrigger: { ...trig, scrub: 2 } });
-  }
-  if (star1) {
-    gsap.to(star1, { y: -150, rotate: 35, transformOrigin: '50% 50%', ease: 'none', scrollTrigger: { ...trig, scrub: 0.8 } });
-  }
-  if (star2) {
-    gsap.to(star2, { y: -110, rotate: -30, transformOrigin: '50% 50%', ease: 'none', scrollTrigger: { ...trig, scrub: 1.1 } });
-  }
+  const gap = w => {
+    const el = document.createElement('span');
+    el.className = 'vl-tl-gap';
+    el.style.width = w + 'rem';
+    return el;
+  };
+
+  timeline.querySelectorAll('.vl-tl-track[data-kind]').forEach(track => {
+    const kind = track.dataset.kind;
+    const pattern = PATTERNS[kind];
+    if (!pattern) return;
+    const frag = document.createDocumentFragment();
+    let photo = 5; // start a few faces in, away from the hero cards' faces
+
+    for (let copy = 0; copy < 2; copy++) {
+      pattern.forEach((w, i) => {
+        if (w < 0) { frag.appendChild(gap(-w)); return; }
+        const clip = document.createElement('span');
+        clip.className = 'vl-tl-clip';
+        clip.style.width = w + 'rem';
+        if (kind === 'video') {
+          if (photos.length) clip.style.backgroundImage = `url("${photos[photo++ % photos.length]}")`;
+          if (i === SELECTED) clip.classList.add('is-selected');
+        }
+        if (kind === 'text' && RED_TEXT.includes(i)) clip.classList.add('is-red');
+        frag.appendChild(clip);
+        frag.appendChild(gap(CLIP_GAP));
+      });
+      frag.appendChild(gap(LOOP - lengthOf(pattern)));
+    }
+    track.appendChild(frag);
+  });
+
+  const ruler = timeline.querySelector('.vl-tl-ruler');
+  if (ruler) ruler.style.width = LOOP * 2 + 'rem';
 }
 
+// ─── Hero entrance: headline lines → copy/CTA/badge, then the
+//     floating creator cards pop in around the edges ─────────────────────────
 function initHeroEntrance() {
   if (typeof gsap === 'undefined') return;
   const hero = document.querySelector('.home-hero');
   if (!hero) return;
 
-  const trust  = hero.querySelector('.vl-trusted');
-  const lines  = Array.from(hero.querySelectorAll('.vl-ht-line--desktop, .vl-ht-line--mobile'));
-  const cta    = hero.querySelector('.vl-hero-cta');
+  const lines   = Array.from(hero.querySelectorAll('.vl-ht-line'));
+  const rest    = ['.vl-hero-sub', '.vl-hero-cta', '.vl-trusted']
+    .map(sel => hero.querySelector(sel)).filter(Boolean);
+  const cards   = Array.from(hero.querySelectorAll('.vl-hero-card'))
+    .filter(c => getComputedStyle(c).display !== 'none');
 
-  const visibleLines = lines.filter(l => getComputedStyle(l).display !== 'none');
-
-  gsap.set([trust, cta].filter(Boolean), { opacity: 0, y: 18 });
-  gsap.set(visibleLines, { opacity: 0, y: 46 });
+  gsap.set(rest, { opacity: 0, y: 18 });
+  gsap.set(lines, { opacity: 0, y: 46 });
+  gsap.set(cards, { opacity: 0, scale: 0.85, y: 30 });
 
   const tl = gsap.timeline({ delay: 0.15 });
-  tl.to(visibleLines, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out', stagger: 0.09 }, 0);
-  if (cta) tl.to(cta, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4');
-  if (trust) tl.to(trust, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.45');
+  tl.to(lines, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out', stagger: 0.09 }, 0);
+  tl.to(rest, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }, '-=0.45');
+  tl.to(cards, { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'back.out(1.6)', stagger: 0.08 }, 0.35);
 }
 
 // ─── Generic scroll reveal: [data-reveal] fades/slides up, [data-reveal-group]
@@ -1986,8 +2051,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // and the FAQ accordion shouldn't depend on it.
   buildClientsCarousel();
   buildContactClientCircles();
+  buildHeroTimeline();
   initCreatorCount();
   initFaqAccordion();
+  initPricingPlans();
 
   initCSSMarquee();
   initMuteButtons();

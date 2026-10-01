@@ -66,78 +66,58 @@
 
 <div class="global">
 
-  <!-- ═══════════════ 01 · HERO ═══════════════ -->
+  <!-- ═══════════════ 01 · HERO ═══════════════
+       Clean, centered: headline → one line of copy → single
+       CTA → trusted badge. Background is a flat colour with a faint "+"
+       pattern, an editing-timeline panel along the bottom plus a few floating creator cards (real client photos, no text) around
+       the edges; cards are decorative and hidden on small phones. Float +
+       entrance live in initHeroEntrance() (vlance.js). -->
   <section class="home-hero" id="hero">
 
-    <!-- Inlined (not <img>) so individual pieces — clouds, stars, arrow —
-         can be targeted and animated in JS. Class/id names are suffixed
-         -d / -m since both copies live in the DOM at once (one hidden per
-         breakpoint) and ids must stay unique per document. Keep this in
-         sync with svg/Hero bck.svg + svg/Hero bck mobile.svg by hand — this
-         copy won't pick up edits to those files automatically. -->
-    <svg class="vl-hero-bck vl-hero-bck--desktop" xmlns="http://www.w3.org/2000/svg"
-         viewBox="0 0 3840 2700" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <defs>
-        <style>
-          .cls-1-d { fill: #f8f8f8; }
-          .cls-1-d, .cls-3-d { stroke: #fcfcfc; stroke-linecap: square; stroke-linejoin: bevel; }
-          .cls-1-d, .cls-3-d, .cls-5-d { stroke-width: 1px; }
-          .cls-1-d, .cls-2-d, .cls-3-d, .cls-4-d, .cls-5-d { fill-rule: evenodd; }
-          .cls-2-d, .cls-5-d { fill: #b91616; }
-          .cls-3-d { fill: #f0f2f6; }
-          .cls-4-d { fill: none; stroke-width: 200px; }
-          .cls-4-d, .cls-5-d { stroke: #b91616; }
-        </style>
-      </defs>
-      <path class="cls-1-d" d="M-125,903c22.092-24.677,678-425,678-425l712,319,726-207,917,345,875-242s511.04,1241.63,495,1263-179.3,389.44-269,438-419.11,186.38-748,195-1334.38-42.69-1536-32-1803.372,10.19-1817,5-549-522-549-522l160-468S-147.092,927.677-125,903Z"/>
-      <path id="red_star_1-d" class="cls-2-d" d="M3169.34,737.981c9.67,0.235,10.77,14.2,1.26,15.95l-76.52,14.056,26.44,73.168c3.29,9.1-9.33,15.188-14.41,6.956l-47.78-77.457-90.99-2.217c-9.67-.236-10.77-14.2-1.26-15.951l76.52-14.055-26.44-73.169c-3.28-9.1,9.33-15.187,14.41-6.956l47.79,77.458Z"/>
-      <path id="red_star_1_copy-d" class="cls-2-d" d="M822.26,943.047c-0.088-9,12.861-10.463,14.788-1.675l15.5,70.688,67.179-26.9c8.352-3.345,14.416,8.191,6.925,13.173L856.16,1045.21l0.83,84.65c0.088,9-12.861,10.47-14.788,1.68l-15.5-70.69-67.179,26.91c-8.352,3.34-14.416-8.2-6.925-13.18l70.489-46.88Z"/>
-      <path id="cloud_left-d" class="cls-3-d" d="M-37.666,1644.13C1.355,1535.04,76.969,1443.54,181.34,1397.85c56.478-24.72,156.248-43.37,288.523-11.27,80.419,19.52,122.815,55.87,202.488,78.24,97.837,27.46,209.338,33.43,313.23,5.95,50.679-13.41,152.359-62.75,244.589-136.32,74.1-59.11,108.89-106.74,184.68-125.64,122.36-30.5,239.33,33.43,290.43,68.74,35.35,24.42,109.67,102.57,160.41,206.25,47.95,97.99,58.48,195.46,52.57,225.49-10.45,53-50.02,128.96-152.83,200.3-181.17,125.72-387.28,110.37-583.59,107.15-141.43-2.32-320.992,4.34-485.582,15.51-64.208,4.35-257-1.67-359.766-6.93-35.975-1.84-70.275-5.52-111.252-17.25-42.506-12.16-71.266-30.32-113.063-44.73-27.851-9.61-59.576-19.73-81.831-25.58-34.7-9.13-55.715-12.68-70.383-30.72-33.533-41.24,1.139-134.03-6.541-193.26a296.768,296.768,0,0,0-13.135-56.57"/>
-      <path id="cloud_right-d" class="cls-3-d" d="M3884,1703c16.4-106.74-4.9-214.25-71.9-294.24-69.74-83.27-200.32-150.71-258.55-107.89-9.76,7.18-20.52,21.05-29.23,42.71-10.38,25.82-2.48,44.39-13.49,60.68-30.09,44.53-163.68,34.01-258.55-33.71-58.26-41.59-95.5-108.54-146.13-159.59-27.4-27.62-59.24-55.47-107.92-67.43-68.61-16.84-157.87,2.15-179.86,51.7-25.7,57.92,59.63,114.77,40.47,170.82-44.24,129.46-557.78,61.99-571.05,128.12-8.26,41.16,184.42,99.14,179.86,173.07-3.87,62.64-147.82,84.21-197.85,179.81-27.12,51.84-29.55,114.77-11.24,186.56"/>
-      <g id="hero-arrow-d" transform="translate(0, 560)">
-        <path class="cls-4-d" d="M-95,2107c192.7-239.2,381.439-372.83,558-348,164.629,23.15,209.292,179.17,368,191,252.56,18.82,387.2-370.14,695.99-445.16,225.4-54.77,442.94,75.87,612.73,89.09,281.48,21.92,573.55-69.39,880.28-274.93"/>
-        <path id="Triangle_1-d" class="cls-5-d" d="M3444.02,998.321c46.18-.744,75.85,48.789,53.4,89.149l-260.1,467.75c-22.45,40.37-80.17,41.3-103.91,1.68l-275.03-459.13c-23.74-39.63,4.32-90.08,50.5-90.83Z"/>
-      </g>
-    </svg>
+    <!-- Faint "+" mark pattern behind everything. -->
+    <div class="vl-hero-pattern" aria-hidden="true"></div>
 
-    <svg class="vl-hero-bck vl-hero-bck--mobile" xmlns="http://www.w3.org/2000/svg"
-         viewBox="0 0 3840 2160" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <defs>
-        <style>
-          .cls-1-m { fill: #f8f8f8; }
-          .cls-1-m, .cls-4-m { stroke: #fcfcfc; }
-          .cls-1-m, .cls-4-m, .cls-5-m { stroke-linecap: square; stroke-linejoin: bevel; }
-          .cls-1-m, .cls-3-m, .cls-4-m, .cls-5-m { stroke-width: 1px; }
-          .cls-1-m, .cls-2-m, .cls-3-m, .cls-4-m, .cls-5-m { fill-rule: evenodd; }
-          .cls-2-m, .cls-3-m { fill: #b91616; }
-          .cls-3-m, .cls-5-m { stroke: #b91616; }
-          .cls-4-m { fill: #f0f2f6; }
-          .cls-5-m { fill: url(#linear-gradient-m); }
-        </style>
-        <linearGradient id="linear-gradient-m" x1="1961.645" y1="1633.75" x2="1883.354" y2="2715.38" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#b91616"/>
-          <stop offset="0.001" stop-color="#b91616"/>
-          <stop offset="1" stop-color="#b91616"/>
-        </linearGradient>
-      </defs>
-      <path class="cls-1-m" d="M-125,903c22.092-24.677,678-425,678-425l712,319,726-207,917,345,875-242s511.04,1241.63,495,1263-179.3,389.44-269,438-419.11,186.38-748,195-1334.38-42.69-1536-32-1803.372,10.19-1817,5-549-522-549-522l160-468S-147.092,927.677-125,903Z"/>
-      <path id="red_star_1-m" class="cls-2-m" transform="translate(161 182) scale(0.5)" d="M3679.34,561.981c9.67,0.235,10.77,14.2,1.26,15.95l-76.52,14.056,26.44,73.168c3.29,9.1-9.33,15.188-14.41,6.956l-47.78-77.457-90.99-2.217c-9.67-.236-10.77-14.2-1.26-15.951l76.52-14.055-26.44-73.169c-3.28-9.1,9.33-15.187,14.41-6.956l47.79,77.458Z"/>
-      <path id="red_star_1_copy-m" class="cls-2-m" transform="translate(1673 223) scale(0.5)" d="M233.26,385.047c-0.088-9,12.861-10.463,14.788-1.675l15.5,70.686,67.179-26.9c8.352-3.345,14.416,8.191,6.925,13.173L267.16,487.212l0.83,84.652c0.088,9-12.861,10.464-14.788,1.676l-15.5-70.687-67.18,26.9c-8.351,3.344-14.415-8.192-6.924-13.174L234.09,469.7Z"/>
-      <path class="cls-3-m" d="M2470.65,2481.33C2701.19,1797.88,2998,1047.75,3212,1081c236.92,36.81,274.21,1035.94,361,1032,85.74-3.89,81.49-980.05,261.8-1006.84,189.41-28.15,453.72,1000.79,664.7,970.03,155.93-22.74,146.89-605.57,289.51-625.08,109.98-15.05,248.16,313.38,358.98,634.34"/>
-      <path id="Shape_2_copy-m" class="cls-3-m" d="M-468.354,2516.33C-237.814,1832.88,59,1082.75,273,1116c236.921,36.81,274.208,1035.94,361,1032,85.738-3.89,81.49-980.05,261.795-1006.84,189.415-28.15,453.725,1000.79,664.705,970.03,155.93-22.74,146.89-605.57,289.51-625.08,109.98-15.05,248.16,313.38,358.98,634.34"/>
-      <path id="cloud_left-m" class="cls-4-m" d="M-31,1572c57.564-100.55,148.067-177.36,258.837-204.01,59.939-14.42,161.434-15.27,286.021,39.55,75.745,33.33,111.1,76.56,185.611,112.56,91.5,44.22,200.219,69.66,307.321,60.85,52.25-4.3,161.01-35.03,264.72-91.27,83.33-45.18,125.94-85.97,203.87-91.27,125.81-8.55,229.74,74.92,273.85,118.65,30.52,30.25,89.96,120.23,121.71,231.21,30.01,104.89,23.27,202.69,12.17,231.21-19.58,50.35-71.88,118.19-185.61,170.37-200.43,91.96-400.64,40.67-593.34,3.04-138.828-27.11-316.768-52.07-480.761-69.97-63.975-6.98-252.721-46.76-352.963-69.97-35.094-8.13-68.216-17.77-106.5-36.51C124.227,1957,99.1,1934.08,60.483,1912.55c-25.732-14.34-55.188-29.88-76.069-39.55-32.556-15.07-52.626-22.25-63.9-42.59C-105.257,1783.92-54.836,1698.66-52,1639a296.973,296.973,0,0,0-3-58"/>
-      <path id="cloud_right-m" class="cls-4-m" d="M3939,1871c16.4-106.74,-4.9-214.25,-71.9-294.24,-69.74-83.27,-200.32-150.71,-258.55-107.89,-9.76,7.18,-20.52,21.05,-29.23,42.71,-10.38,25.82,-2.48,44.39,-13.49,60.68,-30.09,44.53,-163.68,34.01,-258.55,-33.71,-58.26,-41.59,-95.5,-108.54,-146.13,-159.59,-27.4,-27.62,-59.24,-55.47,-107.92,-67.43,-68.61,-16.84,-157.87,2.15,-179.86,51.7,-25.7,57.92,59.63,114.77,40.47,170.82,-44.24,129.46,-557.78,61.99,-571.05,128.12,-8.26,41.16,184.42,99.14,179.86,173.07,-3.87,62.64,-147.82,84.21,-197.85,179.81,-27.12,51.84,-29.55,114.77,-11.24,186.56"/>
-      <path id="main_bck-m" class="cls-5-m" d="M-19.9,1633.75Q677.45,1769.245,1377.98,1808.48c276.63,15.43,560.12,19.41,857.03,12.49,299.67-6.99,594.44-25.55,892.4-56.17,299.67-29.52,568.69-69.34,852.87-120.65,41.51,138.4,44.92,265.91,4.16,380.67-352.95,993.84-3940.654,814.02-4137.468,97.77-20.313-73.92-40.31-284.57,81.6-436.2A379.278,379.278,0,0,1-19.9,1633.75Z"/>
-    </svg>
+    <!-- Editing-timeline panel along the bottom: ruler + video / text /
+         audio lanes scrolling in sync under a fixed red playhead, with
+         track icons on the left like a real editor. Clips are generated by
+         buildHeroTimeline() (vlance.js); purely decorative. -->
+    <div class="vl-hero-timeline" aria-hidden="true">
+      <span class="vl-tl-head"></span>
+      <div class="vl-tl-lane"><div class="vl-tl-track vl-tl-ruler"></div></div>
+
+      <span class="vl-tl-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 12h4M17 12h4"/></svg></span>
+      <div class="vl-tl-lane"><div class="vl-tl-track" data-kind="video"></div></div>
+
+      <span class="vl-tl-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 6h14M12 6v13"/></svg></span>
+      <div class="vl-tl-lane"><div class="vl-tl-track" data-kind="text"></div></div>
+
+      <span class="vl-tl-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg></span>
+      <div class="vl-tl-lane"><div class="vl-tl-track" data-kind="audio"></div></div>
+
+      <span class="vl-tl-playhead"></span>
+    </div>
+
+    <div class="vl-hero-cards" aria-hidden="true">
+      <figure class="vl-hero-card vl-hero-card--1"><img src="png/clients/lis_beautytips.jpeg" alt=""></figure>
+      <figure class="vl-hero-card vl-hero-card--2"><img src="png/clients/dayne%20pfp.png" alt=""></figure>
+      <figure class="vl-hero-card vl-hero-card--3"><img src="png/clients/Susan%20L.png" alt=""></figure>
+      <figure class="vl-hero-card vl-hero-card--4"><img src="png/clients/Nikki_brownlee.jpeg" alt=""></figure>
+    </div>
 
     <div class="container">
       <div class="home-hero__content">
 
-        <!-- Trusted-by badge: overlapping circular creator avatars + label.
-             The 4 slots below are what's visible; initTrustedAvatars cycles
-             them through the full clients.js list so the same 4 faces aren't
-             always showing. The markup keeps 4 real <img>s so the badge
-             still looks right with JS off. -->
+        <h1 class="vl-hero-heading">
+          <span class="vl-ht-line">Video editing for</span>
+          <span class="vl-ht-line"><span class="vl-ht-accent">TikTok Shop</span> creators.</span>
+        </h1>
+
+        <p class="vl-hero-sub">Stop editing.<br>Start posting.</p>
+
+        <div class="vl-hero-cta">
+          <a href="https://forms.gle/pR8P6YxU4mV4t3Qc9" target="_blank" rel="noopener" class="btn btn--primary">Start now</a>
+        </div>
+
         <div class="vl-trusted">
           <div class="vl-trusted__avatars">
             <span class="vl-trusted__slot"><img src="png/clients/chico%20pfp.png" class="vl-trusted__avatar" alt="Chico"></span>
@@ -148,26 +128,6 @@
           <!-- Static fallback text for no-JS; initCreatorCount() overwrites
                this with the live count from clients.js on load. -->
           <span class="vl-trusted__label">Trusted by 25+ creators</span>
-        </div>
-
-        <!-- Title -->
-        <div class="home-hero__title-row">
-          <h1 class="vl-hero-heading">
-            <!-- Desktop line grouping -->
-            <span class="vl-ht-line vl-ht-line--desktop">We edit.</span>
-            <span class="vl-ht-line vl-ht-line--desktop">You go <span class="vl-ht-accent">viral.</span></span>
-            <!-- Mobile line grouping (each on its own line) -->
-            <span class="vl-ht-line vl-ht-line--mobile">We</span>
-            <span class="vl-ht-line vl-ht-line--mobile">edit.</span>
-            <span class="vl-ht-line vl-ht-line--mobile">You go</span>
-            <span class="vl-ht-line vl-ht-line--mobile"><span class="vl-ht-accent">viral.</span></span>
-          </h1>
-        </div>
-
-        <!-- Hero CTAs -->
-        <div class="vl-hero-cta">
-          <a href="#contact" class="btn btn--primary">Start now</a>
-          <a href="#services" class="vl-clients-cta__btn">Or see our work</a>
         </div>
 
       </div><!-- /.home-hero__content -->
@@ -490,6 +450,74 @@
     </div>
   </section>
 
+  <!-- ═══════════════ 06b · PRICING ═══════════════
+       Two cards: Free trial / Credit plans. -->
+  <section class="vl-pricing-section" id="pricing">
+    <div class="container">
+      <h2 class="h-l vl-pricing-heading">Simple,<br>honest pricing.</h2>
+
+      <div class="vl-pricing-grid" data-reveal>
+
+        <!-- Free trial -->
+        <div class="vl-price-card">
+          <span class="vl-price-name">Free trial</span>
+          <div class="vl-price-amount"><span class="vl-price-num">$0</span></div>
+          <p class="vl-price-sub">See our work on your own footage before you pay anything.</p>
+          <ul class="vl-price-list">
+            <li>Get a free test video</li>
+            <li>Same system as paid plans</li>
+            <li>Same editors as paid plans</li>
+            <li>No cards, no commitment</li>
+          </ul>
+          <a href="https://forms.gle/pR8P6YxU4mV4t3Qc9" target="_blank" rel="noopener" class="btn vl-price-btn">Start free trial</a>
+        </div>
+
+        <!-- Credit plans: $5.50 per credit. Each switch button carries its own
+             data-credits / data-price, copied into the card by
+             initPricingPlans() (vlance.js) — change prices here, not in JS. -->
+        <div class="vl-price-card vl-price-card--featured" data-pricing-plans>
+          <span class="vl-price-name">Credit plans</span>
+          <div class="vl-price-switch" role="tablist" aria-label="Credits">
+            <button class="vl-price-opt" role="tab" aria-selected="false" data-credits="20" data-price="$110">20 credits</button>
+            <button class="vl-price-opt is-active" role="tab" aria-selected="true" data-credits="50" data-price="$275">50 credits</button>
+            <button class="vl-price-opt" role="tab" aria-selected="false" data-credits="100" data-price="$550">100 credits</button>
+            <button class="vl-price-opt" role="tab" aria-selected="false" data-credits="150" data-price="$825">150 credits</button>
+          </div>
+          <div class="vl-price-amount"><span class="vl-price-num" data-plan-price>$275</span><span class="vl-price-unit">/ <span data-plan-credits>50</span> credits</span></div>
+          <p class="vl-price-sub">Each video uses credits based on its difficulty. Plans last 60 days.</p>
+
+          <div class="vl-price-type">
+            <div class="vl-price-type-head"><span>Normal video</span><span>1 credit</span></div>
+            <ul class="vl-price-list">
+              <li>Cutting pauses</li>
+              <li>Removing duplicate takes</li>
+              <li>Zoom ins and zoom outs</li>
+              <li>Hook text</li>
+              <li>Up to 3 overlays (image or video)</li>
+              <li>B-roll footage</li>
+              <li>Raw footage up to 5 minutes long</li>
+              <li>2 revisions</li>
+            </ul>
+          </div>
+
+          <div class="vl-price-type">
+            <div class="vl-price-type-head"><span>Harder video</span><span>1.7 credits</span></div>
+            <ul class="vl-price-list">
+              <li>Everything in Normal</li>
+              <li>Sound effects</li>
+              <li>Captions</li>
+              <li>Basic color grading</li>
+              <li>Raw footage up to 8 minutes long</li>
+            </ul>
+          </div>
+
+          <a href="https://forms.gle/pR8P6YxU4mV4t3Qc9" target="_blank" rel="noopener" class="btn vl-price-btn">Get started</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════════════ 07 · FAQ ═══════════════
        Accordion interaction (single item open at a time, smooth height
        animation, rotating icon) modeled on the accordion from the Evander
@@ -507,24 +535,72 @@
 
         <div class="vl-faq-item">
           <button class="vl-faq-toggle" aria-expanded="false">
-            <h3 class="vl-faq-question">How fast do I get my videos back?</h3>
+            <h3 class="vl-faq-question">How do I upload videos?</h3>
             <span class="vl-faq-icon" aria-hidden="true"></span>
           </button>
           <div class="vl-faq-answer">
-            <p>Most videos are delivered within 24 hours. Larger batches can take up to 48 hours, but you're never stuck waiting the 3–5 days that can happen with a typical editor.</p>
+            <p><span class="vl-faq-line">You will get your own Google Drive Folder, where you can upload your files.</span>
+               <span class="vl-faq-line">Alternatively, you can use our web app to upload links if you don't use Google Drive.</span></p>
           </div>
         </div>
 
         <div class="vl-faq-item">
           <button class="vl-faq-toggle" aria-expanded="false">
-            <h3 class="vl-faq-question">How does the process work?</h3>
+            <h3 class="vl-faq-question">How do credits work?</h3>
             <span class="vl-faq-icon" aria-hidden="true"></span>
           </button>
           <div class="vl-faq-answer">
-            <p>You upload your videos to Google Drive along with any instructions or examples.</p>
-            <p>We edit them and upload the finished videos back to Drive.</p>
-            <p>If you need changes, just add your revisions to the revisions file and we'll take care of them. You'll also get updates on Discord as your videos move through each step.</p>
-            <p>If you ever have any problems or questions just ask your personal Manager on Discord.</p>
+            <p><span class="vl-faq-line">You can choose a plan with 20, 50, 100 or 150 credits.</span></p>
+            <p><span class="vl-faq-line">Each video uses credits based on its difficulty: a normal video uses 1 credit, and a harder video uses 1.7 credits. They're subtracted from your balance after each video is completed.</span></p>
+            <p><span class="vl-faq-line">Credits expire after 60 days. Your plan ends once you have less than 1 credit left.</span></p>
+            <p><span class="vl-faq-line">Example: If your plan includes 20 credits and all your videos are normal, you would get 20 videos.</span></p>
+          </div>
+        </div>
+
+        <div class="vl-faq-item">
+          <button class="vl-faq-toggle" aria-expanded="false">
+            <h3 class="vl-faq-question">How do I pay?</h3>
+            <span class="vl-faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="vl-faq-answer">
+            <p><span class="vl-faq-line">Before editing starts, you will receive one invoice from your manager.</span></p>
+            <p><span class="vl-faq-line">We handle all invoices through Payoneer.</span></p>
+            <p><span class="vl-faq-line">You can pay the invoice by card or any other available payment option.</span></p>
+          </div>
+        </div>
+
+        <div class="vl-faq-item">
+          <button class="vl-faq-toggle" aria-expanded="false">
+            <h3 class="vl-faq-question">Who will edit my videos?</h3>
+            <span class="vl-faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="vl-faq-answer">
+            <p><span class="vl-faq-line">We have multiple editors available to work on your projects.</span>
+               <span class="vl-faq-line">We never rely on just one editor.</span>
+               <span class="vl-faq-line">This way we make sure your videos are always finished on time.</span></p>
+          </div>
+        </div>
+
+        <div class="vl-faq-item">
+          <button class="vl-faq-toggle" aria-expanded="false">
+            <h3 class="vl-faq-question">How can the editor replicate my style?</h3>
+            <span class="vl-faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="vl-faq-answer">
+            <p><span class="vl-faq-line">Your manager will send you a Google Form where you can share style examples, fonts, sound effects, and more.</span></p>
+          </div>
+        </div>
+
+        <div class="vl-faq-item">
+          <button class="vl-faq-toggle" aria-expanded="false">
+            <h3 class="vl-faq-question">How do revisions work?</h3>
+            <span class="vl-faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="vl-faq-answer">
+            <p><span class="vl-faq-line">Each project includes 2 revisions.</span>
+               <span class="vl-faq-line">You can write all your revisions as soon as the editor uploads the videos.</span>
+               <span class="vl-faq-line">Revisions are done as soon as possible.</span></p>
+            <p><span class="vl-faq-line">For a small extra fee, you can also have our manager review your videos first.</span></p>
           </div>
         </div>
 
@@ -534,7 +610,8 @@
             <span class="vl-faq-icon" aria-hidden="true"></span>
           </button>
           <div class="vl-faq-answer">
-            <p>You can send brand instructions, examples, or feedback along with your videos. If a brand needs to review the content, you also have time to send their feedback during the revision window.</p>
+            <p><span class="vl-faq-line">You can send us the brief or examples the brand sends you, and we'll follow them when editing your videos.</span>
+               <span class="vl-faq-line">We'll also fix any revisions requested by the brand.</span></p>
           </div>
         </div>
 
@@ -557,16 +634,8 @@
       </div>
 
       <div class="vlance-contact-actions">
-        <!-- Email -->
-        <a href="mailto:venivservices@gmail.com" class="vlance-contact-icon-btn" aria-label="Email us">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-        </a>
-        <!-- Discord -->
-        <a href="https://discord.gg/wbnTYnNZXe" target="_blank" rel="noopener" class="vlance-contact-icon-btn" aria-label="Discord">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-        </a>
         <!-- Contact form button -->
-        <a href="https://tally.so/r/vGpe1D" target="_blank" rel="noopener" class="vlance-contact-btn">Contact us via form</a>
+        <a href="https://forms.gle/pR8P6YxU4mV4t3Qc9" target="_blank" rel="noopener" class="vlance-contact-btn">Contact us via form</a>
       </div>
 
       <!-- Built from clients.js by buildContactClientCircles() (vlance.js) —
