@@ -2032,7 +2032,7 @@ function initHeroEntrance() {
   if (!hero) return;
 
   const lines   = Array.from(hero.querySelectorAll('.vl-ht-line'));
-  const rest    = ['.vl-hero-sub', '.vl-hero-cta', '.vl-trusted']
+  const rest    = ['.vl-hero-cta', '.vl-trusted']
     .map(sel => hero.querySelector(sel)).filter(Boolean);
   const cards   = Array.from(hero.querySelectorAll('.vl-hero-card'))
     .filter(c => getComputedStyle(c).display !== 'none');

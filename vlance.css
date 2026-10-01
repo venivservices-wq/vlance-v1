@@ -364,16 +364,6 @@ a { color: inherit; }
 .vl-ht-line { display: block; }
 .vl-ht-accent { color: var(--red); font-style: normal; }
 
-.vl-hero-sub {
-  margin: 0;
-  max-width: 30ch;
-  text-wrap: balance;
-  font-family: var(--font-mono);
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-  line-height: 1.5;
-  color: var(--fg-dim);
-}
-
 .vl-hero-cta {
   display: flex;
   justify-content: center;
