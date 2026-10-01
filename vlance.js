@@ -849,7 +849,7 @@ function buildContactClientCircles() {
   picks.forEach(client => {
     const img = document.createElement('img');
     img.className = 'vlance-contact-avatar';
-    img.src = encodeClientPhoto(client.photo);
+    img.src = encodeClientPhoto(client.avatar || client.photo); // "avatar" = the img 2 photo for the small circles
     img.alt = '';
     img.loading = 'lazy';
     wrap.appendChild(img);
@@ -889,7 +889,7 @@ function initTrustedAvatars() {
   const current = slotEls.map(el => el.querySelector('img'));
   if (!current.length || current.some(img => !img)) return;
 
-  const pool = (window.VLANCE_CLIENTS || []).map(c => ({ src: encodeClientPhoto(c.photo), alt: c.name }));
+  const pool = (window.VLANCE_CLIENTS || []).map(c => ({ src: encodeClientPhoto(c.avatar || c.photo), alt: c.name }));
   // Nothing to rotate through if the pool can't beat what's already shown
   if (pool.length <= slotEls.length) return;
 

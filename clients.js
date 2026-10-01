@@ -18,18 +18,21 @@
 //           if you don't have one yet
 //   url     (optional) their profile link — leave out if you don't have one
 //           yet; the card just won't be clickable until you add it
+//   avatar  (optional) a different photo for the small "Trusted by N+
+//           creators" circles (hero badge + contact section), kept in
+//           png/clients/img 2/. Leave out to use `photo` there too.
 // ─────────────────────────────────────────────────────────────────────────
 
 window.VLANCE_CLIENTS = [
-  { name: "Chico",     photo: "png/clients/chico pfp.png",      handle: "@chicoguerraa",         url: "https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&sender_device=pc" },
+  { name: "Chico",     photo: "png/clients/chico pfp.png", avatar: "png/clients/img 2/chico img2.jpeg",      handle: "@chicoguerraa",         url: "https://www.tiktok.com/@chicoguerraa?is_from_webapp=1&sender_device=pc" },
   { name: "Anna",      photo: "png/clients/anna pfp.png",       handle: "@daynes_wife",           url: "https://www.tiktok.com/@daynes_wife?is_from_webapp=1&sender_device=pc" },
-  { name: "Dayne",     photo: "png/clients/dayne pfp.png",      handle: "@trendyshopdealz",       url: "https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&sender_device=pc" },
+  { name: "Dayne",     photo: "png/clients/dayne pfp.png", avatar: "png/clients/img 2/Dayne img2.jpeg",      handle: "@trendyshopdealz",       url: "https://www.tiktok.com/@trendyshopdealz?is_from_webapp=1&sender_device=pc" },
   { name: "Susan",     photo: "png/clients/Susan L.png",        handle: "@susanluckhardt",        url: "https://www.tiktok.com/@susanluckhardt?is_from_webapp=1&sender_device=pc" },
-  { name: "Maddie",    photo: "png/clients/Maddie M.png",       handle: "@maddieshomefinds",      url: "https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&sender_device=pc" },
+  { name: "Maddie",    photo: "png/clients/Maddie M.png", avatar: "png/clients/img 2/Maddie Miller img2.jpeg",       handle: "@maddieshomefinds",      url: "https://www.tiktok.com/@maddieshomefinds?is_from_webapp=1&sender_device=pc" },
   { name: "Cari",      photo: "png/clients/Cari C.png",         handle: "@cari_chapman",          url: "https://www.tiktok.com/@cari_chapman?is_from_webapp=1&sender_device=pc" },
-  { name: "Steffany",  photo: "png/clients/Steffany B.png",     handle: "@Steff__bell",           url: "https://www.tiktok.com/@steff__bell?is_from_webapp=1&sender_device=pc" },
-  { name: "Amanda",    photo: "png/clients/Amanda R.png",       handle: "@BusyboymomAmanda",      url: "https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&sender_device=pc" },
-  { name: "Leah",      photo: "png/clients/Leah M.png",         handle: "@Leah_runhideandread",   url: "https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&sender_device=pc" },
+  { name: "Steffany",  photo: "png/clients/Steffany B.png", avatar: "png/clients/img 2/Stefany Bell img2.jpeg",     handle: "@Steff__bell",           url: "https://www.tiktok.com/@steff__bell?is_from_webapp=1&sender_device=pc" },
+  { name: "Amanda",    photo: "png/clients/Amanda R.png", avatar: "png/clients/img 2/Amanda R img2.jpeg",       handle: "@BusyboymomAmanda",      url: "https://www.tiktok.com/@busyboymomamanda?is_from_webapp=1&sender_device=pc" },
+  { name: "Leah",      photo: "png/clients/Leah M.png", avatar: "png/clients/img 2/Leah M img2.jpeg",         handle: "@Leah_runhideandread",   url: "https://www.tiktok.com/@leah_runhideandread?is_from_webapp=1&sender_device=pc" },
   { name: "Andrew",    photo: "png/clients/Andrew K.png",       handle: "@Norman_Stevens",        url: "https://www.tiktok.com/@norman_stevens?is_from_webapp=1&sender_device=pc" },
   { name: "Taylor",    photo: "png/clients/Taylor G png.png",   handle: "@Taylorgfinds",          url: "https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&sender_device=pc" },
   { name: "Savannah",  photo: "png/clients/Savannah Irwin.png", handle: "@savannahxraeee",        url: "https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&sender_device=pc" },
