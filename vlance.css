@@ -1362,33 +1362,43 @@ a { color: inherit; }
 .vl-price-card--featured .vl-price-btn { background: #fff; color: var(--red); }
 .vl-price-card--featured .vl-price-btn:hover { background: var(--fg); color: #fff; }
 
-/* 20 / 50 / 100 / 150 credit switch — pill segmented control, 2×2 on
-   narrow phones so "150 credits" never gets squeezed. */
+/* 20 / 50 / 100 / 150 credit switch — one row of four tiles, number on top
+   and a small "credits" label under it, so it fits any phone in one line. */
 .vl-price-switch {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.25rem;
-  padding: 0.25rem;
-  border-radius: 1.4rem;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  border-radius: 1rem;
   background: rgba(0, 0, 0, 0.18);
 }
 .vl-price-opt {
-  padding: 0.6em 0.4em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.6rem 0.2rem 0.55rem;
   border: 0;
-  border-radius: 100em;
+  border-radius: 0.75rem;
   background: none;
   color: #fff;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 700;
-  white-space: nowrap;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-.vl-price-opt.is-active { background: #fff; color: var(--red); }
-@media (max-width: 1100px) and (min-width: 901px), (max-width: 480px) {
-  .vl-price-switch { grid-template-columns: repeat(2, 1fr); }
+.vl-price-opt__num {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
+.vl-price-opt__lbl {
+  font-size: 0.68rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+.vl-price-opt.is-active { background: #fff; color: var(--red); }
 
 /* Card body: one block per video type (Normal / Harder), each with
    its own name + price row acting as the divider above its list. */
