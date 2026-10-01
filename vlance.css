@@ -1427,16 +1427,16 @@ a { color: inherit; }
 
 @media (max-width: 640px) {
   .vl-compare-switch {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.25rem;
-    padding: 0.25rem;
+    display: flex;
+    gap: 0.3rem;
+    padding: 0.3rem;
     margin-bottom: 1.5rem;
     border-radius: 100em;
     background: rgba(0, 0, 0, 0.06);
   }
   .vl-compare-opt {
-    padding: 0.7em 0.3em;
+    flex: 1 1 auto; /* width follows the label, so "Ordinary editor" gets more room */
+    padding: 0.75em 1em;
     border: 0;
     border-radius: 100em;
     background: none;
