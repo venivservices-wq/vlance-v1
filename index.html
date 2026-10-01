@@ -197,7 +197,7 @@
           <div class="vl-perk-text">
             <h3 class="vl-perk-title">Brand revisions<br>made simple</h3>
             <p class="vl-perk-sub">Just let us know what needs changing.</p>
-            <p class="vl-perk-sub">You have 5 days to send revisions after your video is edited, giving you time to review it and make changes. If you work with a brand, they have time to chime in as well.</p>
+            <p class="vl-perk-sub">Each project includes 2 free revisions. If you work with a brand, they can chime in as well.</p>
           </div>
           <img class="vl-perk-img" src="png/feature%20images/easy%20revisions.png" alt="" aria-hidden="true">
         </div>
@@ -411,7 +411,14 @@
     <div class="container">
       <h2 class="h-l vl-compare-heading">Why creators<br>choose Vlance</h2>
 
-      <div class="vl-compare-table" data-reveal>
+      <!-- Phones only: pick which column the table shows (initCompareSwitch). -->
+      <div class="vl-compare-switch" role="tablist" aria-label="Compare">
+        <button class="vl-compare-opt" role="tab" aria-selected="false" data-col="2">Yourself</button>
+        <button class="vl-compare-opt" role="tab" aria-selected="false" data-col="3">Ordinary editor</button>
+        <button class="vl-compare-opt is-active" role="tab" aria-selected="true" data-col="4">Vlance</button>
+      </div>
+
+      <div class="vl-compare-table" data-col="4" data-reveal>
         <div class="vl-compare-cell vl-compare-cell--label"></div>
         <div class="vl-compare-cell vl-compare-cell--head">Edit it yourself</div>
         <div class="vl-compare-cell vl-compare-cell--head">Hire an ordinary editor</div>
@@ -454,7 +461,7 @@
        Two cards: Free trial / Credit plans. -->
   <section class="vl-pricing-section" id="pricing">
     <div class="container">
-      <h2 class="h-l vl-pricing-heading">Simple,<br>honest pricing.</h2>
+      <h2 class="h-l vl-pricing-heading">Simple pricing.</h2>
 
       <div class="vl-pricing-grid" data-reveal>
 

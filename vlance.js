@@ -1111,14 +1111,31 @@ function initFaqAccordion() {
 
     toggle.addEventListener('click', () => {
       const opening = !item.classList.contains('is-open');
+      const topBefore = item.getBoundingClientRect().top;
 
       items.forEach(other => {
-        if (other === item) return;
+        if (other === item || !other.classList.contains('is-open')) return;
         other.classList.remove('is-open');
         other.querySelector('.vl-faq-toggle')?.setAttribute('aria-expanded', 'false');
         const otherAnswer = other.querySelector('.vl-faq-answer');
-        if (otherAnswer) otherAnswer.style.maxHeight = '';
+        if (!otherAnswer) return;
+        // An open answer ABOVE the tapped one would shrink and drag the
+        // tapped question up off screen as it animates — close that one
+        // instantly instead, then correct the scroll below.
+        const above = other.compareDocumentPosition(item) & Node.DOCUMENT_POSITION_FOLLOWING;
+        if (above) {
+          otherAnswer.style.transition = 'none';
+          otherAnswer.style.maxHeight = '';
+          void otherAnswer.offsetHeight;
+          otherAnswer.style.transition = '';
+        } else {
+          otherAnswer.style.maxHeight = '';
+        }
       });
+
+      // Put the tapped question back exactly where the finger was.
+      const shift = item.getBoundingClientRect().top - topBefore;
+      if (shift) window.scrollBy({ top: shift, behavior: 'instant' });
 
       item.classList.toggle('is-open', opening);
       toggle.setAttribute('aria-expanded', String(opening));
@@ -1145,6 +1162,22 @@ function initPricingPlans() {
         if (price) price.textContent = opt.dataset.price;
         if (credits) credits.textContent = opt.dataset.credits;
       });
+    });
+  });
+}
+
+// ─── Comparison table (phones): switch which column is shown ─────────────────
+function initCompareSwitch() {
+  const table = document.querySelector('.vl-compare-table');
+  const opts = document.querySelectorAll('.vl-compare-opt');
+  if (!table || !opts.length) return;
+  opts.forEach(opt => {
+    opt.addEventListener('click', () => {
+      opts.forEach(o => {
+        o.classList.toggle('is-active', o === opt);
+        o.setAttribute('aria-selected', String(o === opt));
+      });
+      table.dataset.col = opt.dataset.col;
     });
   });
 }
@@ -2055,6 +2088,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCreatorCount();
   initFaqAccordion();
   initPricingPlans();
+  initCompareSwitch();
 
   initCSSMarquee();
   initMuteButtons();
