@@ -37,7 +37,6 @@ window.VLANCE_CLIENTS = [
   { name: "Taylor",    photo: "png/clients/Taylor G png.png",   handle: "@Taylorgfinds",          url: "https://www.tiktok.com/@taylorgfinds?is_from_webapp=1&sender_device=pc" },
   { name: "Savannah",  photo: "png/clients/Savannah Irwin.png", handle: "@savannahxraeee",        url: "https://www.tiktok.com/@savannahxraeee?is_from_webapp=1&sender_device=pc" },
   { name: "Maze",      photo: "png/clients/fern pfp.png" },
-  { name: "Sophie",    photo: "png/clients/Sophie pfp.png" },
 
   // Newest additions — names taken straight from their image filenames for
   // now; rename any of these whenever you have their real name/handle.
