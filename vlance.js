@@ -810,11 +810,13 @@ function buildClientsCarousel() {
   const bottomTrack = carousel.querySelector('.vl-clients-track--bottom');
   if (!topTrack || !bottomTrack) return;
 
-  // Row 2 gets the same clients, rotated so the two rows never line up as
-  // identical columns (a shared order would repeat every client in the same
-  // position in both rows).
-  const rotate = (arr, by) => arr.slice(by).concat(arr.slice(0, by));
-  const rowOrders = [clients, rotate(clients, Math.floor(clients.length / 2) + 1)];
+  // The roster is split between the rows (every other client), so no creator
+  // is ever in both rows — the rows scroll in opposite directions, so a
+  // shared list would always bring the same face past in both at some point.
+  // A very short roster (under 8) can't fill two rows, so both get everyone.
+  const rowOrders = clients.length < 8
+    ? [clients, clients]
+    : [clients.filter((_, i) => i % 2 === 0), clients.filter((_, i) => i % 2 === 1)];
 
   [topTrack, bottomTrack].forEach((track, i) => {
     track.innerHTML = '';
