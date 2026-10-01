@@ -593,8 +593,8 @@ a { color: inherit; }
   .vl-clients-stat { align-items: flex-start; text-align: left; }
   .vl-clients-card { width: clamp(10rem, 40vw, 12.5rem); margin-right: 0.2rem; }
   .vl-clients-carousel {
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,0.25) 5%, rgba(0,0,0,0.7) 12%, #000 20%, #000 80%, rgba(0,0,0,0.7) 88%, rgba(0,0,0,0.25) 95%, transparent 100%);
-            mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,0.25) 5%, rgba(0,0,0,0.7) 12%, #000 20%, #000 80%, rgba(0,0,0,0.7) 88%, rgba(0,0,0,0.25) 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,0.25) 2.5%, rgba(0,0,0,0.7) 6%, #000 10%, #000 90%, rgba(0,0,0,0.7) 94%, rgba(0,0,0,0.25) 97.5%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,0.25) 2.5%, rgba(0,0,0,0.7) 6%, #000 10%, #000 90%, rgba(0,0,0,0.7) 94%, rgba(0,0,0,0.25) 97.5%, transparent 100%);
   }
 }
 
