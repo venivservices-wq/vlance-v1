@@ -1146,7 +1146,7 @@ function initFaqAccordion() {
   });
 }
 
-// ─── Pricing: 20 / 50 / 100 / 150 credit switch ──────────────────────────────
+// ─── Pricing: 50 / 100 / 150 credit switch ──────────────────────────────
 // Each option button holds its own data-credits / data-price; this just
 // copies them into the card.
 function initPricingPlans() {

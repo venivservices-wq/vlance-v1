@@ -161,14 +161,30 @@ a { color: inherit; }
 
 /* Faint "+" marks on a 56px grid. A radial mask (not a background gradient —
    the marks themselves stay flat) fades them out toward the screen edges. */
+/* one soft warm glow behind the headline - the only colour in the background */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: min(70rem, 110vw);
+  height: 34rem;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: none;
+  pointer-events: none;
+  z-index: 0;
+}
 .vl-hero-pattern {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 23v10M23 28h10' stroke='%230a0a0a' stroke-opacity='0.05' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") center top / 56px 56px repeat;
-  -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 30%, transparent 100%);
-          mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 30%, transparent 100%);
+  /* thin vertical column lines, like a layout grid (user, 22 Oct: replaces the + marks and the glow) */
+  /* a plain dot grid (user, 22 Oct: "more simple pattern") */
+  background: radial-gradient(circle, rgba(10, 10, 10, 0.16) 1.2px, transparent 1.6px) center top / 28px 28px repeat;
+  -webkit-mask-image: radial-gradient(ellipse 80% 75% at 50% 45%, transparent 18%, #000 55%);
+          mask-image: radial-gradient(ellipse 80% 75% at 50% 45%, transparent 18%, #000 55%);
 }
 
 /* Editing-timeline panel near the bottom of the hero. A 2-column grid: track
@@ -329,10 +345,11 @@ a { color: inherit; }
   object-fit: cover;
   border-radius: 0.85rem;
 }
-.vl-hero-card--1 { --rot: -8deg; top: 12%;    left: 6%;  }
-.vl-hero-card--2 { --rot:  7deg; top: 10%;    right: 7%; animation-delay: -1.5s; }
-.vl-hero-card--3 { --rot:  6deg; bottom: 30%; left: 11%; animation-delay: -3s; }
-.vl-hero-card--4 { --rot: -6deg; bottom: 28%; right: 10%; animation-delay: -4.5s; }
+/* on wide screens the cards stay near the headline instead of drifting to the far edges */
+.vl-hero-card--1 { --rot: -8deg; top: 12%;    left: max(5%, calc(50% - 54rem));  }
+.vl-hero-card--2 { --rot:  7deg; top: 10%;    right: max(6%, calc(50% - 54rem)); animation-delay: -1.5s; }
+.vl-hero-card--3 { --rot:  6deg; bottom: 30%; left: max(10%, calc(50% - 49rem)); animation-delay: -3s; }
+.vl-hero-card--4 { --rot: -6deg; bottom: 28%; right: max(9%, calc(50% - 50rem)); animation-delay: -4.5s; }
 
 @keyframes vl-hero-float {
   0%, 100% { translate: 0 0; }
@@ -359,17 +376,45 @@ a { color: inherit; }
   letter-spacing: -0.045em;
   line-height: 0.92;
   color: var(--fg);
-  font-size: clamp(3rem, 6.4vw, 6.25rem);
+  font-size: clamp(3rem, 6vw, 7.5rem);
 }
 .vl-ht-line { display: block; }
 .vl-ht-accent { color: var(--red); font-style: normal; }
 
+.vl-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 100em;
+  background: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+.vl-hero-pill i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #22c55e; }
+.vl-hero-sub {
+  max-width: 34rem;
+  margin: 0.2rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 1.5vw, 1.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  color: var(--fg-dim);
+}
 .vl-hero-cta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 0.75rem;
   margin-top: 0.4rem;
 }
-.vl-hero-cta .btn { font-size: 1.15rem; padding: 1em 2.6em; }
+.vl-hero-cta .btn { font-size: clamp(1.15rem, 1.1vw, 1.35rem); padding: 1.05em 2.8em; }
 
 /* Trusted-by avatar badge */
 .vl-trusted {
@@ -1245,6 +1290,7 @@ a { color: inherit; }
   border-bottom: var(--line-w) solid var(--line);
 }
 .vl-pricing-heading {
+  text-align: center;
   font-size: clamp(2.4rem, 5.5vw, 4.4rem);
   margin-bottom: clamp(2rem, 5vw, 3.5rem) !important;
 }
@@ -1253,6 +1299,7 @@ a { color: inherit; }
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   max-width: 60rem;
+  margin: 0 auto;
   gap: clamp(0.75rem, 1.6vw, 1.25rem);
   align-items: stretch;
 }
@@ -1356,7 +1403,7 @@ a { color: inherit; }
    and a small "credits" label under it, so it fits any phone in one line. */
 .vl-price-switch {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.3rem;
   padding: 0.3rem;
   border-radius: 1rem;
