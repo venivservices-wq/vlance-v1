@@ -971,7 +971,10 @@ a { color: inherit; }
   flex: none;
 }
 @media screen and (max-width: 767px) {
-  .gsap-slider__item { width: min(78vw, 320px) !important; }
+  /* Phones: a bit smaller, and never taller than the screen allows, so the arrows above the
+     video and the whole video fit on screen together (27 Oct - scrolling to see the video used
+     to push the arrows out of view). Height = width x 16/9; ~150px kept for the arrows + browser bars. */
+  .gsap-slider__item { width: min(68vw, 290px, calc((100svh - 150px) * 0.5625)) !important; }
 }
 
 .vl-nav-row {
@@ -995,6 +998,11 @@ a { color: inherit; }
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 .vl-nav-arrow:hover { background: var(--red); border-color: var(--red); color: #fff; }
+/* Phones: the arrows sit right above the video (was 3em + 1.75rem apart - scrolling to the video hid them) */
+@media screen and (max-width: 767px) {
+  .product-slider .gsap-slider { gap: 0.75rem; }
+  .vl-nav-row { padding-bottom: 0; }
+}
 
 .product-card {
   background: var(--bg-panel);
@@ -1296,6 +1304,8 @@ a { color: inherit; }
 }
 /* "Every plan runs for 60 days" right under the heading (27 Oct) - the heading keeps a small gap above it */
 .vl-pricing-heading:has(+ .vl-pricing-sub) { margin-bottom: 0.9rem !important; }
+.vl-pricing-sub span { white-space: nowrap; }
+@media (max-width: 767px) { .vl-pricing-sub span { display: block; } }   /* phones: two lines, one sentence each */
 .vl-pricing-sub {
   margin: 0 auto clamp(2rem, 5vw, 3.5rem);
   text-align: center;
