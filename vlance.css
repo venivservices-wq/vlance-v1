@@ -373,7 +373,7 @@ a { color: inherit; }
   margin: 0;
   font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.02em;
   line-height: 0.92;
   color: var(--fg);
   font-size: clamp(3rem, 6vw, 7.5rem);
@@ -1294,6 +1294,15 @@ a { color: inherit; }
   font-size: clamp(2.4rem, 5.5vw, 4.4rem);
   margin-bottom: clamp(2rem, 5vw, 3.5rem) !important;
 }
+/* "Every plan runs for 60 days" right under the heading (27 Oct) - the heading keeps a small gap above it */
+.vl-pricing-heading:has(+ .vl-pricing-sub) { margin-bottom: 0.9rem !important; }
+.vl-pricing-sub {
+  margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  color: var(--fg-dim);
+}
 
 .vl-pricing-grid {
   display: grid;
@@ -1349,6 +1358,9 @@ a { color: inherit; }
   color: var(--fg-dim);
 }
 .vl-price-card--featured .vl-price-unit { color: rgba(255, 255, 255, 0.8); }
+/* "for 60 days" in the price line: the plan length, said where the price is (27 Oct) */
+.vl-price-days { font-weight: 700; color: var(--fg); }
+.vl-price-card--featured .vl-price-days { color: #fff; }
 
 .vl-price-sub {
   margin: 0;
